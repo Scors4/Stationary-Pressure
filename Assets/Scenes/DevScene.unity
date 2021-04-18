@@ -614,6 +614,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 110940279173313543, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6879446185197568469, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8055857019788714642, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9145587583254010637, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -624,7 +636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9145587583254010637, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8541157
+      value: 0.7575
       objectReference: {fileID: 0}
     - target: {fileID: 9145587583254010637, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -646,9 +658,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pipe_Straight
       objectReference: {fileID: 0}
-    - target: {fileID: 9145587583791453271, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3548474787621869376, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
+    - {fileID: 6879446185197568469, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ddf1311e2e1673b4296f3f6fd7c4193b, type: 3}

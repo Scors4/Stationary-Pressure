@@ -29,15 +29,15 @@ public class Player : MonoBehaviour
     {
         UpdateCameraMovement();
         UpdatePlayerMovement();
+
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Mouse0))
+            FireInteraction();
     }
 
     void FixedUpdate()
     {
         if (isInBuild)
             UpdatePossibleInteraction();
-
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Mouse0))
-            FireInteraction();
     }
 
     void UpdateCameraMovement()
@@ -57,17 +57,40 @@ public class Player : MonoBehaviour
         Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 5, Color.white, 1.0f);
         if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, 5, 1 << 3))
         {
-            Debug.Log("Raycast hit: " + hit.collider.gameObject);
             Interactable ap = hit.collider.gameObject.GetComponent<Interactable>();
             if(ap != null)
             {
                 ap.OnHover(this.gameObject);
+            }
+            else
+            {
+                Interactable pap = hit.collider.GetComponentInParent<Interactable>();
+                if(pap != null)
+                {
+                    pap.OnHover(this.gameObject);
+                }
             }
         }
     }
 
     void FireInteraction()
     {
-
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 5, Color.white, 1.0f);
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, 5, 1 << 3))
+        {
+            Interactable ap = hit.collider.gameObject.GetComponent<Interactable>();
+            if (ap != null)
+            {
+                ap.OnInteraction(this.gameObject);
+            }
+            else
+            {
+                Interactable pap = hit.collider.GetComponentInParent<Interactable>();
+                if (pap != null)
+                {
+                    pap.OnInteraction(this.gameObject);
+                }
+            }
+        }
     }
 }
