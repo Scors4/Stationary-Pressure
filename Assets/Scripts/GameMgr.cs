@@ -11,6 +11,9 @@ public enum RESOURCE
 public class GameMgr : MonoBehaviour
 {
     public static GameMgr inst;
+    
+    public SerializableDictionary<RESOURCE, float> Resources;
+    public int Power = 0;
 
     // Start is called before the first frame update
     void Start()

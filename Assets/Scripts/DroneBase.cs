@@ -19,7 +19,7 @@ public class DroneBase : MonoBehaviour
     /// The amount of force a thruster can provide.
     public float ThrusterForce = 0.2f;
     
-    /// The drone's target. The drone will attempt to approach the target until it gets within the `targetRadius`.
+    /// The drone's target
     public Transform Target = null;
     /// The speed at which this drone can rotate.
     public float RotationSpeed = 10.0f;
