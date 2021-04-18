@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// A class to continually rotate an entity to make it seem more like an asteroid.
-public class Asteroid : MonoBehaviour
+public class Asteroid : MonoBehaviour, DroneTargetable
 {
-    private Transform transform = null;
+    new private Transform transform = null;
     
     public Vector3 RotateVelocity = Vector3.zero;
     
@@ -25,5 +25,9 @@ public class Asteroid : MonoBehaviour
     void FixedUpdate() {
         // Rotate for visuals
         transform.Rotate(RotateVelocity);
+    }
+    
+    public Vector3 getPosition() {
+        return transform.position;
     }
 }
