@@ -6,9 +6,10 @@ public class DronePart : MonoBehaviour, Interactable
 {
     public Material highlightMat;
     public float mass;
-    public SerializableDictionary<RESOURCE, float> resourceDemands;
+    public SerializableDictionary<RESOURCE, float> resourceCost;
 
     public List<AttachPoint> anchorPoints;
+    AttachPoint parentPoint;
     int frameToHide;
     bool isHighlighted = false;
     GameObject highlightObject;
@@ -44,7 +45,9 @@ public class DronePart : MonoBehaviour, Interactable
 
     public void OnInteraction(GameObject other)
     {
-
+        if (parentPoint != null)
+            parentPoint.gameObject.SetActive(true);
+        Destroy(gameObject);
     }
 
     void FixedUpdate()
@@ -82,5 +85,10 @@ public class DronePart : MonoBehaviour, Interactable
     public int GetAnchorCount()
     {
         return anchorPoints.Count;
+    }
+
+    public void SetParentAttachPoint(AttachPoint newParentPoint)
+    {
+        parentPoint = newParentPoint;
     }
 }

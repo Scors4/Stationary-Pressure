@@ -22,10 +22,10 @@ public class HoloTable : MonoBehaviour, Interactable
             point.gameObject.SetActive(inBuildMode);
         }
 
-        int i = 0;
+        int i = page * partDisplays.Count;
         foreach(Transform display in partDisplays)
         {
-            if(i < partsList.Count)
+            if (i < partsList.Count)
             {
                 GameObject obj = GameObject.Instantiate(partsList[i], transform);
                 obj.transform.localPosition = display.localPosition;
@@ -34,11 +34,13 @@ public class HoloTable : MonoBehaviour, Interactable
                 DronePart part = obj.GetComponent<DronePart>();
                 part.enabled = false;
 
-                foreach(AttachPoint point in obj.GetComponentsInChildren<AttachPoint>())
+                foreach (AttachPoint point in obj.GetComponentsInChildren<AttachPoint>())
                 {
                     point.gameObject.SetActive(false);
                 }
             }
+            else
+                break;
 
             i++;
         }
@@ -85,10 +87,14 @@ public class HoloTable : MonoBehaviour, Interactable
         Transform anchor = part.GetAnchorPoint(anchorIndex);
 
         obj.transform.localEulerAngles = (Vector3.up * 180) - anchor.localEulerAngles;
-        obj.transform.position = (selectedAttachPoint.transform.position - (anchor.localRotation * anchor.localPosition));
+        obj.transform.localPosition = -(anchor.localRotation * anchor.localPosition);
 
-        Debug.Log("Vector 3: " + anchor.InverseTransformPoint(obj.transform.position));
+        obj.transform.SetParent(selectedAttachPoint.transform.parent, true);
 
         part.AttachToAnchor(anchorIndex);
+        part.SetParentAttachPoint(selectedAttachPoint);
+        selectedAttachPoint.SetSelected(false);
+        selectedAttachPoint.gameObject.SetActive(false);
+        selectedAttachPoint = null;
     }
 }

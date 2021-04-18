@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Flags]
+public enum AttachType
+{
+    Power = 0x1,
+    Mining = 0x2,
+    Fuel = 0x4,
+    Ammo = 0x8
+}
+
 public class AttachPoint : MonoBehaviour, Interactable
 {
     public Material pointSelectedMaterial;
@@ -11,6 +20,8 @@ public class AttachPoint : MonoBehaviour, Interactable
 
     public Vector3 rotationOffset = Vector3.zero;
     public MeshRenderer visual;
+
+    public AttachType attachType;
 
     private int frameToHide = 0;
     private bool pointVisible = false;

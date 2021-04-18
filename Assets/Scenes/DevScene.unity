@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502586, g: 0.37139237, b: 0.4960093, a: 1}
+  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -264,11 +264,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c2febae4e95834486bdbdd94e6e578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0, z: 0}
   acceleration: {x: 0, y: 0, z: 0}
   weight: 1
   ThrusterForce: 0.2
   Target: {fileID: 150317688}
-  TargetRadius: 1
   RotationSpeed: 3
 --- !u!135 &476544752
 SphereCollider:
@@ -786,6 +786,10 @@ PrefabInstance:
     - target: {fileID: 2832608027820962424, guid: b3f6bfb031d41ea4ba7019618b2ed1df, type: 3}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832608027820962424, guid: b3f6bfb031d41ea4ba7019618b2ed1df, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 2832608027820962424, guid: b3f6bfb031d41ea4ba7019618b2ed1df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
