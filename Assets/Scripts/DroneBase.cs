@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DroneBase : MonoBehaviour
 {
+    public int type = 0;
+    public int id = 0;
+
     /// The transform
     new private Transform transform = null;
     /// The 3D velocity vector
@@ -63,6 +66,16 @@ public class DroneBase : MonoBehaviour
             // Approach target and stop
             thrusterCommands.Enqueue(new SerialThrusterCommand(new ApproachTargetToRadiusThrusterCommand(Target), new ZeroVelocityThrusterCommand(this)));
         }
+    }
+
+    void OnEnable()
+    {
+        DroneMgr.inst.DroneSpawned(this);
+    }
+
+    void OnDisable()
+    {
+        DroneMgr.inst.DroneDestroyed(this);
     }
 
     // Update is called once per frame

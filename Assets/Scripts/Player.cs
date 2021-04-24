@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
-        isInBuild = true;
+        isInBuild = false;
     }
 
     private void Awake()
