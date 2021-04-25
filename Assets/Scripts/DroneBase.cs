@@ -26,6 +26,11 @@ public class DroneBase : MonoBehaviour
     public Transform Target = null;
     /// The speed at which this drone can rotate.
     public float RotationSpeed = 10.0f;
+    /// The maximum speed
+    public float MaxSpeed = 3.0f;
+    
+    /// The target rotation
+    public Quaternion TargetRotation = Quaternion.identity;
     
     /// Whether the thrusters are activated.
     private bool thrustersActivated = false;
@@ -79,10 +84,7 @@ public class DroneBase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Update() {}
     
     // Fixed timestep
     void FixedUpdate() {
@@ -95,13 +97,27 @@ public class DroneBase : MonoBehaviour
             thrusterCommands.Peek().Tick(this);
         }
         
+        // Rotation
+        // If the desired rot and rot are close, just set them equal
+        // TODO: Do i need a Mathf.abs here?
+        if(Quaternion.Angle(transform.rotation, TargetRotation) > 1.0) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, RotationSpeed * Time.fixedDeltaTime);
+        } else {
+            transform.rotation = TargetRotation;
+        }
+        
         if(thrustersActivated) {
             float acceleration1D = desiredThrusterForce / weight; 
             acceleration = transform.forward.normalized * acceleration1D;
         }
         
-        velocity += acceleration * Time.fixedDeltaTime;
+        velocity = Vector3.ClampMagnitude(velocity + (acceleration * Time.fixedDeltaTime), MaxSpeed);
         transform.position += velocity * Time.fixedDeltaTime;
+    }
+    
+    /// Whether the drone is at the target rotation
+    public bool isAtTargetRotation() {
+        return transform.rotation == TargetRotation;
     }
 }
 
@@ -131,27 +147,21 @@ class RotateToPointThrusterCommand : ThrusterCommand {
     
      /// Perform a tick
     public void Tick(DroneBase drone) {
-        Vector3 positionDiff = target - drone.transform.position;
-                
-        // Update rotation
-        // https://answers.unity.com/questions/254130/how-do-i-rotate-an-object-towards-a-vector3-point.html
-        Quaternion lookRotation = Quaternion.LookRotation(positionDiff.normalized);
-        
-        // If the desired rot and rot are close, just set them equal
-        // TODO: Do i need a Mathf.abs here?
-        if(Quaternion.Angle(drone.transform.rotation, lookRotation) > 1.0) {
-            drone.transform.rotation = Quaternion.Slerp(drone.transform.rotation, lookRotation, drone.RotationSpeed * Time.fixedDeltaTime);
-        } else {
-            drone.transform.rotation = lookRotation;
-        }
+        updateTargetRotation(drone);
     }
     
     /// Whether this is done executing.
     public bool IsFinished(DroneBase drone) {
+        updateTargetRotation(drone);
+        return drone.isAtTargetRotation();
+    }
+    
+    void updateTargetRotation(DroneBase drone) {
         Vector3 positionDiff = target - drone.transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(positionDiff.normalized);
-        
-        return drone.transform.rotation == lookRotation;
+                
+        // Update rotation
+        // https://answers.unity.com/questions/254130/how-do-i-rotate-an-object-towards-a-vector3-point.html
+        drone.TargetRotation = Quaternion.LookRotation(positionDiff.normalized);
     }
 }
 
@@ -167,8 +177,12 @@ class ZeroVelocityThrusterCommand : ThrusterCommand {
         rotateCommand.SetTarget(drone.transform.position - drone.GetVelocity());
         
         if(!rotateCommand.IsFinished(drone)) {
+            drone.FireThrusters(0.0f);
             rotateCommand.Tick(drone);
-        } else if(drone.velocity != Vector3.zero) {
+            return;
+        } 
+        
+        if(drone.velocity != Vector3.zero) {
             // F = MA
             // A = F/M
             //
@@ -208,12 +222,15 @@ class ApproachTargetToRadiusThrusterCommand : ThrusterCommand {
     public void Tick(DroneBase drone) {
         rotateCommand.SetTarget(target.position);
         
-        Vector3 positionDiff = drone.transform.position - target.position;
+        Vector3 positionDiff = target.position - drone.transform.position;
         float positionDiffMag = positionDiff.magnitude;
         
         if(!rotateCommand.IsFinished(drone)) {
             rotateCommand.Tick(drone);
-        } else if(Mathf.Abs(positionDiffMag) < 5.0f || true) {
+            return;
+        } 
+        
+        if(Mathf.Abs(positionDiffMag) > 5.0f) {
             // F = MA
             // A = F/M
             //
@@ -222,13 +239,14 @@ class ApproachTargetToRadiusThrusterCommand : ThrusterCommand {
             //
             // x = VT + 0.5AT^2
             // 2(x - VT) = AT^2
-            // sqrt(2(x - VT)) = AT
-            // A = sqrt(2(x - VT)) / T
-            // F/M = sqrt(2(x - VT)) / T
-            // F = M * sqrt(2(x - VT)) / T
-            // TODO: This seems too slow?
-            float desiredForce = drone.weight * Mathf.Sqrt(2.0f * (positionDiff.magnitude - (drone.GetVelocity().magnitude * Time.fixedDeltaTime))) / Time.fixedDeltaTime;
+            // A = 2(x - VT) / T^2
+            // F/M = 2(x - VT) / T^2
+            // F = M * 2(x - VT) / T^2
+            Vector3 xVT = positionDiff - (drone.GetVelocity() * Time.fixedDeltaTime);
+            float desiredForce = drone.weight * 2.0f * xVT.magnitude / (Time.fixedDeltaTime * Time.fixedDeltaTime);
             drone.FireThrusters(desiredForce);
+        } else {
+            drone.FireThrusters(0.0f);
         }
     }
     
