@@ -5,7 +5,6 @@
 [Bb]uilds/
 [Ll]ogs/
 Assets/AssetStoreTools*
-Assets/BreakableAsteroids*
 
 # Visual Studio cache directory
 .vs/
@@ -40,4 +39,3 @@ sysinfo.txt
 
 
 Logs
-Assets/BreakableAsteroids
