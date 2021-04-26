@@ -9,6 +9,8 @@ public class StatsScreen : MonoBehaviour
     public Text PowerText;
     /// The label for iron
     public Text IronText;
+    /// The label for time
+    public Text TimeText;
     
     // Start is called before the first frame update
     void Start()
@@ -21,5 +23,8 @@ public class StatsScreen : MonoBehaviour
     {
         PowerText.text = "Power: " + GameMgr.inst.Power;
         IronText.text = "Iron: " + GameMgr.inst.Resources.Iron;
+        
+        float time = Time.timeSinceLevelLoad;
+        TimeText.text = "Time: " + Mathf.Floor(time / 60) + ":" + Mathf.Floor(time);
     }
 }
