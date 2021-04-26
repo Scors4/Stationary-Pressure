@@ -6,14 +6,27 @@ using UnityEngine.EventSystems;
 
 public class DroneCommand : MonoBehaviour
 {
+    public RectTransform ScrollPanel;
+
     Canvas screenCanvas;
     GraphicRaycaster raycaster;
+
+    Scrollbar scrollbar;
+
+    EventSystem es;
 
     // Start is called before the first frame update
     void Awake()
     {
         screenCanvas = GetComponentInChildren<Canvas>();
         raycaster = GetComponentInChildren<GraphicRaycaster>();
+
+        scrollbar = GetComponentInChildren<Scrollbar>();
+    }
+
+    private void Start()
+    {
+        es = EventSystem.current;
     }
 
     // Update is called once per frame
@@ -24,21 +37,36 @@ public class DroneCommand : MonoBehaviour
 
     public void OnMouseDown()
     {
-        Debug.Log("Mouse Down.");
+        PointerEventData ped = new PointerEventData(es);
+        ped.position = Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        es.RaycastAll(ped, results);
+
+        foreach(RaycastResult result in results)
+        {
+            IPointerClickHandler pch = result.gameObject.GetComponent<IPointerClickHandler>();
+
+            if(pch != null)
+                pch.OnPointerClick(ped);
+        }
     }
 
-    public void OnMouseDrag()
+    public void OnScrollDown()
     {
-        
+        float step = 1.0f / (ScrollPanel.childCount);
+        scrollbar.value -= step * 2;
+
+        if (scrollbar.value < 0)
+            scrollbar.value = 0;
     }
 
-    public void OnMouseEnter()
+    public void OnScrollUp()
     {
-        EventSystem.current.SetSelectedGameObject(this.gameObject);
-    }
+        float step = 1.0f / (ScrollPanel.childCount);
+        scrollbar.value += step * 2;
 
-    public void OnMouseExit()
-    {
-        EventSystem.current.SetSelectedGameObject(null);
+        if (scrollbar.value > 1.0f)
+            scrollbar.value = 1.0f;
     }
 }
