@@ -9,10 +9,14 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     
     public Vector3 RotateVelocity = Vector3.zero;
     
+    public ResourceSet Resources = new ResourceSet();
+    
     // Start is called before the first frame update
     void Start()
     {
         transform = GetComponent<Transform>();
+        
+        Resources.Iron = 100.0f;
     }
 
     // Update is called once per frame
@@ -29,5 +33,22 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     
     public Vector3 getPosition() {
         return transform.position;
+    }
+    
+    /// Try to mine this asteroid
+    public void Mine() {        
+        if(Resources.Iron > 0.0f) {
+            Resources.Iron -= 1.0f;
+            GameMgr.inst.Resources.Iron += 1.0f;
+        }
+        
+        if(IsEmpty()) {
+            gameObject.GetComponent<Fracture>().FractureObject();
+        }
+    }
+    
+    /// Whether this asteroid is empty
+    public bool IsEmpty() {
+        return Resources.Iron == 0.0f;
     }
 }
