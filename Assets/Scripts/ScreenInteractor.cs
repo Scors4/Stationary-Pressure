@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DroneCommand : MonoBehaviour
+public class ScreenInteractor : MonoBehaviour
 {
     public RectTransform ScrollPanel;
 
@@ -20,6 +20,12 @@ public class DroneCommand : MonoBehaviour
     {
         screenCanvas = GetComponentInChildren<Canvas>();
         raycaster = GetComponentInChildren<GraphicRaycaster>();
+
+        if (screenCanvas == null || raycaster == null)
+        {
+            enabled = false;
+            return;
+        }
 
         scrollbar = GetComponentInChildren<Scrollbar>();
     }
@@ -47,13 +53,16 @@ public class DroneCommand : MonoBehaviour
         {
             IPointerClickHandler pch = result.gameObject.GetComponent<IPointerClickHandler>();
 
-            if(pch != null)
+            if (pch != null)
                 pch.OnPointerClick(ped);
         }
     }
 
     public void OnScrollDown()
     {
+        if (ScrollPanel.childCount == 0)
+            return;
+
         float step = 1.0f / (ScrollPanel.childCount);
         scrollbar.value -= step * 2;
 
@@ -63,6 +72,9 @@ public class DroneCommand : MonoBehaviour
 
     public void OnScrollUp()
     {
+        if (ScrollPanel.childCount == 0)
+            return;
+
         float step = 1.0f / (ScrollPanel.childCount);
         scrollbar.value += step * 2;
 

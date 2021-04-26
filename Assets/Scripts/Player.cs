@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player player;
+
     public bool isInBuild {get; private set;}
     public float mouseSensitivity = 125;
     public float moveSpeed = 15;
@@ -13,6 +15,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = this;
         playerCamera = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
         isInBuild = false;
@@ -38,6 +41,11 @@ public class Player : MonoBehaviour
     {
         if (isInBuild)
             UpdatePossibleInteraction();
+    }
+
+    public void ToggleBuildMode(bool newState)
+    {
+        isInBuild = newState;
     }
 
     void UpdateCameraMovement()

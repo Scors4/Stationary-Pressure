@@ -26,21 +26,21 @@ public class MainMenu : MonoBehaviour
     }
     
     public void ShowInstructions() {
-        CreditsView.active = false;
-        MainMenuView.active = false;
-        InstructionsView.active = true;
+        CreditsView.SetActive(false);
+        MainMenuView.SetActive(false);
+        InstructionsView.SetActive(true);
     }
     
      public void ShowMainMenu() {
-        MainMenuView.active = true;
-        InstructionsView.active = false;
-        CreditsView.active = false;
+        MainMenuView.SetActive(true);
+        InstructionsView.SetActive(false);
+        CreditsView.SetActive(false);
     }
     
     public void ShowCredits() {
-        CreditsView.active = true;
-        MainMenuView.active = false;
-        InstructionsView.active = false;
+        CreditsView.SetActive(true);
+        MainMenuView.SetActive(false);
+        InstructionsView.SetActive(false);
     }
     
      public void Quit() {

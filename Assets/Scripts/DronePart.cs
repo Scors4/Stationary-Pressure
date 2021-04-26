@@ -45,6 +45,9 @@ public class DronePart : MonoBehaviour, Interactable
 
     public void OnInteraction(GameObject other)
     {
+        if (!enabled)
+            return;
+
         if (parentPoint != null)
             parentPoint.gameObject.SetActive(true);
         Destroy(gameObject);

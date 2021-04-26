@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 1313916091227584200}
   - component: {fileID: 1313916091227584201}
   - component: {fileID: 1313916091227584202}
+  - component: {fileID: 2973356167713056334}
   m_Layer: 0
   m_Name: PanelScreen
   m_TagString: Untagged
@@ -196,6 +197,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2973356167713056334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313916091227584203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d98ca54dd65f574da2d58ffdb498f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScrollPanel: {fileID: 0}
 --- !u!1 &1313916091604831430
 GameObject:
   m_ObjectHideFlags: 0

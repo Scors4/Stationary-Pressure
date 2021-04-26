@@ -1,68 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class HoloTable : MonoBehaviour, Interactable
+public class HoloTable : MonoBehaviour
 {
     public List<Transform> partDisplays;
-    public List<GameObject> partsList;
+    List<GameObject> partsList;
+    public Text pageText;
+
+    public Button buildModeButton;
 
     protected AttachPoint selectedAttachPoint;
 
-    private bool inBuildMode = true;
+    private bool inBuildMode = false;
     private int page = 0;
+    private int pageCount = 0;
 
     private void Start()
     {
         GameObject[] parts = Resources.LoadAll<GameObject>("Drone Parts");
+        partsList = new List<GameObject>();
         partsList.AddRange(parts);
 
-        foreach(AttachPoint point in GetComponentsInChildren<AttachPoint>())
-        {
-            point.gameObject.SetActive(inBuildMode);
-        }
+        UpdatePage();
+        UpdateBuildMode();
 
-        int i = page * partDisplays.Count;
-        foreach(Transform display in partDisplays)
-        {
-            if (i < partsList.Count)
-            {
-                GameObject obj = GameObject.Instantiate(partsList[i], transform);
-                obj.transform.localPosition = display.localPosition;
-                obj.transform.localEulerAngles = display.localEulerAngles + new Vector3(90, 0, 0);
-
-                DronePart part = obj.GetComponent<DronePart>();
-                part.enabled = false;
-
-                foreach (AttachPoint point in obj.GetComponentsInChildren<AttachPoint>())
-                {
-                    point.gameObject.SetActive(false);
-                }
-            }
-            else
-                break;
-
-            i++;
-        }
-    }
-
-    public void OnInteraction(GameObject other)
-    {
-        ToggleBuildMode();
-    }
-
-    public void OnHover(GameObject other)
-    {
-        
-    }
-
-    public void ToggleBuildMode()
-    {
-        inBuildMode = !inBuildMode;
-        foreach (AttachPoint point in GetComponentsInChildren<AttachPoint>())
-        {
-            point.gameObject.SetActive(inBuildMode);
-        }
+        pageCount = (partsList.Count / partDisplays.Count);
+        pageText.text = "Page " + page+1 + " of " + pageCount+1;
     }
 
     public void SelectAttachPoint(AttachPoint newPoint)
@@ -96,5 +61,64 @@ public class HoloTable : MonoBehaviour, Interactable
         selectedAttachPoint.SetSelected(false);
         selectedAttachPoint.gameObject.SetActive(false);
         selectedAttachPoint = null;
+    }
+
+    public void OnBuildModeClick()
+    {
+        inBuildMode = !inBuildMode;
+        Player.player.ToggleBuildMode(inBuildMode);
+        UpdateBuildMode();
+    }
+
+    public void OnPageUpClick()
+    {
+        
+    }
+
+    public void OnPageDownClick()
+    {
+
+    }
+
+    void UpdateBuildMode()
+    {
+        foreach(Transform display in partDisplays)
+        {
+            display.gameObject.SetActive(inBuildMode);
+        }
+    }
+
+    void UpdatePage()
+    {
+
+        pageText.text = "Page " + (page + 1) + " of " + (pageCount + 1);
+
+        int i = page * partDisplays.Count;
+        foreach (Transform display in partDisplays)
+        {
+            if(display.childCount > 0)
+                Destroy(display.GetChild(0).gameObject);
+
+            if (i < partsList.Count)
+            {
+                GameObject obj = GameObject.Instantiate(partsList[i], transform);
+
+                obj.transform.SetParent(display, true);
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localEulerAngles = Vector3.zero;
+
+                DronePart part = obj.GetComponent<DronePart>();
+                part.enabled = false;
+
+                foreach (AttachPoint point in obj.GetComponentsInChildren<AttachPoint>())
+                {
+                    point.gameObject.SetActive(false);
+                }
+            }
+            else
+                break;
+
+            i++;
+        }
     }
 }
