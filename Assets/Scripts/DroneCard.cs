@@ -19,22 +19,43 @@ public class DroneCard : MonoBehaviour
     internal void SetDrone(DroneBase drone)
     {
         this.drone = drone;
+        drone.hasCard = true;
 
         droneID.text = drone.type.ToString("d2") + "-" + drone.id.ToString("d3");
     }
 
+    private void OnDisable()
+    {
+        drone.hasCard = false;
+        this.drone = null;
+    }
+
+    private bool ValidateDrone()
+    {
+        return drone != null;
+    }
+
+    private void FixedUpdate()
+    {
+        if (drone == null)
+            Destroy(gameObject);
+    }
+
     public void OnReturnClick()
     {
-
+        if (!ValidateDrone())
+            Destroy(gameObject);
     }
 
     public void OnLaunchClick()
     {
-
+        if (!ValidateDrone())
+            Destroy(gameObject);
     }
 
     public void OnPowerClick()
     {
-
+        if (!ValidateDrone())
+            Destroy(gameObject);
     }
 }
