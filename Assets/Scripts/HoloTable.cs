@@ -30,7 +30,7 @@ public class HoloTable : MonoBehaviour
         UpdateBuildMode();
 
         pageCount = (partsList.Count / partDisplays.Count);
-        pageText.text = "Page " + page+1 + " of " + pageCount+1;
+        pageText.text = "Page " + (page + 1) + " of " + (pageCount + 1);
     }
 
     public void SelectAttachPoint(AttachPoint newPoint)

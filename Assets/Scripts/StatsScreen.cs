@@ -19,12 +19,12 @@ public class StatsScreen : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         PowerText.text = "Power: " + GameMgr.inst.Power;
         IronText.text = "Iron: " + GameMgr.inst.Resources.Iron;
         
         float time = Time.timeSinceLevelLoad;
-        TimeText.text = "Time: " + Mathf.Floor(time / 60) + ":" + Mathf.Floor(time);
+        TimeText.text = "Time: " + ((int)Mathf.Floor(time / 60)).ToString("d2") + ":" + (((int)Mathf.Floor(time)) % 60).ToString("d2");
     }
 }
