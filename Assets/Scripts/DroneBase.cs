@@ -63,21 +63,6 @@ public class DroneBase : MonoBehaviour
     void Start()
     {
         transform = GetComponent<Transform>();
-        
-        // Test target intercept. Remove when this class is complete.
-        if(Target != null) {
-            
-            // This is just to test how it reacts to previous velocities
-            velocity.x += 1f;
-            velocity.y += 0.5f;
-            velocity.z += 1.0f;
-            
-            // Approach target and stop
-            thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(Target));
-            thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
-            thrusterCommands.Enqueue(new RotateToPointCommand(Target.transform.position));
-            thrusterCommands.Enqueue(new MineAsteroidCommand(Target.gameObject.GetComponent<Asteroid>()));
-        }
     }
 
     void OnEnable()
@@ -91,7 +76,16 @@ public class DroneBase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {}
+    void Update() {
+        if(Target == null) {
+            Target = GameMgr.inst.asteroids[Random.Range(0, GameMgr.inst.asteroids.Count)].gameObject.transform;
+            
+            thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(Target));
+            thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
+            thrusterCommands.Enqueue(new RotateToPointCommand(Target.transform.position));
+            thrusterCommands.Enqueue(new MineAsteroidCommand(Target.gameObject.GetComponent<Asteroid>()));
+        }
+    }
     
     // Fixed timestep
     void FixedUpdate() {
