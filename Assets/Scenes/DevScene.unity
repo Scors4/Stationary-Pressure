@@ -1568,7 +1568,7 @@ PrefabInstance:
     - target: {fileID: 4349864335836492421, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: Target
       value: 
-      objectReference: {fileID: 8202099388370252604}
+      objectReference: {fileID: 0}
     - target: {fileID: 4349864335836492421, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: LaserEffect
       value: 
@@ -2041,11 +2041,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c5328116e5648944a25e9f12021440b, type: 3}
---- !u!4 &8202099388370252604 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2271760523973536477, guid: 3c5328116e5648944a25e9f12021440b, type: 3}
-  m_PrefabInstance: {fileID: 7950366025201179105}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8262745884008099779
 PrefabInstance:
   m_ObjectHideFlags: 0

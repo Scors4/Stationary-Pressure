@@ -47,7 +47,6 @@ public class GameMgr : MonoBehaviour
     void FixedUpdate() {
         for(int i = GetAsteroids().Count; i < 100; i++) {
             SpawnAsteroid();
-            Debug.Log(GetAsteroids().Count);
         }
     }
 
