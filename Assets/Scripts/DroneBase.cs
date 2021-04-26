@@ -91,7 +91,7 @@ public class DroneBase : MonoBehaviour
         if (Target == null)
         {
             Asteroid ast = GameMgr.inst.asteroids[Random.Range(0, GameMgr.inst.asteroids.Count)];
-            if(ast.isActiveAndEnabled)
+            if(!(ast == null) && ast.isActiveAndEnabled)
                 Target = ast.gameObject.transform;
 
             thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(Target));
