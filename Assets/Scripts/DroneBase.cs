@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DroneBase : MonoBehaviour
 {
+    static int nextId = 0;
+    
     public int type = 0;
     public int id = 0;
 
@@ -61,6 +63,7 @@ public class DroneBase : MonoBehaviour
     void Start()
     {
         transform = GetComponent<Transform>();
+        id = nextId++;
     }
 
     void OnEnable()
