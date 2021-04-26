@@ -43,6 +43,9 @@ public class ScreenInteractor : MonoBehaviour
 
     public void OnMouseDown()
     {
+        if (!enabled)
+            return;
+
         PointerEventData ped = new PointerEventData(es);
         ped.position = Input.mousePosition;
         List<RaycastResult> results = new List<RaycastResult>();
