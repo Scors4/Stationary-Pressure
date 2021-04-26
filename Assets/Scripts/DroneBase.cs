@@ -64,13 +64,15 @@ public class DroneBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DroneMgr.inst.DroneSpawned(this);
         transform = GetComponent<Transform>();
         id = nextId++;
     }
 
     void OnEnable()
     {
-        DroneMgr.inst.DroneSpawned(this);
+        if(DroneMgr.inst != null)
+            DroneMgr.inst.DroneSpawned(this);
     }
 
     void OnDisable()
@@ -80,20 +82,26 @@ public class DroneBase : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(Target == null) {
-            Target = GameMgr.inst.asteroids[Random.Range(0, GameMgr.inst.asteroids.Count)].gameObject.transform;
-            
+        
+    }
+    
+    // Fixed timestep
+    void FixedUpdate() {
+
+        if (Target == null)
+        {
+            Asteroid ast = GameMgr.inst.asteroids[Random.Range(0, GameMgr.inst.asteroids.Count)];
+            if(ast.isActiveAndEnabled)
+                Target = ast.gameObject.transform;
+
             thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(Target));
             thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
             thrusterCommands.Enqueue(new RotateToPointCommand(Target.transform.position));
             thrusterCommands.Enqueue(new MineAsteroidCommand(Target.gameObject.GetComponent<Asteroid>()));
         }
-    }
-    
-    // Fixed timestep
-    void FixedUpdate() {
+
         /// Update thruster commands
-        while(thrusterCommands.Count > 0 && thrusterCommands.Peek().IsFinished(this)) {
+        while (thrusterCommands.Count > 0 && thrusterCommands.Peek().IsFinished(this)) {
             thrusterCommands.Dequeue();
         }
         

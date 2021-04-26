@@ -57,7 +57,7 @@ public class GameMgr : MonoBehaviour
         List<Asteroid> filtered = new List<Asteroid>();
         
         foreach(Asteroid a in asteroids) {
-            if(a != null) {
+            if(a != null && a.isActiveAndEnabled) {
                 filtered.Add(a);
             }
         }

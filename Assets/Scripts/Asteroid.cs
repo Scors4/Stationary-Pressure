@@ -27,7 +27,13 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     {
         
     }
-    
+
+    private void OnDisable()
+    {
+        if (GameMgr.inst != null)
+            GameMgr.inst.asteroids.Remove(this);
+    }
+
     // A Fixed Timestep
     void FixedUpdate() {
         // Rotate for visuals
