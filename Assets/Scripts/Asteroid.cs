@@ -18,7 +18,8 @@ public class Asteroid : MonoBehaviour, DroneTargetable
         
         Resources.Iron = 100.0f;
         
-        GameMgr.inst.asteroids.Add(this);
+        if(GameMgr.inst != null)
+            GameMgr.inst.asteroids.Add(this);
     }
 
     // Update is called once per frame

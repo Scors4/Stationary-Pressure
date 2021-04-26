@@ -20,17 +20,34 @@ public class DroneList : MonoBehaviour
         droneMgr = DroneMgr.inst;
         foreach(DroneBase drone in droneMgr.GetDrones())
         {
-            GameObject card = Instantiate(DroneCardPrefab);
-            card.transform.SetParent(panelParent);
-            card.transform.localPosition = Vector3.zero;
-            card.transform.localScale = Vector3.one;
-            card.transform.localEulerAngles = Vector3.zero;
-
-            DroneCard droneCard = card.GetComponent<DroneCard>();
-            if (droneCard != null)
-                droneCard.SetDrone(drone);
-
-            cards.Add(card);
+            BuildNewCard(drone);
         }
+    }
+
+    public void FixedUpdate()
+    {
+        if(droneMgr.GetDrones().Count > cards.Count)
+        {
+            foreach(DroneBase drone in droneMgr.GetDrones())
+            {
+                if (!drone.hasCard)
+                    BuildNewCard(drone);
+            }
+        }
+    }
+
+    private void BuildNewCard(DroneBase drone)
+    {
+        GameObject card = Instantiate(DroneCardPrefab);
+        card.transform.SetParent(panelParent);
+        card.transform.localPosition = Vector3.zero;
+        card.transform.localScale = Vector3.one;
+        card.transform.localEulerAngles = Vector3.zero;
+
+        DroneCard droneCard = card.GetComponent<DroneCard>();
+        if (droneCard != null)
+            droneCard.SetDrone(drone);
+
+        cards.Add(card);
     }
 }

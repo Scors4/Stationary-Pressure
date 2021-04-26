@@ -9,6 +9,8 @@ public class DroneBase : MonoBehaviour
     public int type = 0;
     public int id = 0;
 
+    public bool hasCard = false;
+
     /// The transform
     new private Transform transform = null;
     /// The 3D velocity vector
