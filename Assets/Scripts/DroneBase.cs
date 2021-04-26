@@ -26,14 +26,21 @@ public class DroneBase : MonoBehaviour
     public Transform Target = null;
     /// The speed at which this drone can rotate.
     public float RotationSpeed = 10.0f;
+    /// The maximum speed
+    public float MaxSpeed = 3.0f;
+    
+    /// The target rotation
+    public Quaternion TargetRotation = Quaternion.identity;
     
     /// Whether the thrusters are activated.
     private bool thrustersActivated = false;
     /// The desired Thruster force
     private float desiredThrusterForce = 0.0f;
     
-    /// A queue of commands to execute for the thrusters.
-    private Queue<ThrusterCommand> thrusterCommands = new Queue<ThrusterCommand>();
+    /// A queue of commands to execute.
+    private Queue<Command> thrusterCommands = new Queue<Command>();
+    
+    public GameObject LaserEffect;
     
     /// Get this drone's velocity
     public Vector3 GetVelocity() {
@@ -64,7 +71,10 @@ public class DroneBase : MonoBehaviour
             velocity.z += 1.0f;
             
             // Approach target and stop
-            thrusterCommands.Enqueue(new SerialThrusterCommand(new ApproachTargetToRadiusThrusterCommand(Target), new ZeroVelocityThrusterCommand(this)));
+            thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(Target));
+            thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
+            thrusterCommands.Enqueue(new RotateToPointCommand(Target.transform.position));
+            thrusterCommands.Enqueue(new MineAsteroidCommand(Target.gameObject.GetComponent<Asteroid>()));
         }
     }
 
@@ -79,10 +89,7 @@ public class DroneBase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Update() {}
     
     // Fixed timestep
     void FixedUpdate() {
@@ -95,18 +102,32 @@ public class DroneBase : MonoBehaviour
             thrusterCommands.Peek().Tick(this);
         }
         
+        // Rotation
+        // If the desired rot and rot are close, just set them equal
+        // TODO: Do i need a Mathf.abs here?
+        if(Quaternion.Angle(transform.rotation, TargetRotation) > 1.0) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, RotationSpeed * Time.fixedDeltaTime);
+        } else {
+            transform.rotation = TargetRotation;
+        }
+        
         if(thrustersActivated) {
             float acceleration1D = desiredThrusterForce / weight; 
             acceleration = transform.forward.normalized * acceleration1D;
         }
         
-        velocity += acceleration * Time.fixedDeltaTime;
+        velocity = Vector3.ClampMagnitude(velocity + (acceleration * Time.fixedDeltaTime), MaxSpeed);
         transform.position += velocity * Time.fixedDeltaTime;
+    }
+    
+    /// Whether the drone is at the target rotation
+    public bool isAtTargetRotation() {
+        return transform.rotation == TargetRotation;
     }
 }
 
-/// A command that controls a drone's thrusters
-interface ThrusterCommand {
+/// A command for a drone
+interface Command {
     /// Perform a tick.
     public void Tick(DroneBase drone);
     
@@ -116,11 +137,11 @@ interface ThrusterCommand {
 
 /// A command to rotate to point to a face a point
 // TODO: Consider allowing dynamic positions, or make a command that handles dynamic positions.
-class RotateToPointThrusterCommand : ThrusterCommand {
+class RotateToPointCommand : Command {
     /// The target position
     private Vector3 target;
     
-    public RotateToPointThrusterCommand(Vector3 target) {
+    public RotateToPointCommand(Vector3 target) {
         this.target = target;
     }
     
@@ -131,44 +152,42 @@ class RotateToPointThrusterCommand : ThrusterCommand {
     
      /// Perform a tick
     public void Tick(DroneBase drone) {
-        Vector3 positionDiff = target - drone.transform.position;
-                
-        // Update rotation
-        // https://answers.unity.com/questions/254130/how-do-i-rotate-an-object-towards-a-vector3-point.html
-        Quaternion lookRotation = Quaternion.LookRotation(positionDiff.normalized);
-        
-        // If the desired rot and rot are close, just set them equal
-        // TODO: Do i need a Mathf.abs here?
-        if(Quaternion.Angle(drone.transform.rotation, lookRotation) > 1.0) {
-            drone.transform.rotation = Quaternion.Slerp(drone.transform.rotation, lookRotation, drone.RotationSpeed * Time.fixedDeltaTime);
-        } else {
-            drone.transform.rotation = lookRotation;
-        }
+        updateTargetRotation(drone);
     }
     
     /// Whether this is done executing.
     public bool IsFinished(DroneBase drone) {
+        updateTargetRotation(drone);
+        return drone.isAtTargetRotation();
+    }
+    
+    void updateTargetRotation(DroneBase drone) {
         Vector3 positionDiff = target - drone.transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(positionDiff.normalized);
-        
-        return drone.transform.rotation == lookRotation;
+                
+        // Update rotation
+        // https://answers.unity.com/questions/254130/how-do-i-rotate-an-object-towards-a-vector3-point.html
+        drone.TargetRotation = Quaternion.LookRotation(positionDiff.normalized);
     }
 }
 
 /// Command a drone to zero its velocity
-class ZeroVelocityThrusterCommand : ThrusterCommand {
-    private RotateToPointThrusterCommand rotateCommand;
+class ZeroVelocityCommand : Command {
+    private RotateToPointCommand rotateCommand;
     
-    public ZeroVelocityThrusterCommand(DroneBase drone) {
-        rotateCommand = new RotateToPointThrusterCommand(drone.transform.position - drone.GetVelocity());
+    public ZeroVelocityCommand(DroneBase drone) {
+        rotateCommand = new RotateToPointCommand(drone.transform.position - drone.GetVelocity());
     }
     
     public void Tick(DroneBase drone) {
         rotateCommand.SetTarget(drone.transform.position - drone.GetVelocity());
         
         if(!rotateCommand.IsFinished(drone)) {
+            drone.FireThrusters(0.0f);
             rotateCommand.Tick(drone);
-        } else if(drone.velocity != Vector3.zero) {
+            return;
+        } 
+        
+        if(drone.velocity != Vector3.zero) {
             // F = MA
             // A = F/M
             //
@@ -196,24 +215,27 @@ class ZeroVelocityThrusterCommand : ThrusterCommand {
 }
 
 /// A Command to approach a target. It will not stop when it reaches its destination.
-class ApproachTargetToRadiusThrusterCommand : ThrusterCommand {
+class ApproachTargetToRadiusCommand : Command {
     private Transform target;
-    private RotateToPointThrusterCommand rotateCommand;
+    private RotateToPointCommand rotateCommand;
     
-    public ApproachTargetToRadiusThrusterCommand(Transform target) {
+    public ApproachTargetToRadiusCommand(Transform target) {
         this.target = target;
-        rotateCommand = new RotateToPointThrusterCommand(target.position);
+        rotateCommand = new RotateToPointCommand(target.position);
     }
     
     public void Tick(DroneBase drone) {
         rotateCommand.SetTarget(target.position);
         
-        Vector3 positionDiff = drone.transform.position - target.position;
+        Vector3 positionDiff = target.position - drone.transform.position;
         float positionDiffMag = positionDiff.magnitude;
         
         if(!rotateCommand.IsFinished(drone)) {
             rotateCommand.Tick(drone);
-        } else if(Mathf.Abs(positionDiffMag) < 5.0f || true) {
+            return;
+        } 
+        
+        if(Mathf.Abs(positionDiffMag) > 5.0f) {
             // F = MA
             // A = F/M
             //
@@ -222,13 +244,14 @@ class ApproachTargetToRadiusThrusterCommand : ThrusterCommand {
             //
             // x = VT + 0.5AT^2
             // 2(x - VT) = AT^2
-            // sqrt(2(x - VT)) = AT
-            // A = sqrt(2(x - VT)) / T
-            // F/M = sqrt(2(x - VT)) / T
-            // F = M * sqrt(2(x - VT)) / T
-            // TODO: This seems too slow?
-            float desiredForce = drone.weight * Mathf.Sqrt(2.0f * (positionDiff.magnitude - (drone.GetVelocity().magnitude * Time.fixedDeltaTime))) / Time.fixedDeltaTime;
+            // A = 2(x - VT) / T^2
+            // F/M = 2(x - VT) / T^2
+            // F = M * 2(x - VT) / T^2
+            Vector3 xVT = positionDiff - (drone.GetVelocity() * Time.fixedDeltaTime);
+            float desiredForce = drone.weight * 2.0f * xVT.magnitude / (Time.fixedDeltaTime * Time.fixedDeltaTime);
             drone.FireThrusters(desiredForce);
+        } else {
+            drone.FireThrusters(0.0f);
         }
     }
     
@@ -238,12 +261,33 @@ class ApproachTargetToRadiusThrusterCommand : ThrusterCommand {
     }
 }
 
-/// Execute thruster commands in parallel
-class ParallelThrusterCommand : ThrusterCommand {
-    ThrusterCommand command1;
-    ThrusterCommand command2;
+/// A command to mine an asteroid
+// TODO: Consider allowing dynamic positions, or make a command that handles dynamic positions.
+class MineAsteroidCommand : Command {
+    /// The target position
+    private Asteroid target;
     
-    public ParallelThrusterCommand(ThrusterCommand command1, ThrusterCommand command2) {
+    public MineAsteroidCommand(Asteroid target) {
+        this.target = target;
+    }
+    
+     /// Perform a tick
+    public void Tick(DroneBase drone) {
+        target.Mine();
+    }
+    
+    /// Whether this is done executing.
+    public bool IsFinished(DroneBase drone) {
+        return target.IsEmpty();
+    }
+}
+
+/// Execute commands in parallel
+class ParallelCommand : Command {
+    Command command1;
+    Command command2;
+    
+    public ParallelCommand(Command command1, Command command2) {
         this.command1 = command1;
         this.command2 = command2;
     }
@@ -259,13 +303,13 @@ class ParallelThrusterCommand : ThrusterCommand {
 }
 
 /// Execute thruster commands in a series
-class SerialThrusterCommand : ThrusterCommand {
-    ThrusterCommand command1;
-    ThrusterCommand command2;
+class SerialCommand : Command {
+    Command command1;
+    Command command2;
     
     int command = 0;
     
-    public SerialThrusterCommand(ThrusterCommand command1, ThrusterCommand command2) {
+    public SerialCommand(Command command1, Command command2) {
         this.command1 = command1;
         this.command2 = command2;
     }

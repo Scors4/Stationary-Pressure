@@ -20,6 +20,6 @@ public class StatsScreen : MonoBehaviour
     void Update()
     {
         PowerText.text = "Power: " + GameMgr.inst.Power;
-        IronText.text = "Iron: " + GameMgr.inst.Resources[RESOURCE.IRON];
+        IronText.text = "Iron: " + GameMgr.inst.Resources.Iron;
     }
 }

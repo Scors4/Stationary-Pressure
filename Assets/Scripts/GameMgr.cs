@@ -8,13 +8,18 @@ public enum RESOURCE
     IRON
 }
 
+/// A set of all possible resources, excluding power
+public class ResourceSet {
+    public float Iron = 0.0f;
+}
+
 public class GameMgr : MonoBehaviour
 {
     public static GameMgr inst;
 
     public List<Asteroid> asteroids;
     
-    public SerializableDictionary<RESOURCE, float> Resources;
+    public ResourceSet Resources = new ResourceSet();
     public int Power = 0;
 
     // Start is called before the first frame update
@@ -38,6 +43,14 @@ public class GameMgr : MonoBehaviour
 
     public List<Asteroid> GetAsteroids()
     {
-        return asteroids;
+        List<Asteroid> filtered = new List<Asteroid>();
+        
+        foreach(Asteroid a in asteroids) {
+            if(a != null) {
+                filtered.Add(a);
+            }
+        }
+        
+        return filtered;
     }
 }
