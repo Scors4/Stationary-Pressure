@@ -17,6 +17,8 @@ public class Asteroid : MonoBehaviour, DroneTargetable
         transform = GetComponent<Transform>();
         
         Resources.Iron = 100.0f;
+        
+        GameMgr.inst.asteroids.Add(this);
     }
 
     // Update is called once per frame

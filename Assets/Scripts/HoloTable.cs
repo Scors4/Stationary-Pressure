@@ -8,6 +8,9 @@ public class HoloTable : MonoBehaviour
     public List<Transform> partDisplays;
     List<GameObject> partsList;
     public Text pageText;
+    
+    public GameObject droneSpawn;
+    public GameObject dronePrefab;
 
     public Button buildModeButton;
 
@@ -119,6 +122,13 @@ public class HoloTable : MonoBehaviour
                 break;
 
             i++;
+        }
+    }
+    
+    public void PrintDrone() {
+        if(GameMgr.inst.Resources.Iron >= 70.0f){
+            GameMgr.inst.Resources.Iron -= 70.0f;
+            Instantiate(dronePrefab, droneSpawn.transform.position, droneSpawn.transform.rotation);
         }
     }
 }
