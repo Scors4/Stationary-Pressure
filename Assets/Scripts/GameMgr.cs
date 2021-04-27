@@ -5,7 +5,9 @@ using UnityEngine;
 [SerializeField]
 public enum RESOURCE
 {
-    IRON
+    IRON,
+    COPPER,
+    URANIUM
 }
 
 /// A set of all possible resources, excluding power

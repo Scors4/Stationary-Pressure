@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DroneStatFields
+{
+    HEALTH,
+    POWER,
+    FUEL,
+    AMMO,
+    STORAGE
+}
+
 public class DroneBase : MonoBehaviour
 {
     static int nextId = 0;
@@ -10,6 +19,8 @@ public class DroneBase : MonoBehaviour
     public int id = 0;
 
     public bool hasCard = false;
+
+    SerializableDictionary<DroneStatFields, float> droneStats;
 
     /// The transform
     new private Transform transform = null;
@@ -78,6 +89,11 @@ public class DroneBase : MonoBehaviour
     void OnDisable()
     {
         DroneMgr.inst.DroneDestroyed(this);
+    }
+
+    public void SetDroneStats(SerializableDictionary<DroneStatFields, float> stats)
+    {
+        droneStats = stats;
     }
 
     // Update is called once per frame

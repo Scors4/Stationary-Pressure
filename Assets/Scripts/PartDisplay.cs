@@ -9,12 +9,15 @@ public class PartDisplay : MonoBehaviour, Interactable
 
     int frameToHide = 0;
     bool isHovered = false;
+    bool isPartValid = true;
 
     public Material hoveredMaterial;
+    public Material invalidMaterial;
     protected Material originalMaterial;
 
     MeshRenderer meshRender;
     HoloTable holoTable;
+    DronePart displayedPart;
 
 
     private void Start()
@@ -38,6 +41,9 @@ public class PartDisplay : MonoBehaviour, Interactable
 
     public void OnHover(GameObject other)
     {
+        if (!isPartValid)
+            return;
+
         frameToHide = 3;
         if(!isHovered)
         {
@@ -48,6 +54,36 @@ public class PartDisplay : MonoBehaviour, Interactable
 
     public void OnInteraction(GameObject other)
     {
+        if (!isPartValid)
+            return;
+
         holoTable.AddPart(selfIndex, anchorIndex);
+    }
+
+    public void SetPartValid(bool isValid)
+    {
+        if (isValid == isPartValid)
+            return;
+
+        isPartValid = isValid;
+
+        if(isValid)
+        {
+            meshRender.material = originalMaterial;
+        }
+        else
+        {
+            meshRender.material = invalidMaterial;
+        }
+    }
+
+    public void SetDisplayedPart(DronePart part)
+    {
+        displayedPart = part;
+    }
+
+    public DronePart GetDisplayedPart()
+    {
+        return displayedPart;
     }
 }

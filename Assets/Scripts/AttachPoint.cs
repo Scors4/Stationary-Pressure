@@ -85,4 +85,9 @@ public class AttachPoint : MonoBehaviour, Interactable
 
         isSelected = newState;
     }
+
+    public AttachType GetAttachType()
+    {
+        return attachType;
+    }
 }

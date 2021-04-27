@@ -6,9 +6,13 @@ public class DronePart : MonoBehaviour, Interactable
 {
     public Material highlightMat;
     public float mass;
+    public Vector3 displayScale = Vector3.one;
+
     public SerializableDictionary<RESOURCE, float> resourceCost;
+    public SerializableDictionary<DroneStatFields, float> statsGiven;
 
     public List<AttachPoint> anchorPoints;
+    public AttachType attachType;
     AttachPoint parentPoint;
     int frameToHide;
     bool isHighlighted = false;
@@ -29,6 +33,8 @@ public class DronePart : MonoBehaviour, Interactable
 
         highlightObject.transform.SetParent(newParent, false);
         highlightObject.SetActive(false);
+
+        UpdateAttachType();
     }
 
     public void OnHover(GameObject other)
@@ -49,7 +55,11 @@ public class DronePart : MonoBehaviour, Interactable
             return;
 
         if (parentPoint != null)
+        {
             parentPoint.gameObject.SetActive(true);
+            HoloTable ht = GetComponentInParent<HoloTable>();
+            ht.PartRemoved(this);
+        }
         Destroy(gameObject);
     }
 
@@ -93,5 +103,28 @@ public class DronePart : MonoBehaviour, Interactable
     public void SetParentAttachPoint(AttachPoint newParentPoint)
     {
         parentPoint = newParentPoint;
+        attachType = parentPoint.attachType & attachType;
+        UpdateAttachType();
+    }
+
+    public AttachType GetAttachType()
+    {
+        return attachType;
+    }
+
+    public SerializableDictionary<RESOURCE, float> GetResourceCost()
+    {
+        return resourceCost;
+    }
+
+    public SerializableDictionary<DroneStatFields, float> GetStatFields()
+    {
+        return statsGiven;
+    }
+
+    public void UpdateAttachType()
+    {
+        foreach (AttachPoint point in anchorPoints)
+            point.attachType = attachType;
     }
 }

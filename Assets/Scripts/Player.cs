@@ -7,8 +7,6 @@ public class Player : MonoBehaviour
     public static Player player;
 
     public bool isInBuild {get; private set;}
-    public float mouseSensitivity = 125;
-    public float moveSpeed = 15;
     private Camera playerCamera;
     private Rigidbody rb;
 
@@ -30,9 +28,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateCameraMovement();
-        UpdatePlayerMovement();
-
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Mouse0))
             FireInteraction();
     }
@@ -46,18 +41,6 @@ public class Player : MonoBehaviour
     public void ToggleBuildMode(bool newState)
     {
         isInBuild = newState;
-    }
-
-    void UpdateCameraMovement()
-    {
-        playerCamera.transform.Rotate(Vector3.right * -Input.GetAxis("Mouse Y") * Time.deltaTime * mouseSensitivity);
-        transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * Time.deltaTime * mouseSensitivity);
-    }
-
-    void UpdatePlayerMovement()
-    {
-        if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
-            transform.Translate((Input.GetAxis("Vertical") * Vector3.forward * moveSpeed * Time.deltaTime) + (Input.GetAxis("Horizontal") * Vector3.right * moveSpeed * Time.deltaTime));
     }
 
     void UpdatePossibleInteraction()
@@ -83,6 +66,9 @@ public class Player : MonoBehaviour
 
     void FireInteraction()
     {
+        if (!isInBuild)
+            return;
+
         Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 5, Color.white, 1.0f);
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, 5, 1 << 3))
         {

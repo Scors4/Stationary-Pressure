@@ -63,13 +63,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightMat: {fileID: 2100000, guid: cf4cfccc462f3ab4eb0120cc335d93ad, type: 2}
   mass: 0
-  resourceDemands:
+  resourceCost:
     list:
     - Key: 0
-      Value: 0
+      Value: 10
+    - Key: 1
+      Value: 5
+  statsGiven:
+    list:
+    - Key: 0
+      Value: 5
   anchorPoints:
   - {fileID: 1786521892392459829}
   - {fileID: 8542489486716389536}
+  attachType: -1
 --- !u!1 &9145587583791453257
 GameObject:
   m_ObjectHideFlags: 0

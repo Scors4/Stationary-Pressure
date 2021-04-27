@@ -4,7 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - hoveredMaterial: {fileID: 2100000, guid: cf4cfccc462f3ab4eb0120cc335d93ad, type: 2}
+  - hoveredMaterial: {fileID: 2100000, guid: 3053e3598d16a41449878f02e5803437, type: 2}
+  - invalidMaterial: {fileID: 2100000, guid: 8b37e6a48d062574ab5e80575ec1b2d2, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

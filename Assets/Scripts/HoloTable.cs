@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class HoloTable : MonoBehaviour
 {
-    public List<Transform> partDisplays;
+    public List<PartDisplay> partDisplays;
     List<GameObject> partsList;
     public Text pageText;
+    public Text costText;
+
+    SerializableDictionary<RESOURCE, float> currentResourceCost;
+    SerializableDictionary<DroneStatFields, float> currentDroneStats;
     
     public GameObject droneSpawn;
     public GameObject dronePrefab;
@@ -26,6 +30,9 @@ public class HoloTable : MonoBehaviour
         partsList = new List<GameObject>();
         partsList.AddRange(parts);
 
+        currentResourceCost = new SerializableDictionary<RESOURCE, float>();
+        currentDroneStats = new SerializableDictionary<DroneStatFields, float>();
+
         UpdatePage();
         UpdateBuildMode();
 
@@ -40,6 +47,8 @@ public class HoloTable : MonoBehaviour
         
         selectedAttachPoint = newPoint;
         selectedAttachPoint.SetSelected(true);
+
+        UpdateValidPartCheck();
     }
 
     public void AddPart(int displayIndex, int anchorIndex)
@@ -64,6 +73,56 @@ public class HoloTable : MonoBehaviour
         selectedAttachPoint.SetSelected(false);
         selectedAttachPoint.gameObject.SetActive(false);
         selectedAttachPoint = null;
+
+        SerializableDictionary<RESOURCE, float> costsRemoved = part.GetResourceCost();
+        foreach (RESOURCE res in costsRemoved.Keys)
+        {
+            if (!currentResourceCost.ContainsKey(res))
+                currentResourceCost[res] = 0;
+
+            currentResourceCost[res] = currentResourceCost[res] + costsRemoved[res];
+        }
+
+        SerializableDictionary<DroneStatFields, float> statsRemoved = part.GetStatFields();
+        foreach (DroneStatFields stat in statsRemoved.Keys)
+        {
+            if (!currentDroneStats.ContainsKey(stat))
+                currentDroneStats[stat] = 0;
+
+            currentDroneStats[stat] = currentDroneStats[stat] - statsRemoved[stat];
+        }
+    }
+
+    public void PartRemoved(DronePart part)
+    {
+        DronePart[] removedParts = part.GetComponentsInChildren<DronePart>();
+
+        foreach(DronePart removedPart in removedParts)
+        {
+            SerializableDictionary<RESOURCE, float> costsRemoved = removedPart.GetResourceCost();
+            foreach(RESOURCE res in costsRemoved.Keys)
+            {
+                currentResourceCost[res] = currentResourceCost[res] - costsRemoved[res];
+            }
+
+            SerializableDictionary<DroneStatFields, float> statsRemoved = removedPart.GetStatFields();
+            foreach(DroneStatFields stat in statsRemoved.Keys)
+            {
+                currentDroneStats[stat] = currentDroneStats[stat] - statsRemoved[stat];
+            }
+        }
+
+        SerializableDictionary<RESOURCE, float> costRemoved = part.GetResourceCost();
+        foreach (RESOURCE res in costRemoved.Keys)
+        {
+            currentResourceCost[res] = currentResourceCost[res] - costRemoved[res];
+        }
+
+        SerializableDictionary<DroneStatFields, float> statRemoved = part.GetStatFields();
+        foreach (DroneStatFields stat in statRemoved.Keys)
+        {
+            currentDroneStats[stat] = currentDroneStats[stat] - statRemoved[stat];
+        }
     }
 
     public void OnBuildModeClick()
@@ -75,17 +134,25 @@ public class HoloTable : MonoBehaviour
 
     public void OnPageUpClick()
     {
-        
+        page++;
+        if (page > pageCount)
+            page = 0;
+
+        UpdatePage();
     }
 
     public void OnPageDownClick()
     {
+        page--;
+        if (page < 0)
+            page = pageCount;
 
+        UpdatePage();
     }
 
     void UpdateBuildMode()
     {
-        foreach(Transform display in partDisplays)
+        foreach(PartDisplay display in partDisplays)
         {
             display.gameObject.SetActive(inBuildMode);
         }
@@ -93,25 +160,30 @@ public class HoloTable : MonoBehaviour
 
     void UpdatePage()
     {
-
         pageText.text = "Page " + (page + 1) + " of " + (pageCount + 1);
 
         int i = page * partDisplays.Count;
-        foreach (Transform display in partDisplays)
+        foreach (PartDisplay display in partDisplays)
         {
-            if(display.childCount > 0)
-                Destroy(display.GetChild(0).gameObject);
+            if (display.transform.childCount > 0)
+            {
+                Destroy(display.transform.GetChild(0).gameObject);
+                display.SetDisplayedPart(null);
+            }
 
             if (i < partsList.Count)
             {
                 GameObject obj = GameObject.Instantiate(partsList[i], transform);
+                DronePart part = obj.GetComponent<DronePart>();
 
-                obj.transform.SetParent(display, true);
+                obj.transform.localScale = part.displayScale;
+
+                obj.transform.SetParent(display.transform, true);
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localEulerAngles = Vector3.zero;
 
-                DronePart part = obj.GetComponent<DronePart>();
                 part.enabled = false;
+                display.SetDisplayedPart(part);
 
                 foreach (AttachPoint point in obj.GetComponentsInChildren<AttachPoint>())
                 {
@@ -123,8 +195,32 @@ public class HoloTable : MonoBehaviour
 
             i++;
         }
+
+        UpdateValidPartCheck();
     }
-    
+
+    void UpdateValidPartCheck()
+    {
+        if (selectedAttachPoint == null)
+        {
+            foreach (PartDisplay display in partDisplays)
+                display.SetPartValid(true);
+        }
+        else
+        { 
+
+            foreach(PartDisplay display in partDisplays)
+            {
+                DronePart part = display.GetDisplayedPart();
+                if (part != null)
+                {
+                    display.SetPartValid((part.GetAttachType() & selectedAttachPoint.GetAttachType()) != 0);
+                }
+            }
+        }
+    }
+
+
     public void PrintDrone() {
         if(GameMgr.inst.Resources.Iron >= 70.0f){
             GameMgr.inst.Resources.Iron -= 70.0f;
