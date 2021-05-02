@@ -35,17 +35,17 @@ public class DroneBase : MonoBehaviour
     // TODO: Consider making private to ensure weight is only changed by drone components.
     public float weight = 1.0f; 
     /// The amount of force a thruster can provide.
-    public float ThrusterForce = 0.2f;
+    public float thrusterForce = 1f;
     
     /// The drone's target
-    public Transform Target = null;
+    public Transform target = null;
     /// The speed at which this drone can rotate.
-    public float RotationSpeed = 10.0f;
+    public float rotationSpeed = 10.0f;
     /// The maximum speed
-    public float MaxSpeed = 3.0f;
+    public float maxSpeed = 3.0f;
     
     /// The target rotation
-    public Quaternion TargetRotation = Quaternion.identity;
+    public Quaternion targetRotation = Quaternion.identity;
     
     /// Whether the thrusters are activated.
     private bool thrustersActivated = false;
@@ -55,7 +55,7 @@ public class DroneBase : MonoBehaviour
     /// A queue of commands to execute.
     private Queue<Command> thrusterCommands = new Queue<Command>();
     
-    public GameObject LaserEffect;
+    public GameObject laserEffect;
     
     /// Get this drone's velocity
     public Vector3 GetVelocity() {
@@ -67,7 +67,7 @@ public class DroneBase : MonoBehaviour
     public void FireThrusters(float force) {
         // F = MA
         // A = F/M
-        desiredThrusterForce = Mathf.Clamp(force, 0.0f, ThrusterForce);
+        desiredThrusterForce = Mathf.Clamp(force, 0.0f, thrusterForce);
         
         thrustersActivated = desiredThrusterForce != 0.0f;
     }
@@ -104,16 +104,16 @@ public class DroneBase : MonoBehaviour
     // Fixed timestep
     void FixedUpdate() {
 
-        if (Target == null)
+        if (target == null)
         {
             Asteroid ast = GameMgr.inst.asteroids[Random.Range(0, GameMgr.inst.asteroids.Count)];
             if(!(ast == null) && ast.isActiveAndEnabled)
-                Target = ast.gameObject.transform;
+                target = ast.gameObject.transform;
 
-            thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(Target));
+            thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(target));
             thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
-            thrusterCommands.Enqueue(new RotateToPointCommand(Target.transform.position));
-            thrusterCommands.Enqueue(new MineAsteroidCommand(Target.gameObject.GetComponent<Asteroid>()));
+            thrusterCommands.Enqueue(new RotateToPointCommand(target.transform.position));
+            thrusterCommands.Enqueue(new MineAsteroidCommand(target.gameObject.GetComponent<Asteroid>()));
         }
 
         /// Update thruster commands
@@ -128,10 +128,10 @@ public class DroneBase : MonoBehaviour
         // Rotation
         // If the desired rot and rot are close, just set them equal
         // TODO: Do i need a Mathf.abs here?
-        if(Quaternion.Angle(transform.rotation, TargetRotation) > 1.0) {
-            transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, RotationSpeed * Time.fixedDeltaTime);
+        if(Quaternion.Angle(transform.rotation, targetRotation) > 1.0) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         } else {
-            transform.rotation = TargetRotation;
+            transform.rotation = targetRotation;
         }
         
         if(thrustersActivated) {
@@ -139,13 +139,13 @@ public class DroneBase : MonoBehaviour
             acceleration = transform.forward.normalized * acceleration1D;
         }
         
-        velocity = Vector3.ClampMagnitude(velocity + (acceleration * Time.fixedDeltaTime), MaxSpeed);
+        velocity = Vector3.ClampMagnitude(velocity + (acceleration * Time.fixedDeltaTime), maxSpeed);
         transform.position += velocity * Time.fixedDeltaTime;
     }
     
     /// Whether the drone is at the target rotation
     public bool isAtTargetRotation() {
-        return transform.rotation == TargetRotation;
+        return transform.rotation == targetRotation;
     }
 }
 
@@ -189,7 +189,7 @@ class RotateToPointCommand : Command {
                 
         // Update rotation
         // https://answers.unity.com/questions/254130/how-do-i-rotate-an-object-towards-a-vector3-point.html
-        drone.TargetRotation = Quaternion.LookRotation(positionDiff.normalized);
+        drone.targetRotation = Quaternion.LookRotation(positionDiff.normalized);
     }
 }
 
@@ -219,8 +219,8 @@ class ZeroVelocityCommand : Command {
             //
             // V = FT/M
             // F = VM/T
-            float desiredForce = drone.GetVelocity().magnitude * drone.weight / Time.fixedDeltaTime;
-            drone.FireThrusters(desiredForce);
+            // float desiredForce = drone.GetVelocity().magnitude * drone.weight / Time.fixedDeltaTime;
+            drone.FireThrusters(drone.thrusterForce);
             
             // Zero velocity to avoid dealing with "drifting".
             // This will lead to unexpected stops, but is far simpler to deal with.
@@ -258,21 +258,14 @@ class ApproachTargetToRadiusCommand : Command {
             return;
         } 
         
-        if(Mathf.Abs(positionDiffMag) > 5.0f) {
-            // F = MA
-            // A = F/M
-            //
-            // V(T) = V(0) + AT
-            // V = AT
-            //
-            // x = VT + 0.5AT^2
-            // 2(x - VT) = AT^2
-            // A = 2(x - VT) / T^2
-            // F/M = 2(x - VT) / T^2
-            // F = M * 2(x - VT) / T^2
-            Vector3 xVT = positionDiff - (drone.GetVelocity() * Time.fixedDeltaTime);
-            float desiredForce = drone.weight * 2.0f * xVT.magnitude / (Time.fixedDeltaTime * Time.fixedDeltaTime);
-            drone.FireThrusters(desiredForce);
+       float velocityMag = drone.velocity.magnitude;
+       float timeToIntercept = positionDiffMag / velocityMag;
+       float maxAcceleration = drone.thrusterForce / drone.weight;
+       float timeToSlow = drone.velocity.magnitude / maxAcceleration;
+       float timeToTarget = (positionDiffMag + 35.0f) / drone.velocity.magnitude;
+        
+        if(timeToSlow < timeToTarget) {
+            drone.FireThrusters(drone.thrusterForce);
         } else {
             drone.FireThrusters(0.0f);
         }
@@ -280,7 +273,8 @@ class ApproachTargetToRadiusCommand : Command {
     
     public bool IsFinished(DroneBase drone) {
         Vector3 positionDiff = drone.transform.position - target.position;
-        return Mathf.Abs(positionDiff.magnitude) < 5.0f;
+        float maxAcceleration = drone.thrusterForce / drone.weight;
+        return Mathf.Abs(positionDiff.magnitude) < 25.0f;
     }
 }
 

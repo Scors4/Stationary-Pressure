@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.0006493982, g: 0.50058746, b: 0.5005313, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014785795, g: 0.0013591028, b: 0.0012890887, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1393,6 +1393,10 @@ PrefabInstance:
     - target: {fileID: 4349864335836492421, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: LaserEffect
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4349864335836492421, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
+      propertyPath: thrusterForce
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4349864335836492441, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: m_RootOrder
