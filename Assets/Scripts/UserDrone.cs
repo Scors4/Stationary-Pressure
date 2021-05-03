@@ -17,9 +17,13 @@ public class UserDrone : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         droneBase = GetComponent<DroneBase>();
-        
+
         DroneMgr.inst.UserDroneSpawned(this);
         id = nextId++;
+
+        DroneBase drone = GetComponent<DroneBase>();
+        if (drone != null)
+            drone.SetOwner(OWNERS.PLAYER);
     }
 
     // Update is called once per frame

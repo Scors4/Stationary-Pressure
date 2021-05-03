@@ -8,6 +8,7 @@ public class DroneMgr : MonoBehaviour
 
     public List<UserDrone> userDrones = new List<UserDrone>();
     public List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
+    public List<DroneBase> allDrones = new List<DroneBase>();
     
     public GameObject userDroneSpawn;
     public GameObject userDronePrefab;
@@ -25,6 +26,10 @@ public class DroneMgr : MonoBehaviour
         if (!userDrones.Contains(newDrone)) {
             userDrones.Add(newDrone);
             droneList.DroneSpawned(newDrone);
+
+            DroneBase db = newDrone.GetComponent<DroneBase>();
+            if (db != null)
+                allDrones.Add(db);
         }
     }
 
@@ -32,17 +37,29 @@ public class DroneMgr : MonoBehaviour
         if (userDrones.Contains(destroyed)) {
             userDrones.Remove(destroyed);
             droneList.DroneDestroyed(destroyed);
+
+            DroneBase db = destroyed.GetComponent<DroneBase>();
+            if (db != null)
+                allDrones.Remove(db);
         }
     }
     
     public void RaiderDroneSpawned(RaiderDrone newDrone) {
         if (!raiderDrones.Contains(newDrone)) {
             raiderDrones.Add(newDrone);
+
+            DroneBase db = newDrone.GetComponent<DroneBase>();
+            if (db != null)
+                allDrones.Add(db);
         }
     }
 
     public void RaiderDroneDestroyed(RaiderDrone destroyed) {
         raiderDrones.Remove(destroyed);
+
+        DroneBase db = destroyed.GetComponent<DroneBase>();
+        if (db != null)
+            allDrones.Remove(db);
     }
 
     public List<UserDrone> GetUserDrones() {
@@ -53,14 +70,28 @@ public class DroneMgr : MonoBehaviour
         return raiderDrones;
     }
     
-    public bool SpawnUserDrone() {
+    public List <DroneBase> GetAllDrones()
+    {
+        return allDrones;
+    }
+
+    bool CanPrintDrone(ResourceSet resourceCost)
+    {
+        ResourceSet currentSupply = GameMgr.inst.Resources;
+        return resourceCost.Iron <= currentSupply.Iron
+            && resourceCost.Copper <= currentSupply.Copper
+            && resourceCost.Uranium <= currentSupply.Uranium;
+    }
+
+    public bool SpawnUserDrone(ResourceSet resourceCost) {
         // TODO: Calculate cost dynamically
-        float cost = 70.0f;
-        
-        if(GameMgr.inst.Resources.Iron < cost)
+
+        if (!CanPrintDrone(resourceCost))
             return false;
-        
-        GameMgr.inst.Resources.Iron -= cost;
+
+        GameMgr.inst.Resources.Iron -= resourceCost.Iron;
+        GameMgr.inst.Resources.Copper -= resourceCost.Copper;
+        GameMgr.inst.Resources.Uranium -= resourceCost.Uranium;
             
         Vector3 offset = new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f));
         Vector3 position = userDroneSpawn.transform.position + offset;

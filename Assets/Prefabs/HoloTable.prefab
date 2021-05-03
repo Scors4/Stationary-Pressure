@@ -681,8 +681,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 36
+    m_Font: {fileID: 12800000, guid: 24da2f69f26ff2345a977344063a21c5, type: 3}
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -690,7 +690,7 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Res A:
@@ -1198,9 +1198,9 @@ MonoBehaviour:
   - {fileID: 1162599541123671672}
   - {fileID: 5364242896977389913}
   pageText: {fileID: 3843456882099121948}
-  costText: {fileID: 0}
-  droneSpawn: {fileID: 0}
-  dronePrefab: {fileID: 0}
+  costText: {fileID: 7142935109544231133}
+  currentResourceCost:
+    list: []
   buildModeButton: {fileID: 2653264057339421654}
 --- !u!1 &8877745098178343153
 GameObject:
@@ -1774,15 +1774,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1811,6 +1811,18 @@ PrefabInstance:
     - target: {fileID: 7830410197661424758, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_Name
       value: AttachPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 9124676845138161029, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 9124676845138161029, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 9124676845138161029, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}

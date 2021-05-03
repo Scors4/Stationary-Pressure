@@ -34,7 +34,7 @@ public class RadarScreen : MonoBehaviour
 
     void FixedUpdate()
     {
-        List<UserDrone> activeDrones = DroneMgr.inst.GetUserDrones();
+        List<DroneBase> activeDrones = DroneMgr.inst.GetAllDrones();
         List<Asteroid> activeRoids = AsteroidMgr.inst.GetAsteroids();
 
         if (droneIcons.Count != activeDrones.Count)
@@ -53,6 +53,14 @@ public class RadarScreen : MonoBehaviour
             if (droneIcons.Count > activeDrones.Count)
             {
                 droneIcons.RemoveRange(activeDrones.Count, (droneIcons.Count - activeDrones.Count));
+            }
+
+            for(int i = 0; i < droneIcons.Count; i++)
+            {
+                DroneBase drone = activeDrones[i];
+                Bogie bogie = droneIcons[i];
+
+                bogie.SetDroneOwner(drone.GetOwner());
             }
         }
 
@@ -77,7 +85,7 @@ public class RadarScreen : MonoBehaviour
 
         for (int i = 0; i < droneIcons.Count; i++)
         {
-            UserDrone drone = activeDrones[i];
+            DroneBase drone = activeDrones[i];
             Bogie bogie = droneIcons[i];
 
             float distance = Vector3.Distance(drone.transform.position, sensor.transform.position);

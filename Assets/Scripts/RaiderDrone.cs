@@ -15,6 +15,10 @@ public class RaiderDrone : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         DroneMgr.inst.RaiderDroneSpawned(this);
+
+        DroneBase drone = GetComponent<DroneBase>();
+        if (drone != null)
+            drone.SetOwner(OWNERS.RAIDER);
     }
 
     // Update is called once per frame

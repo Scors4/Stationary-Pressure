@@ -8,7 +8,7 @@ public class StatsScreen : MonoBehaviour
     /// The label for power
     public Text PowerText;
     /// The label for iron
-    public Text IronText;
+    public Text ResourceText;
     /// The label for time
     public Text TimeText;
     /// The time to the next wave
@@ -23,7 +23,10 @@ public class StatsScreen : MonoBehaviour
     void FixedUpdate()
     {
         PowerText.text = "Power: " + GameMgr.inst.Power;
-        IronText.text = "Iron: " + GameMgr.inst.Resources.Iron;
+        ResourceText.text = "Iron: " + GameMgr.inst.Resources.Iron.ToString("#.0") + "\n"
+            + "Copper: " + GameMgr.inst.Resources.Copper.ToString("#.0") + "\n"
+            + "Uranium: " + GameMgr.inst.Resources.Uranium.ToString("#.0") + "\n"
+            + "Ice: " + GameMgr.inst.Resources.Ice.ToString("#.0");
         
         TimeText.text = "Time: " + Util.formatTime(GameMgr.inst.timeSurvived);
         TimeNextWaveText.text = "Next Wave In: " + Util.formatTime(GameMgr.inst.timeToNextWave);

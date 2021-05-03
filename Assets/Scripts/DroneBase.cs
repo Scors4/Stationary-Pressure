@@ -11,6 +11,13 @@ public enum DroneStatFields
     STORAGE
 }
 
+public enum OWNERS
+{
+    PLAYER,
+    RAIDER,
+    NEUTRAL
+}
+
 public class DroneBase : MonoBehaviour {
     SerializableDictionary<DroneStatFields, float> droneStats;
 
@@ -47,6 +54,9 @@ public class DroneBase : MonoBehaviour {
     
     public float health = 100.0f;
     public float damage = 3.0f;
+
+    OWNERS owner;
+    public bool isRadarHidden = false;
     
     /// Get this drone's position
     public Vector3 GetPosition() {
@@ -130,6 +140,16 @@ public class DroneBase : MonoBehaviour {
         health -= power;
         
         // Delegate the actual reaction to negative health to the caller since the caller needs to handle deregistering the user/raider drone.
+    }
+
+    public void SetOwner(OWNERS newOwner)
+    {
+        owner = newOwner;
+    }
+
+    public OWNERS GetOwner()
+    {
+        return owner;
     }
 }
 

@@ -10,7 +10,7 @@ public class HoloTable : MonoBehaviour
     public Text pageText;
     public Text costText;
 
-    SerializableDictionary<RESOURCE, float> currentResourceCost;
+    public ResourceSet currentResourceCost;
     SerializableDictionary<DroneStatFields, float> currentDroneStats;
 
     public Button buildModeButton;
@@ -27,7 +27,7 @@ public class HoloTable : MonoBehaviour
         partsList = new List<GameObject>();
         partsList.AddRange(parts);
 
-        currentResourceCost = new SerializableDictionary<RESOURCE, float>();
+        currentResourceCost = new ResourceSet();
         currentDroneStats = new SerializableDictionary<DroneStatFields, float>();
 
         UpdatePage();
@@ -71,14 +71,11 @@ public class HoloTable : MonoBehaviour
         selectedAttachPoint.gameObject.SetActive(false);
         selectedAttachPoint = null;
 
-        SerializableDictionary<RESOURCE, float> costsRemoved = part.GetResourceCost();
-        foreach (RESOURCE res in costsRemoved.Keys)
-        {
-            if (!currentResourceCost.ContainsKey(res))
-                currentResourceCost[res] = 0;
+        SerializableDictionary<RESOURCE, float> costsIncurred = part.GetResourceCost();
+        currentResourceCost.Iron += costsIncurred[RESOURCE.IRON];
+        currentResourceCost.Copper += costsIncurred[RESOURCE.COPPER];
+        currentResourceCost.Uranium += costsIncurred[RESOURCE.URANIUM];
 
-            currentResourceCost[res] = currentResourceCost[res] + costsRemoved[res];
-        }
 
         SerializableDictionary<DroneStatFields, float> statsRemoved = part.GetStatFields();
         foreach (DroneStatFields stat in statsRemoved.Keys)
@@ -88,6 +85,8 @@ public class HoloTable : MonoBehaviour
 
             currentDroneStats[stat] = currentDroneStats[stat] - statsRemoved[stat];
         }
+
+        UpdateCostDisplay();
     }
 
     public void PartRemoved(DronePart part)
@@ -96,11 +95,10 @@ public class HoloTable : MonoBehaviour
 
         foreach(DronePart removedPart in removedParts)
         {
-            SerializableDictionary<RESOURCE, float> costsRemoved = removedPart.GetResourceCost();
-            foreach(RESOURCE res in costsRemoved.Keys)
-            {
-                currentResourceCost[res] = currentResourceCost[res] - costsRemoved[res];
-            }
+            SerializableDictionary<RESOURCE, float> costsIncurred = part.GetResourceCost();
+            currentResourceCost.Iron -= costsIncurred[RESOURCE.IRON];
+            currentResourceCost.Copper -= costsIncurred[RESOURCE.COPPER];
+            currentResourceCost.Uranium -= costsIncurred[RESOURCE.URANIUM];
 
             SerializableDictionary<DroneStatFields, float> statsRemoved = removedPart.GetStatFields();
             foreach(DroneStatFields stat in statsRemoved.Keys)
@@ -109,17 +107,29 @@ public class HoloTable : MonoBehaviour
             }
         }
 
-        SerializableDictionary<RESOURCE, float> costRemoved = part.GetResourceCost();
-        foreach (RESOURCE res in costRemoved.Keys)
-        {
-            currentResourceCost[res] = currentResourceCost[res] - costRemoved[res];
-        }
+        SerializableDictionary<RESOURCE, float> costIncurred = part.GetResourceCost();
+        currentResourceCost.Iron -= costIncurred[RESOURCE.IRON];
+        currentResourceCost.Copper -= costIncurred[RESOURCE.COPPER];
+        currentResourceCost.Uranium -= costIncurred[RESOURCE.URANIUM];
 
         SerializableDictionary<DroneStatFields, float> statRemoved = part.GetStatFields();
         foreach (DroneStatFields stat in statRemoved.Keys)
         {
             currentDroneStats[stat] = currentDroneStats[stat] - statRemoved[stat];
         }
+
+        UpdateCostDisplay();
+    }
+
+    public void UpdateCostDisplay()
+    {
+        string cost = "";
+
+        cost += "Iron: " + currentResourceCost.Iron.ToString("#.0") + "\n";
+        cost += "Copper: " + currentResourceCost.Copper.ToString("#.0") + "\n";
+        cost += "Uranium: " + currentResourceCost.Uranium.ToString("#.0");
+
+        costText.text = cost;
     }
 
     public void OnBuildModeClick()
@@ -217,9 +227,8 @@ public class HoloTable : MonoBehaviour
         }
     }
 
-
     public void PrintDrone() {
         // TODO: Pass more info to DroneMgr for instantiation
-        DroneMgr.inst.SpawnUserDrone();
+        DroneMgr.inst.SpawnUserDrone(currentResourceCost);
     }
 }
