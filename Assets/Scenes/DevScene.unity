@@ -1252,7 +1252,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: -4.1997147, y: 10.934862, z: 1, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 4.5905e-41, w: 4.3311e-41}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1264,13 +1264,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138677391}
-  m_LocalRotation: {x: 0.7064338, y: 0.47771442, z: 0.030843567, w: 0.5213338}
-  m_LocalPosition: {x: 0.24, y: 3, z: 4.18}
+  m_LocalRotation: {x: 0.6670821, y: 0.2491363, z: -0.23452406, w: 0.66176367}
+  m_LocalPosition: {x: -1.1, y: 80.6, z: 5.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45, y: 130, z: 90}
+  m_LocalEulerAnglesHint: {x: 88.74, y: 130, z: 90}
 --- !u!1001 &1313916090908620019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1455,7 +1455,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4349864335836492420, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: m_Name
-      value: Drone
+      value: UserDrone
       objectReference: {fileID: 0}
     - target: {fileID: 4349864335836492421, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: Target
@@ -1512,6 +1512,22 @@ PrefabInstance:
     - target: {fileID: 4349864335836492441, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152994651550756476, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 46.399994
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152994651550756476, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152994651550756476, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 156
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152994651550756476, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 36
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5152de46691f7e14193f7e90579dee96, type: 3}

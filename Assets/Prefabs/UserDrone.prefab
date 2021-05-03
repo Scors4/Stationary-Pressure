@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4349864335836492441}
   - component: {fileID: 4349864335836492421}
+  - component: {fileID: 7788679637190914134}
   m_Layer: 0
-  m_Name: Drone
+  m_Name: UserDrone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,15 +47,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 3
   id: 0
+  hasCard: 0
   velocity: {x: 0, y: 0, z: 0}
   acceleration: {x: 0, y: 0, z: 0}
   weight: 1
-  ThrusterForce: 2
-  Target: {fileID: 0}
-  RotationSpeed: 3
-  MaxSpeed: 3
-  TargetRotation: {x: 0, y: 0, z: 0, w: 1}
-  LaserEffect: {fileID: 0}
+  thrusterForce: 1
+  rotationSpeed: 10
+  maxSpeed: 3
+  targetRotation: {x: 0, y: 0, z: 0, w: 1}
+  laserEffect: {fileID: 0}
+--- !u!114 &7788679637190914134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4349864335836492420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a367da5c5310847b17118855838e09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4349864336053875083
 PrefabInstance:
   m_ObjectHideFlags: 0

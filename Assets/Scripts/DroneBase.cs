@@ -35,8 +35,6 @@ public class DroneBase : MonoBehaviour
     /// The amount of force a thruster can provide.
     public float thrusterForce = 1f;
     
-    /// The drone's target
-    private Transform target = null;
     /// The speed at which this drone can rotate.
     public float rotationSpeed = 10.0f;
     /// The maximum speed
@@ -51,7 +49,7 @@ public class DroneBase : MonoBehaviour
     private float desiredThrusterForce = 0.0f;
     
     /// A queue of commands to execute.
-    private Queue<Command> thrusterCommands = new Queue<Command>();
+    private Queue<Command> commands = new Queue<Command>();
     
     public GameObject laserEffect;
     
@@ -94,27 +92,13 @@ public class DroneBase : MonoBehaviour
     
     // Fixed timestep
     void FixedUpdate() {
-        if (target == null){
-            Asteroid ast = GameMgr.inst.getClosestAsteroid(transform.position);
-            
-            if(ast != null && ast.isActiveAndEnabled) {
-                target = ast.gameObject.transform;
-                
-                thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(target));
-                thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
-                thrusterCommands.Enqueue(new RotateToPointCommand(target.transform.position));
-                thrusterCommands.Enqueue(new MineAsteroidCommand(target.gameObject.GetComponent<Asteroid>()));
-            }   
-        }
-
         /// Update thruster commands
-        while (thrusterCommands.Count > 0 && thrusterCommands.Peek().IsFinished(this)) {
-            thrusterCommands.Dequeue();
-        }
+        while (!isIdle() && commands.Peek().IsFinished(this)) 
+            commands.Dequeue();
         
-        if(thrusterCommands.Count > 0) {
-            thrusterCommands.Peek().Tick(this);
-        }
+        if (!isIdle()) 
+            commands.Peek().Tick(this);
+        
         
         // Rotation
         // If the desired rot and rot are close, just set them equal
@@ -138,10 +122,20 @@ public class DroneBase : MonoBehaviour
     public bool isAtTargetRotation() {
         return transform.rotation == targetRotation;
     }
+    
+    /// Whether this drone is idle
+    public bool isIdle() {
+        return commands.Count == 0;
+    }
+    
+    /// Add a command to be executed
+    public void addCommand(Command c) {
+        commands.Enqueue(c);
+    }
 }
 
 /// A command for a drone
-interface Command {
+public interface Command {
     /// Perform a tick.
     public void Tick(DroneBase drone);
     
@@ -230,6 +224,8 @@ class ApproachTargetToRadiusCommand : Command {
     }
     
     public void Tick(DroneBase drone) {
+        if(target == null) return;
+        
         rotateCommand.SetTarget(target.position);
         
         Vector3 positionDiff = target.position - drone.transform.position;
@@ -254,6 +250,8 @@ class ApproachTargetToRadiusCommand : Command {
     }
     
     public bool IsFinished(DroneBase drone) {
+        if(target == null) return true;
+        
         Vector3 positionDiff = drone.transform.position - target.position;
         float maxAcceleration = drone.thrusterForce / drone.weight;
         return Mathf.Abs(positionDiff.magnitude) < 25.0f;
@@ -261,7 +259,6 @@ class ApproachTargetToRadiusCommand : Command {
 }
 
 /// A command to mine an asteroid
-// TODO: Consider allowing dynamic positions, or make a command that handles dynamic positions.
 class MineAsteroidCommand : Command {
     /// The target position
     private Asteroid target;
