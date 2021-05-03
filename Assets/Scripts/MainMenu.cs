@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject MainMenuView;
     public GameObject InstructionsView;
-     public GameObject CreditsView;
+    public GameObject CreditsView;
     
     // Start is called before the first frame update
     void Start()
