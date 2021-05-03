@@ -45,6 +45,14 @@ public class DroneBase : MonoBehaviour {
     
     public GameObject laserEffect;
     
+    public float health = 100.0f;
+    public float damage = 3.0f;
+    
+    /// Get this drone's position
+    public Vector3 GetPosition() {
+        return transform.position;
+    }
+    
     /// Get this drone's velocity
     public Vector3 GetVelocity() {
         return velocity;
@@ -111,6 +119,17 @@ public class DroneBase : MonoBehaviour {
     /// Add a command to be executed
     public void addCommand(Command c) {
         commands.Enqueue(c);
+    }
+    
+    /// Clear all current commands
+    public void ClearCommands() {
+        commands.Clear();
+    }
+    
+    public void DoDamage(float power) {
+        health -= power;
+        
+        // Delegate the actual reaction to negative health to the caller since the caller needs to handle deregistering the user/raider drone.
     }
 }
 
@@ -249,12 +268,53 @@ class MineAsteroidCommand : Command {
     
      /// Perform a tick
     public void Tick(DroneBase drone) {
-        target.Mine();
+        target.Mine(drone.damage);
     }
     
     /// Whether this is done executing.
     public bool IsFinished(DroneBase drone) {
         return target.IsEmpty();
+    }
+}
+
+/// A Command to pursue a target. It will not stop when it reaches its destination.
+class PursueTargetToRadiusCommand : Command {
+    private DroneBase target;
+    private RotateToPointCommand rotateCommand;
+    
+    public PursueTargetToRadiusCommand(DroneBase target) {
+        this.target = target;
+        rotateCommand = new RotateToPointCommand(target.transform.position);
+    }
+    
+    public void Tick(DroneBase drone) {
+        if(target == null) return;
+        
+        rotateCommand.SetTarget(target.transform.position);
+        
+        Vector3 positionDiff = target.transform.position - drone.transform.position;
+        float positionDiffMag = positionDiff.magnitude;
+        
+        if(!rotateCommand.IsFinished(drone)) {
+            rotateCommand.Tick(drone);
+            return;
+        } 
+        
+       float velocityMag = drone.velocity.magnitude;
+       float timeToIntercept = positionDiffMag / velocityMag;
+       float maxAcceleration = drone.thrusterForce / drone.weight;
+       float timeToSlow = drone.velocity.magnitude / maxAcceleration;
+       float timeToTarget = (positionDiffMag + 35.0f) / drone.velocity.magnitude;
+        
+        if(timeToSlow < timeToTarget) {
+            drone.FireThrusters(drone.thrusterForce);
+        } else {
+            drone.FireThrusters(0.0f);
+        }
+    }
+    
+    public bool IsFinished(DroneBase drone) {
+        return target == null;
     }
 }
 

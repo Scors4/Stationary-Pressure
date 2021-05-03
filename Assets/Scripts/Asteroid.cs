@@ -23,18 +23,26 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     }
     
     /// Try to mine this asteroid
-    public void Mine() {        
+    public void Mine(float power) {        
         if(Resources.Iron > 0.0f) {
-            Resources.Iron -= 1.0f;
-            GameMgr.inst.Resources.Iron += 1.0f;
+            Resources.Iron -= power;
+            
+            // TODO: The player currently gains some extra resources from each "mine" op
+            // since the iron levels in an asteroid can go below zero. Fix this.
+            GameMgr.inst.Resources.Iron += power;
         }
         
-        if(IsEmpty()) 
+        if(IsEmpty()) {
             AsteroidMgr.inst.AsteroidDestroyed(this);
+            gameObject.GetComponent<Fracture>().FractureObject();
+        }
+        
+        Debug.Log(Resources.Iron);
     }
     
     /// Whether this asteroid is empty
     public bool IsEmpty() {
-        return Resources.Iron == 0.0f;
+        // TODO: Check for all resources
+        return Resources.Iron <= 0.0f;
     }
 }

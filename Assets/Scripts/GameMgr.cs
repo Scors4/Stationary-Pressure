@@ -15,8 +15,7 @@ public class ResourceSet {
     public float Iron = 0.0f;
 }
 
-public class GameMgr : MonoBehaviour
-{
+public class GameMgr : MonoBehaviour {
     public static GameMgr inst;
     
     public ResourceSet Resources = new ResourceSet();

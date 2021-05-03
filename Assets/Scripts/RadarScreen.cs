@@ -35,7 +35,7 @@ public class RadarScreen : MonoBehaviour
     void FixedUpdate()
     {
         List<UserDrone> activeDrones = DroneMgr.inst.GetUserDrones();
-        List<Asteroid> activeRoids = AsteroidMgr.inst.asteroids;
+        List<Asteroid> activeRoids = AsteroidMgr.inst.GetAsteroids();
 
         if (droneIcons.Count != activeDrones.Count)
         {

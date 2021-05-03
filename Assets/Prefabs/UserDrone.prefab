@@ -45,9 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c2febae4e95834486bdbdd94e6e578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
-  id: 0
-  hasCard: 0
   velocity: {x: 0, y: 0, z: 0}
   acceleration: {x: 0, y: 0, z: 0}
   weight: 1
@@ -56,6 +53,8 @@ MonoBehaviour:
   maxSpeed: 3
   targetRotation: {x: 0, y: 0, z: 0, w: 1}
   laserEffect: {fileID: 0}
+  health: 100
+  damage: 1
 --- !u!114 &7788679637190914134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,6 +67,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a367da5c5310847b17118855838e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  droneCard: {fileID: 0}
+  type: 0
 --- !u!1001 &4349864336053875083
 PrefabInstance:
   m_ObjectHideFlags: 0

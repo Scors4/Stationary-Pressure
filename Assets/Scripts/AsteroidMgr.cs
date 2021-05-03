@@ -59,12 +59,15 @@ public class AsteroidMgr : MonoBehaviour {
         }
     }
     
+    public List<Asteroid> GetAsteroids() {
+        return asteroids;
+    }
+    
     public void AsteroidSpawned(Asteroid asteroid) {
         asteroids.Add(asteroid); 
     }
     
     public void AsteroidDestroyed(Asteroid asteroid) {
         asteroids.Remove(asteroid);
-        asteroid.gameObject.GetComponent<Fracture>().FractureObject();
     }
 }

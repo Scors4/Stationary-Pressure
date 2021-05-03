@@ -88,4 +88,42 @@ public class DroneMgr : MonoBehaviour
         for(int i = 0; i < 5; i++) 
             SpawnRaiderDrone();
     }
+    
+    public UserDrone GetClosestUserDrone(Vector3 pos) {
+        int minIndex = -1;
+        float magSqr = float.MaxValue;
+        
+        for(int i = 0; i < userDrones.Count; i++) {
+            float newMagSqr = (userDrones[i].GetDroneBase().GetPosition() - pos).sqrMagnitude;
+            if(newMagSqr < magSqr) {
+                magSqr = newMagSqr;
+                minIndex = i;
+            }
+        }
+        
+        if(minIndex == -1) {
+            return null;
+        } else {
+            return userDrones[minIndex];
+        }
+    }
+    
+    public RaiderDrone GetClosestRaiderDrone(Vector3 pos) {
+        int minIndex = -1;
+        float magSqr = float.MaxValue;
+        
+        for(int i = 0; i < raiderDrones.Count; i++) {
+            float newMagSqr = (raiderDrones[i].GetDroneBase().GetPosition() - pos).sqrMagnitude;
+            if(newMagSqr < magSqr) {
+                magSqr = newMagSqr;
+                minIndex = i;
+            }
+        }
+        
+        if(minIndex == -1) {
+            return null;
+        } else {
+            return raiderDrones[minIndex];
+        }
+    }
 }
