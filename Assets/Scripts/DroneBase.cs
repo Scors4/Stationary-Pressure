@@ -90,23 +90,21 @@ public class DroneBase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
-        
-    }
+    void Update() {}
     
     // Fixed timestep
     void FixedUpdate() {
-
-        if (target == null)
-        {
-            Asteroid ast = GameMgr.inst.asteroids[Random.Range(0, GameMgr.inst.asteroids.Count)];
-            if(!(ast == null) && ast.isActiveAndEnabled)
+        if (target == null){
+            Asteroid ast = GameMgr.inst.getClosestAsteroid(transform.position);
+            
+            if(ast != null && ast.isActiveAndEnabled) {
                 target = ast.gameObject.transform;
-
-            thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(target));
-            thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
-            thrusterCommands.Enqueue(new RotateToPointCommand(target.transform.position));
-            thrusterCommands.Enqueue(new MineAsteroidCommand(target.gameObject.GetComponent<Asteroid>()));
+                
+                thrusterCommands.Enqueue(new ApproachTargetToRadiusCommand(target));
+                thrusterCommands.Enqueue(new ZeroVelocityCommand(this));
+                thrusterCommands.Enqueue(new RotateToPointCommand(target.transform.position));
+                thrusterCommands.Enqueue(new MineAsteroidCommand(target.gameObject.GetComponent<Asteroid>()));
+            }   
         }
 
         /// Update thruster commands
@@ -204,15 +202,6 @@ class ZeroVelocityCommand : Command {
         } 
         
         if(drone.velocity != Vector3.zero) {
-            // F = MA
-            // A = F/M
-            //
-            // V(T) = V(0) + AT
-            // V = AT
-            //
-            // V = FT/M
-            // F = VM/T
-            // float desiredForce = drone.GetVelocity().magnitude * drone.weight / Time.fixedDeltaTime;
             drone.FireThrusters(drone.thrusterForce);
             
             // Zero velocity to avoid dealing with "drifting".

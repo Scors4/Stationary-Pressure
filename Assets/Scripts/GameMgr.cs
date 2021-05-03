@@ -19,52 +19,34 @@ public class GameMgr : MonoBehaviour
 {
     public static GameMgr inst;
 
-    public List<Asteroid> asteroids;
+    public List<Asteroid> asteroids = new List<Asteroid>();
     
     public ResourceSet Resources = new ResourceSet();
     public int Power = 0;
     
     public GameObject asteroidSpawn;
     public GameObject asteroidPrefab;
+    public int numAsteroids = 100;
 
     // Start is called before the first frame update
-    void Awake()
-    {
+    void Awake() {
         inst = this;
-        if(asteroids == null)
-            asteroids = new List<Asteroid>();
     }
 
-    void Start()
-    {
-        
+    void Start() {
+        trySpawnAsteroids();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Update() {}
     
     void FixedUpdate() {
-        for(int i = GetAsteroids().Count; i < 100; i++) {
-            SpawnAsteroid();
-        }
+        trySpawnAsteroids();
     }
-
-    public List<Asteroid> GetAsteroids()
-    {
-        // To filter out dead asteriods.
-        // TODO: Consider calling a method on GameMgr to destroy asteroids instead of just nuking the GameObject.
-        List<Asteroid> filtered = new List<Asteroid>();
-        
-        foreach(Asteroid a in asteroids) {
-            if(a != null && a.isActiveAndEnabled) {
-                filtered.Add(a);
-            }
-        }
-        
-        return filtered;
+    
+    void trySpawnAsteroids() {
+        for(int i = asteroids.Count; i < numAsteroids; i++)
+            SpawnAsteroid();
     }
     
     public void SpawnAsteroid() {
@@ -72,5 +54,24 @@ public class GameMgr : MonoBehaviour
         Vector3 position = asteroidSpawn.transform.position + offset;
         
         Instantiate(asteroidPrefab, position, asteroidSpawn.transform.rotation);
+    }
+    
+    public Asteroid getClosestAsteroid(Vector3 pos) {
+        int minIndex = -1;
+        float magSqr = float.MaxValue;
+        
+        for(int i = 0; i < asteroids.Count; i++) {
+            float newMagSqr = (asteroids[i].getPosition() - pos).sqrMagnitude;
+            if(newMagSqr < magSqr) {
+                magSqr = newMagSqr;
+                minIndex = i;
+            }
+        }
+        
+        if(minIndex == -1) {
+            return null;
+        } else {
+            return asteroids[minIndex];
+        }
     }
 }
