@@ -11,7 +11,7 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     void Start() {
         Resources.Iron = 100.0f;
         
-        GameMgr.inst.asteroids.Add(this);    
+        AsteroidMgr.inst.AsteroidSpawned(this);   
     }
 
     // Update is called once per frame
@@ -29,10 +29,8 @@ public class Asteroid : MonoBehaviour, DroneTargetable
             GameMgr.inst.Resources.Iron += 1.0f;
         }
         
-        if(IsEmpty()) {
-            GameMgr.inst.asteroids.Remove(this);
-            gameObject.GetComponent<Fracture>().FractureObject();
-        }
+        if(IsEmpty()) 
+            AsteroidMgr.inst.AsteroidDestroyed(this);
     }
     
     /// Whether this asteroid is empty

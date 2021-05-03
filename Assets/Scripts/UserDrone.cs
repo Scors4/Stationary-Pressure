@@ -28,7 +28,7 @@ public class UserDrone : MonoBehaviour
         // TODO: Search for nearest enemy and kill, otherwise do idle check
         
         if (droneBase.isIdle()){
-            Asteroid asteroid = GameMgr.inst.getClosestAsteroid(transform.position);
+            Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
             
             if(asteroid != null && asteroid.isActiveAndEnabled) {                
                 droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
