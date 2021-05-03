@@ -22,8 +22,6 @@ public class DroneBase : MonoBehaviour
 
     SerializableDictionary<DroneStatFields, float> droneStats;
 
-    /// The transform
-    new private Transform transform = null;
     /// The 3D velocity vector
     public Vector3 velocity = Vector3.zero;
     /// The 3D acceleration vector
@@ -38,7 +36,7 @@ public class DroneBase : MonoBehaviour
     public float thrusterForce = 1f;
     
     /// The drone's target
-    public Transform target = null;
+    private Transform target = null;
     /// The speed at which this drone can rotate.
     public float rotationSpeed = 10.0f;
     /// The maximum speed
@@ -73,26 +71,21 @@ public class DroneBase : MonoBehaviour
     }
     
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         DroneMgr.inst.DroneSpawned(this);
-        transform = GetComponent<Transform>();
         id = nextId++;
     }
 
-    void OnEnable()
-    {
+    void OnEnable() {
         if(DroneMgr.inst != null)
             DroneMgr.inst.DroneSpawned(this);
     }
 
-    void OnDisable()
-    {
+    void OnDisable() {
         DroneMgr.inst.DroneDestroyed(this);
     }
 
-    public void SetDroneStats(SerializableDictionary<DroneStatFields, float> stats)
-    {
+    public void SetDroneStats(SerializableDictionary<DroneStatFields, float> stats) {
         droneStats = stats;
     }
 

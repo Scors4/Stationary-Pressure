@@ -1078,7 +1078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asteroids:
-  - {fileID: 2084242827}
+  - {fileID: 0}
   Power: 100
   asteroidSpawn: {fileID: 279579059}
   asteroidPrefab: {fileID: 679462129005589639, guid: 3c5328116e5648944a25e9f12021440b, type: 3}
@@ -1096,17 +1096,6 @@ Transform:
   m_Father: {fileID: 1860507297}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2084242827 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7950366023654857834, guid: 3c5328116e5648944a25e9f12021440b, type: 3}
-  m_PrefabInstance: {fileID: 7950366025201179105}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f28f9b17c3f33c42837ed7ed4e30446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0
