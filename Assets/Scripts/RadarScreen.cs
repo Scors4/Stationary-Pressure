@@ -34,7 +34,7 @@ public class RadarScreen : MonoBehaviour
 
     void FixedUpdate()
     {
-        List<DroneBase> activeDrones = DroneMgr.inst.GetDrones();
+        List<UserDrone> activeDrones = DroneMgr.inst.GetUserDrones();
         List<Asteroid> activeRoids = GameMgr.inst.asteroids;
 
         if (droneIcons.Count != activeDrones.Count)
@@ -77,7 +77,7 @@ public class RadarScreen : MonoBehaviour
 
         for (int i = 0; i < droneIcons.Count; i++)
         {
-            DroneBase drone = activeDrones[i];
+            UserDrone drone = activeDrones[i];
             Bogie bogie = droneIcons[i];
 
             float distance = Vector3.Distance(drone.transform.position, sensor.transform.position);

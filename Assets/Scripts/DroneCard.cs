@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DroneCard : MonoBehaviour
 {
-    DroneBase drone;
+    UserDrone drone;
 
     public Text droneName;
     public Text droneID;
@@ -16,7 +16,7 @@ public class DroneCard : MonoBehaviour
     public Button powerButton;
     public Button returnButton;
 
-    internal void SetDrone(DroneBase drone)
+    internal void SetDrone(UserDrone drone)
     {
         this.drone = drone;
         drone.hasCard = true;

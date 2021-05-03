@@ -6,9 +6,18 @@ public class UserDrone : MonoBehaviour
 {
     DroneBase droneBase = null;
     
+    static int nextId = 0;
+    public int id = 0;
+    
+    public bool hasCard = false;
+    public int type = 0;
+    
     // Start is called before the first frame update
     void Start() {
         droneBase = GetComponent<DroneBase>();
+        
+        DroneMgr.inst.UserDroneSpawned(this);
+        id = nextId++;
     }
 
     // Update is called once per frame
@@ -26,5 +35,14 @@ public class UserDrone : MonoBehaviour
                 droneBase.addCommand(new MineAsteroidCommand(asteroid));
             }   
         }
+    }
+    
+    void OnEnable() {
+        if(DroneMgr.inst != null)
+            DroneMgr.inst.UserDroneSpawned(this);
+    }
+    
+    void OnDisable() {
+        DroneMgr.inst.UserDroneDestroyed(this);
     }
 }

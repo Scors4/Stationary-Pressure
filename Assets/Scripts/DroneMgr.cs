@@ -6,28 +6,23 @@ public class DroneMgr : MonoBehaviour
 {
     public static DroneMgr inst;
 
-    List<DroneBase> drones;
+    List<UserDrone> userDrones = new List<UserDrone>();
 
-    void Awake()
-    {
+    void Awake() {
         inst = this;
-        drones = new List<DroneBase>();
     }
 
-    public void DroneSpawned(DroneBase newDrone)
-    {
-        if (!drones.Contains(newDrone))
-            drones.Add(newDrone);
+    public void UserDroneSpawned(UserDrone newDrone) {
+        if (!userDrones.Contains(newDrone))
+            userDrones.Add(newDrone);
     }
 
-    public void DroneDestroyed(DroneBase destroyed)
-    {
-        if (drones.Contains(destroyed))
-            drones.Remove(destroyed);
+    public void UserDroneDestroyed(UserDrone destroyed) {
+        if (userDrones.Contains(destroyed))
+            userDrones.Remove(destroyed);
     }
 
-    public List<DroneBase> GetDrones()
-    {
-        return drones;
+    public List<UserDrone> GetUserDrones() {
+        return userDrones;
     }
 }

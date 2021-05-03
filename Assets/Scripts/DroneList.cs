@@ -18,7 +18,7 @@ public class DroneList : MonoBehaviour
     public void Start()
     {
         droneMgr = DroneMgr.inst;
-        foreach(DroneBase drone in droneMgr.GetDrones())
+        foreach(UserDrone drone in droneMgr.GetUserDrones())
         {
             BuildNewCard(drone);
         }
@@ -26,9 +26,9 @@ public class DroneList : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(droneMgr.GetDrones().Count > cards.Count)
+        if(droneMgr.GetUserDrones().Count > cards.Count)
         {
-            foreach(DroneBase drone in droneMgr.GetDrones())
+            foreach(UserDrone drone in droneMgr.GetUserDrones())
             {
                 if (!drone.hasCard)
                     BuildNewCard(drone);
@@ -36,7 +36,7 @@ public class DroneList : MonoBehaviour
         }
     }
 
-    private void BuildNewCard(DroneBase drone)
+    private void BuildNewCard(UserDrone drone)
     {
         GameObject card = Instantiate(DroneCardPrefab);
         card.transform.SetParent(panelParent);

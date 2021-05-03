@@ -11,15 +11,7 @@ public enum DroneStatFields
     STORAGE
 }
 
-public class DroneBase : MonoBehaviour
-{
-    static int nextId = 0;
-    
-    public int type = 0;
-    public int id = 0;
-
-    public bool hasCard = false;
-
+public class DroneBase : MonoBehaviour {
     SerializableDictionary<DroneStatFields, float> droneStats;
 
     /// The 3D velocity vector
@@ -69,19 +61,7 @@ public class DroneBase : MonoBehaviour
     }
     
     // Start is called before the first frame update
-    void Start() {
-        DroneMgr.inst.DroneSpawned(this);
-        id = nextId++;
-    }
-
-    void OnEnable() {
-        if(DroneMgr.inst != null)
-            DroneMgr.inst.DroneSpawned(this);
-    }
-
-    void OnDisable() {
-        DroneMgr.inst.DroneDestroyed(this);
-    }
+    void Start() {}
 
     public void SetDroneStats(SerializableDictionary<DroneStatFields, float> stats) {
         droneStats = stats;
