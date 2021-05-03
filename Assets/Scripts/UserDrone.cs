@@ -9,7 +9,7 @@ public class UserDrone : MonoBehaviour
     static int nextId = 0;
     public int id = 0;
     
-    public bool hasCard = false;
+    public DroneCard droneCard = null;
     public int type = 0;
     
     // Start is called before the first frame update
@@ -30,7 +30,7 @@ public class UserDrone : MonoBehaviour
             
             if(asteroid != null && asteroid.isActiveAndEnabled) {                
                 droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
-                droneBase.addCommand(new ZeroVelocityCommand(this.droneBase));
+                droneBase.addCommand(new ZeroVelocityCommand(droneBase));
                 droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
                 droneBase.addCommand(new MineAsteroidCommand(asteroid));
             }   

@@ -19,14 +19,12 @@ public class DroneCard : MonoBehaviour
     internal void SetDrone(UserDrone drone)
     {
         this.drone = drone;
-        drone.hasCard = true;
 
         droneID.text = drone.type.ToString("d2") + "-" + drone.id.ToString("d3");
     }
 
     private void OnDisable()
     {
-        drone.hasCard = false;
         this.drone = null;
     }
 

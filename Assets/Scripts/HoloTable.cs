@@ -12,9 +12,6 @@ public class HoloTable : MonoBehaviour
 
     SerializableDictionary<RESOURCE, float> currentResourceCost;
     SerializableDictionary<DroneStatFields, float> currentDroneStats;
-    
-    public GameObject droneSpawn;
-    public GameObject dronePrefab;
 
     public Button buildModeButton;
 
@@ -222,9 +219,7 @@ public class HoloTable : MonoBehaviour
 
 
     public void PrintDrone() {
-        if(GameMgr.inst.Resources.Iron >= 70.0f){
-            GameMgr.inst.Resources.Iron -= 70.0f;
-            Instantiate(dronePrefab, droneSpawn.transform.position, droneSpawn.transform.rotation);
-        }
+        // TODO: Pass more info to DroneMgr for instantiation
+        DroneMgr.inst.SpawnUserDrone();
     }
 }

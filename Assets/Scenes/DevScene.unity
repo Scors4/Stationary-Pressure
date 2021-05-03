@@ -166,6 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113f683968280f646a8800135c3603b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userDroneSpawn: {fileID: 770184541}
+  userDronePrefab: {fileID: 1725187144}
+  droneList: {fileID: 1284534490}
 --- !u!1 &279579059
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 770184542}
   m_Layer: 0
-  m_Name: DroneSpawn
+  m_Name: UserDroneSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -856,6 +859,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251681619}
   m_CullTransparentMesh: 1
+--- !u!114 &1284534490 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8242740626659323150, guid: 8c3a89615f7406545b9de9ae0e103e1e, type: 3}
+  m_PrefabInstance: {fileID: 6609385473468332885}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec989ed772f5e242b1d727161b1c923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1363394982
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1016,6 +1030,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720356862}
   m_CullTransparentMesh: 1
+--- !u!1 &1725187144 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4349864335836492420, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
+  m_PrefabInstance: {fileID: 4349864335368768618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1860507296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,6 +1147,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885499080}
   m_CullTransparentMesh: 1
+--- !u!1 &1945256854 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4459864851310106424, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
+  m_PrefabInstance: {fileID: 841898415}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1945256858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945256854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &1994711834
 GameObject:
   m_ObjectHideFlags: 0
