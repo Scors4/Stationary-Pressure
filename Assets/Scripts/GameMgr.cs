@@ -48,6 +48,12 @@ public class GameMgr : MonoBehaviour {
             Power = 0;
             timeToLoss = 0.0f;
         }
+        
+        // TODO: Replace with better lose-con
+        if (DroneMgr.inst.GetUserDrones().Count == 0) {
+            Power = 0;
+            timeToLoss = 0.0f;
+        }
 
         if(!gameLost && Input.GetKeyDown(KeyCode.Escape))
         {

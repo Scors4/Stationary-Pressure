@@ -172,7 +172,7 @@ MonoBehaviour:
   userDroneSpawn: {fileID: 770184541}
   userDronePrefab: {fileID: 4349864335836492420, guid: 5152de46691f7e14193f7e90579dee96, type: 3}
   raiderDroneSpawn: {fileID: 326968368}
-  raiderDronePrefab: {fileID: 0}
+  raiderDronePrefab: {fileID: 2736371479181131665, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
   droneList: {fileID: 1284534490}
 --- !u!1 &279579059
 GameObject:
