@@ -29,13 +29,13 @@ public class UserDrone : MonoBehaviour
     void FixedUpdate() {
         if(droneBase.health <= 0.0) {
             DroneMgr.inst.UserDroneDestroyed(this);
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         
         RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
         
-        if(isEngagingRaider && raiderDrone == null)
+        if(isEngagingRaider && droneBase.isIdle())
             isEngagingRaider = false;
         
         if(raiderDrone != null) {

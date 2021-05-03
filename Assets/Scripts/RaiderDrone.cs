@@ -6,11 +6,14 @@ public class RaiderDrone : MonoBehaviour
 {
     DroneBase droneBase = null;
     
-    // Start is called before the first frame update
-    void Start()
-    {
+    bool isEngagingUserDrone = false;
+    
+    void Awake() {
         droneBase = GetComponent<DroneBase>();
-        
+    }
+    
+    // Start is called before the first frame update
+    void Start() {
         DroneMgr.inst.RaiderDroneSpawned(this);
     }
 
@@ -23,6 +26,27 @@ public class RaiderDrone : MonoBehaviour
             DroneMgr.inst.RaiderDroneDestroyed(this);
             Destroy(gameObject);
             return;
+        }
+        
+        UserDrone userDrone = DroneMgr.inst.GetClosestUserDrone(transform.position);
+        
+        if(isEngagingUserDrone && droneBase.isIdle())
+            isEngagingUserDrone = false;
+        
+        if(userDrone != null) {
+            Vector3 positionDiff = userDrone.transform.position - droneBase.transform.position;
+            if(positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0) 
+                userDrone.GetDroneBase().DoDamage(droneBase.damage);
+        }
+        
+        if (!isEngagingUserDrone && userDrone != null) {
+            isEngagingUserDrone = true;
+            droneBase.ClearCommands();
+            
+            droneBase.addCommand(new PursueTargetToRadiusCommand(userDrone.GetDroneBase()));
+        } else if (droneBase.isIdle()){
+            droneBase.addCommand(new ZeroVelocityCommand(droneBase));
+           /// TODO: target Base/user 
         }
     }
     

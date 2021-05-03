@@ -36,8 +36,6 @@ public class Asteroid : MonoBehaviour, DroneTargetable
             AsteroidMgr.inst.AsteroidDestroyed(this);
             gameObject.GetComponent<Fracture>().FractureObject();
         }
-        
-        Debug.Log(Resources.Iron);
     }
     
     /// Whether this asteroid is empty

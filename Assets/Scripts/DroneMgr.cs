@@ -6,8 +6,8 @@ public class DroneMgr : MonoBehaviour
 {
     public static DroneMgr inst;
 
-    List<UserDrone> userDrones = new List<UserDrone>();
-    List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
+    public List<UserDrone> userDrones = new List<UserDrone>();
+    public List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
     
     public GameObject userDroneSpawn;
     public GameObject userDronePrefab;
@@ -42,9 +42,7 @@ public class DroneMgr : MonoBehaviour
     }
 
     public void RaiderDroneDestroyed(RaiderDrone destroyed) {
-        if (raiderDrones.Contains(destroyed)) {
-            raiderDrones.Remove(destroyed);
-        }
+        raiderDrones.Remove(destroyed);
     }
 
     public List<UserDrone> GetUserDrones() {
