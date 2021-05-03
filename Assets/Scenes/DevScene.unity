@@ -1890,9 +1890,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 356576732788285491, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 356576732788285495, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3409151742704577148, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3724756716308716074, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6285661568749409551, guid: 5069574807a1005418687c666b97a51d, type: 3}
       propertyPath: m_Name
       value: Ore_Cell_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285661568749409551, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7011058507622583973, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057596040773418739, guid: 5069574807a1005418687c666b97a51d, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5069574807a1005418687c666b97a51d, type: 3}

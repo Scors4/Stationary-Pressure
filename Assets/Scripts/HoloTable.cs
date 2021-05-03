@@ -10,8 +10,8 @@ public class HoloTable : MonoBehaviour
     public Text pageText;
     public Text costText;
 
-    public ResourceSet currentResourceCost;
-    SerializableDictionary<DroneStatFields, float> currentDroneStats;
+    ResourceSet currentResourceCost;
+    DroneStatSet currentDroneStats;
 
     public Button buildModeButton;
 
@@ -28,7 +28,7 @@ public class HoloTable : MonoBehaviour
         partsList.AddRange(parts);
 
         currentResourceCost = new ResourceSet();
-        currentDroneStats = new SerializableDictionary<DroneStatFields, float>();
+        currentDroneStats = new DroneStatSet();
 
         UpdatePage();
         UpdateBuildMode();
@@ -72,19 +72,26 @@ public class HoloTable : MonoBehaviour
         selectedAttachPoint = null;
 
         SerializableDictionary<RESOURCE, float> costsIncurred = part.GetResourceCost();
-        currentResourceCost.Iron += costsIncurred[RESOURCE.IRON];
-        currentResourceCost.Copper += costsIncurred[RESOURCE.COPPER];
-        currentResourceCost.Uranium += costsIncurred[RESOURCE.URANIUM];
+        if(costsIncurred.ContainsKey(RESOURCE.IRON))
+            currentResourceCost.Iron += costsIncurred[RESOURCE.IRON];
+        if (costsIncurred.ContainsKey(RESOURCE.COPPER))
+            currentResourceCost.Copper += costsIncurred[RESOURCE.COPPER];
+        if (costsIncurred.ContainsKey(RESOURCE.URANIUM))
+            currentResourceCost.Uranium += costsIncurred[RESOURCE.URANIUM];
 
 
-        SerializableDictionary<DroneStatFields, float> statsRemoved = part.GetStatFields();
-        foreach (DroneStatFields stat in statsRemoved.Keys)
-        {
-            if (!currentDroneStats.ContainsKey(stat))
-                currentDroneStats[stat] = 0;
+        SerializableDictionary<DroneStatFields, float> statsAdded = part.GetStatFields();
+        if (statsAdded.ContainsKey(DroneStatFields.HEALTH))
+            currentDroneStats.Health += statsAdded[DroneStatFields.HEALTH];
+        if (statsAdded.ContainsKey(DroneStatFields.POWER))
+            currentDroneStats.Power+= statsAdded[DroneStatFields.POWER];
+        if (statsAdded.ContainsKey(DroneStatFields.FUEL))
+            currentDroneStats.Fuel += statsAdded[DroneStatFields.FUEL];
+        if (statsAdded.ContainsKey(DroneStatFields.STORAGE))
+            currentDroneStats.Storage += statsAdded[DroneStatFields.STORAGE];
+        if (statsAdded.ContainsKey(DroneStatFields.AMMO))
+            currentDroneStats.Ammo += statsAdded[DroneStatFields.AMMO];
 
-            currentDroneStats[stat] = currentDroneStats[stat] - statsRemoved[stat];
-        }
 
         UpdateCostDisplay();
     }
@@ -96,27 +103,45 @@ public class HoloTable : MonoBehaviour
         foreach(DronePart removedPart in removedParts)
         {
             SerializableDictionary<RESOURCE, float> costsIncurred = part.GetResourceCost();
-            currentResourceCost.Iron -= costsIncurred[RESOURCE.IRON];
-            currentResourceCost.Copper -= costsIncurred[RESOURCE.COPPER];
-            currentResourceCost.Uranium -= costsIncurred[RESOURCE.URANIUM];
+            if (costsIncurred.ContainsKey(RESOURCE.IRON))
+                currentResourceCost.Iron -= costsIncurred[RESOURCE.IRON];
+            if (costsIncurred.ContainsKey(RESOURCE.COPPER))
+                currentResourceCost.Copper -= costsIncurred[RESOURCE.COPPER];
+            if (costsIncurred.ContainsKey(RESOURCE.URANIUM))
+                currentResourceCost.Uranium -= costsIncurred[RESOURCE.URANIUM];
 
             SerializableDictionary<DroneStatFields, float> statsRemoved = removedPart.GetStatFields();
-            foreach(DroneStatFields stat in statsRemoved.Keys)
-            {
-                currentDroneStats[stat] = currentDroneStats[stat] - statsRemoved[stat];
-            }
+            if (statsRemoved.ContainsKey(DroneStatFields.HEALTH))
+                currentDroneStats.Health += statsRemoved[DroneStatFields.HEALTH];
+            if (statsRemoved.ContainsKey(DroneStatFields.POWER))
+                currentDroneStats.Power += statsRemoved[DroneStatFields.POWER];
+            if (statsRemoved.ContainsKey(DroneStatFields.FUEL))
+                currentDroneStats.Fuel += statsRemoved[DroneStatFields.FUEL];
+            if (statsRemoved.ContainsKey(DroneStatFields.STORAGE))
+                currentDroneStats.Storage += statsRemoved[DroneStatFields.STORAGE];
+            if (statsRemoved.ContainsKey(DroneStatFields.AMMO))
+                currentDroneStats.Ammo += statsRemoved[DroneStatFields.AMMO];
         }
 
         SerializableDictionary<RESOURCE, float> costIncurred = part.GetResourceCost();
-        currentResourceCost.Iron -= costIncurred[RESOURCE.IRON];
-        currentResourceCost.Copper -= costIncurred[RESOURCE.COPPER];
-        currentResourceCost.Uranium -= costIncurred[RESOURCE.URANIUM];
+        if (costIncurred.ContainsKey(RESOURCE.IRON))
+            currentResourceCost.Iron -= costIncurred[RESOURCE.IRON];
+        if (costIncurred.ContainsKey(RESOURCE.COPPER))
+            currentResourceCost.Copper -= costIncurred[RESOURCE.COPPER];
+        if (costIncurred.ContainsKey(RESOURCE.URANIUM))
+            currentResourceCost.Uranium -= costIncurred[RESOURCE.URANIUM];
 
         SerializableDictionary<DroneStatFields, float> statRemoved = part.GetStatFields();
-        foreach (DroneStatFields stat in statRemoved.Keys)
-        {
-            currentDroneStats[stat] = currentDroneStats[stat] - statRemoved[stat];
-        }
+        if (statRemoved.ContainsKey(DroneStatFields.HEALTH))
+            currentDroneStats.Health += statRemoved[DroneStatFields.HEALTH];
+        if (statRemoved.ContainsKey(DroneStatFields.POWER))
+            currentDroneStats.Power += statRemoved[DroneStatFields.POWER];
+        if (statRemoved.ContainsKey(DroneStatFields.FUEL))
+            currentDroneStats.Fuel += statRemoved[DroneStatFields.FUEL];
+        if (statRemoved.ContainsKey(DroneStatFields.STORAGE))
+            currentDroneStats.Storage += statRemoved[DroneStatFields.STORAGE];
+        if (statRemoved.ContainsKey(DroneStatFields.AMMO))
+            currentDroneStats.Ammo += statRemoved[DroneStatFields.AMMO];
 
         UpdateCostDisplay();
     }
@@ -227,8 +252,21 @@ public class HoloTable : MonoBehaviour
         }
     }
 
+    bool ValidateDroneToPrint()
+    {
+        bool print = true;
+
+        if (currentDroneStats.Health <= 0.0f)
+            print = false;
+
+        if (currentDroneStats.Power <= 0.0f)
+            print = false;
+
+        return print;
+    }
+
     public void PrintDrone() {
-        // TODO: Pass more info to DroneMgr for instantiation
-        DroneMgr.inst.SpawnUserDrone(currentResourceCost);
+        if(ValidateDroneToPrint())
+            DroneMgr.inst.SpawnUserDrone(currentResourceCost);
     }
 }

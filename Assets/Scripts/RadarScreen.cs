@@ -60,7 +60,7 @@ public class RadarScreen : MonoBehaviour
                 DroneBase drone = activeDrones[i];
                 Bogie bogie = droneIcons[i];
 
-                bogie.SetDroneOwner(drone.GetOwner());
+                bogie.SetDroneOwner(drone, drone.GetOwner());
             }
         }
 

@@ -11,6 +11,15 @@ public enum DroneStatFields
     STORAGE
 }
 
+public struct DroneStatSet
+{
+    public float Health;
+    public float Power;
+    public float Fuel;
+    public float Ammo;
+    public float Storage;
+}
+
 public enum OWNERS
 {
     PLAYER,
