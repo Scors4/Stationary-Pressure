@@ -11,12 +11,11 @@ public class StatsScreen : MonoBehaviour
     public Text IronText;
     /// The label for time
     public Text TimeText;
+    /// The time to the next wave
+    public Text TimeNextWaveText;
     
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    void Start() {}
 
     // Update is called once per frame
     void FixedUpdate()
@@ -24,7 +23,7 @@ public class StatsScreen : MonoBehaviour
         PowerText.text = "Power: " + GameMgr.inst.Power;
         IronText.text = "Iron: " + GameMgr.inst.Resources.Iron;
         
-        float time = Time.timeSinceLevelLoad;
-        TimeText.text = "Time: " + ((int)Mathf.Floor(time / 60)).ToString("d2") + ":" + (((int)Mathf.Floor(time)) % 60).ToString("d2");
+        TimeText.text = "Time: " + Util.formatTime(GameMgr.inst.timeSurvived);
+        TimeNextWaveText.text = "Next Wave In: " + Util.formatTime(GameMgr.inst.timeToNextWave);
     }
 }

@@ -27,6 +27,9 @@ public class GameMgr : MonoBehaviour
     public GameObject asteroidSpawn;
     public GameObject asteroidPrefab;
     public int numAsteroids = 100;
+    
+    public float timeSurvived = 0.0f;
+    public float timeToNextWave = 30.0f;
 
     // Start is called before the first frame update
     void Awake() {
@@ -42,6 +45,15 @@ public class GameMgr : MonoBehaviour
     
     void FixedUpdate() {
         trySpawnAsteroids();
+        
+        timeSurvived = Time.timeSinceLevelLoad;
+        
+        if(timeToNextWave <= 0.0f) {
+            // TODO: Spawn Wave
+            timeToNextWave = 30.0f;
+        } else {
+            timeToNextWave -= Time.fixedDeltaTime;
+        }
     }
     
     void trySpawnAsteroids() {
