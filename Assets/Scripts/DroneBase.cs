@@ -237,6 +237,8 @@ class ApproachTargetToRadiusCommand : Command {
     private Transform target;
     private RotateToPointCommand rotateCommand;
     
+    private float radius = 10.0f;
+    
     public ApproachTargetToRadiusCommand(Transform target) {
         this.target = target;
         rotateCommand = new RotateToPointCommand(target.position);
@@ -259,7 +261,7 @@ class ApproachTargetToRadiusCommand : Command {
        float timeToIntercept = positionDiffMag / velocityMag;
        float maxAcceleration = drone.thrusterForce / drone.weight;
        float timeToSlow = drone.velocity.magnitude / maxAcceleration;
-       float timeToTarget = (positionDiffMag + 35.0f) / drone.velocity.magnitude;
+       float timeToTarget = (positionDiffMag + radius + 10.0f) / drone.velocity.magnitude;
         
         if(timeToSlow < timeToTarget) {
             drone.FireThrusters(drone.thrusterForce);
@@ -273,7 +275,7 @@ class ApproachTargetToRadiusCommand : Command {
         
         Vector3 positionDiff = drone.transform.position - target.position;
         float maxAcceleration = drone.thrusterForce / drone.weight;
-        return Mathf.Abs(positionDiff.magnitude) < 25.0f;
+        return Mathf.Abs(positionDiff.magnitude) < radius;
     }
 }
 
@@ -302,6 +304,8 @@ class PursueTargetToRadiusCommand : Command {
     private DroneBase target;
     private RotateToPointCommand rotateCommand;
     
+    private float radius = 25.0f;
+    
     public PursueTargetToRadiusCommand(DroneBase target) {
         this.target = target;
         rotateCommand = new RotateToPointCommand(target.transform.position);
@@ -324,7 +328,7 @@ class PursueTargetToRadiusCommand : Command {
        float timeToIntercept = positionDiffMag / velocityMag;
        float maxAcceleration = drone.thrusterForce / drone.weight;
        float timeToSlow = drone.velocity.magnitude / maxAcceleration;
-       float timeToTarget = (positionDiffMag + 35.0f) / drone.velocity.magnitude;
+       float timeToTarget = (positionDiffMag + radius + 10.0f) / drone.velocity.magnitude;
         
         if(timeToSlow < timeToTarget) {
             drone.FireThrusters(drone.thrusterForce);
