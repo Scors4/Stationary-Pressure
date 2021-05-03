@@ -168,6 +168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userDroneSpawn: {fileID: 770184541}
   userDronePrefab: {fileID: 1725187144}
+  raiderDroneSpawn: {fileID: 326968368}
+  raiderDronePrefab: {fileID: 581449908}
   droneList: {fileID: 1284534490}
 --- !u!1 &279579059
 GameObject:
@@ -192,12 +194,42 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 279579059}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 11.37, z: 16.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_Father: {fileID: 1225550230}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &326968368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 326968369}
+  m_Layer: 0
+  m_Name: RaiderDroneSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &326968369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326968368}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 23.2, z: -94.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1225550230}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &395793582 stripped
 GameObject:
@@ -216,6 +248,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab2bc6b22e04cc41b6d1eec88694483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &427633009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 427633010}
+  - component: {fileID: 427633012}
+  - component: {fileID: 427633011}
+  m_Layer: 0
+  m_Name: RaidersRemaining
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &427633010
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427633009}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00006622739}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1073194882}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -463.99985, y: -45}
+  m_SizeDelta: {x: 915.66, y: 100}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &427633011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427633009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.040334597, g: 0.9716981, b: 0.12080199, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 54
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 300
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: RaidersRemaining
+--- !u!222 &427633012
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427633009}
+  m_CullTransparentMesh: 1
 --- !u!114 &433676480 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 480276760006378015, guid: 6ec520dcca46b5545b44bad4d9fbda1a, type: 3}
@@ -227,6 +338,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b0c0da9de34728408f472fba9e9bdda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &581449908 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2736371479181131665, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+  m_PrefabInstance: {fileID: 2736371479694395173}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &658339798
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -315,12 +431,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 770184541}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 10.88, z: 16.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_Father: {fileID: 1225550230}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &841898415
 PrefabInstance:
@@ -701,6 +817,40 @@ MonoBehaviour:
   IronText: {fileID: 1251681621}
   TimeText: {fileID: 1244926409}
   TimeNextWaveText: {fileID: 1720356864}
+  RaidersRemaining: {fileID: 427633011}
+--- !u!1 &1225550229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1225550230}
+  m_Layer: 0
+  m_Name: Spawns
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1225550230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225550229}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 770184542}
+  - {fileID: 279579060}
+  - {fileID: 326968369}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1244926407
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1652,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a791657ba094d6744a4db741c54e10c6, type: 3}
+--- !u!1001 &2736371479694395173
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131664, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131665, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_Name
+      value: RaiderDrone
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736371479181131665, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
 --- !u!1001 &4349864335368768618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2142,7 +2353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2307933357110396950, guid: 12d8f162e12c643469089965d0ab8759, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2307933357110396950, guid: 12d8f162e12c643469089965d0ab8759, type: 3}
       propertyPath: m_LocalPosition.x

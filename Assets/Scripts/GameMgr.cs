@@ -30,6 +30,7 @@ public class GameMgr : MonoBehaviour
     
     public float timeSurvived = 0.0f;
     public float timeToNextWave = 30.0f;
+    bool inWave = false;
 
     // Start is called before the first frame update
     void Awake() {
@@ -48,11 +49,21 @@ public class GameMgr : MonoBehaviour
         
         timeSurvived = Time.timeSinceLevelLoad;
         
-        if(timeToNextWave <= 0.0f) {
-            // TODO: Spawn Wave
-            timeToNextWave = 30.0f;
-        } else {
-            timeToNextWave -= Time.fixedDeltaTime;
+        if (!inWave) {
+            if(timeToNextWave <= 0.0f) {
+                timeToNextWave = 0.0f;
+                inWave = true;
+                DroneMgr.inst.SpawnRaiderWave();
+            } else {
+                timeToNextWave -= Time.fixedDeltaTime;
+            }
+        } else if (inWave) {
+            if(DroneMgr.inst.GetRaiderDrones().Count == 0) {
+                inWave = false;
+                
+                // TODO: Consider making dynamic
+                timeToNextWave = 30.0f;
+            }
         }
     }
     

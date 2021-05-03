@@ -7,9 +7,13 @@ public class DroneMgr : MonoBehaviour
     public static DroneMgr inst;
 
     List<UserDrone> userDrones = new List<UserDrone>();
+    List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
     
     public GameObject userDroneSpawn;
     public GameObject userDronePrefab;
+    
+    public GameObject raiderDroneSpawn;
+    public GameObject raiderDronePrefab;
     
     public DroneList droneList;
 
@@ -30,9 +34,25 @@ public class DroneMgr : MonoBehaviour
             droneList.DroneDestroyed(destroyed);
         }
     }
+    
+    public void RaiderDroneSpawned(RaiderDrone newDrone) {
+        if (!raiderDrones.Contains(newDrone)) {
+            raiderDrones.Add(newDrone);
+        }
+    }
+
+    public void RaiderDroneDestroyed(RaiderDrone destroyed) {
+        if (raiderDrones.Contains(destroyed)) {
+            raiderDrones.Remove(destroyed);
+        }
+    }
 
     public List<UserDrone> GetUserDrones() {
         return userDrones;
+    }
+    
+    public List<RaiderDrone> GetRaiderDrones() {
+        return raiderDrones;
     }
     
     public bool SpawnUserDrone() {
@@ -50,5 +70,22 @@ public class DroneMgr : MonoBehaviour
         Instantiate(userDronePrefab, position, userDroneSpawn.transform.rotation);
             
         return true;
+    }
+    
+    public bool SpawnRaiderDrone() {   
+        // TODO: Add modules to drone based on difficulty
+        
+        Vector3 offset = new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f));
+        Vector3 position = raiderDroneSpawn.transform.position + offset;
+            
+        Instantiate(raiderDronePrefab, position, raiderDroneSpawn.transform.rotation);
+            
+        return true;
+    }
+    
+    public void SpawnRaiderWave() {
+        // TODO: Scale with input difficulty param
+        for(int i = 0; i < 5; i++) 
+            SpawnRaiderDrone();
     }
 }

@@ -13,6 +13,8 @@ public class StatsScreen : MonoBehaviour
     public Text TimeText;
     /// The time to the next wave
     public Text TimeNextWaveText;
+    /// The # of remaining raiders
+    public Text RaidersRemaining;
     
     // Start is called before the first frame update
     void Start() {}
@@ -25,5 +27,7 @@ public class StatsScreen : MonoBehaviour
         
         TimeText.text = "Time: " + Util.formatTime(GameMgr.inst.timeSurvived);
         TimeNextWaveText.text = "Next Wave In: " + Util.formatTime(GameMgr.inst.timeToNextWave);
+        
+        RaidersRemaining.text = "Raiders Remaining: " + DroneMgr.inst.GetRaiderDrones().Count;
     }
 }

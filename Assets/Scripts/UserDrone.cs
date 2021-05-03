@@ -25,6 +25,8 @@ public class UserDrone : MonoBehaviour
     
     // Fixed Timestep
     void FixedUpdate() {
+        // TODO: Search for nearest enemy and kill, otherwise do idle check
+        
         if (droneBase.isIdle()){
             Asteroid asteroid = GameMgr.inst.getClosestAsteroid(transform.position);
             
