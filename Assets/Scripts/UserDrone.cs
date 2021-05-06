@@ -11,7 +11,9 @@ public class UserDrone : MonoBehaviour
     
     public DroneCard droneCard = null;
     public int type = 0;
-    
+
+    DroneStatSet maxStats;
+    DroneStatSet currentStats;
     bool isEngagingRaider = false;
     
     // Start is called before the first frame update
@@ -77,5 +79,17 @@ public class UserDrone : MonoBehaviour
     
     public DroneBase GetDroneBase() {
         return droneBase;
+    }
+
+    public void GetDroneStats(out DroneStatSet current, out DroneStatSet max)    
+    {
+        current = currentStats;
+        max = maxStats;
+    }
+
+    public void SetDroneStats(DroneStatSet newStats)
+    {
+        maxStats = newStats;
+        currentStats = newStats;
     }
 }

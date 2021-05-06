@@ -11,7 +11,7 @@ public class RadarScreen : MonoBehaviour
     public GameObject asteroidBogie;
 
     [Range(25, 2500)]
-    float radarRange = 50;
+    public float radarRange = 50;
 
     float width;
     float height;

@@ -4637,6 +4637,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8727425261026631065, guid: 5256336e80fe1fe4fb84dac02676af5e, type: 3}
+      propertyPath: radarRange
+      value: 1200
+      objectReference: {fileID: 0}
     - target: {fileID: 9073670010101209225, guid: 5256336e80fe1fe4fb84dac02676af5e, type: 3}
       propertyPath: m_RootOrder
       value: 4
