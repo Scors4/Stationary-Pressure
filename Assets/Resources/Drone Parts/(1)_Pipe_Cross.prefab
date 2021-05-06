@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 2432698879910792267}
   - component: {fileID: 8347341361725350558}
   m_Layer: 3
-  m_Name: Pipe_Cross
+  m_Name: (1)_Pipe_Cross
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMat: {fileID: 2100000, guid: cf4cfccc462f3ab4eb0120cc335d93ad, type: 2}
-  mass: 0
+  mass: 2
   displayScale: {x: 1, y: 1, z: 1}
   resourceCost:
     list:

@@ -7,7 +7,6 @@ public enum DroneStatFields
     HEALTH,
     POWER,
     FUEL,
-    AMMO,
     STORAGE
 }
 
@@ -16,7 +15,6 @@ public struct DroneStatSet
     public float Health;
     public float Power;
     public float Fuel;
-    public float Ammo;
     public float Storage;
 }
 

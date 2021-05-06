@@ -26,6 +26,10 @@ PrefabInstance:
       value: Ore_Cell_1
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
+      propertyPath: mass
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: buildScale.x
       value: 0.75
       objectReference: {fileID: 0}

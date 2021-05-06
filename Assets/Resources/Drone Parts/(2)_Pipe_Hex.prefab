@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 4721079568842436233}
   - component: {fileID: 1410115806241964124}
   m_Layer: 3
-  m_Name: Pipe_Hex
+  m_Name: (2)_Pipe_Hex
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMat: {fileID: 2100000, guid: cf4cfccc462f3ab4eb0120cc335d93ad, type: 2}
-  mass: 0
+  mass: 3
   displayScale: {x: 1, y: 1, z: 1}
   resourceCost:
     list:

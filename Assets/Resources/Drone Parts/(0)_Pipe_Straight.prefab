@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7742299662660579946}
   - component: {fileID: 4136332532281040063}
   m_Layer: 3
-  m_Name: Pipe_Straight
+  m_Name: (0)_Pipe_Straight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMat: {fileID: 2100000, guid: cf4cfccc462f3ab4eb0120cc335d93ad, type: 2}
-  mass: 0
+  mass: 1
   displayScale: {x: 1, y: 1, z: 1}
   resourceCost:
     list:

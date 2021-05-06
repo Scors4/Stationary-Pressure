@@ -9,6 +9,8 @@ public class HoloTable : MonoBehaviour
     List<GameObject> partsList;
     public Text pageText;
     public Text costText;
+    public Transform centerPoint;
+    public float maxAttachDistance = 4;
 
     ResourceSet currentResourceCost;
     DroneStatSet currentDroneStats;
@@ -89,11 +91,10 @@ public class HoloTable : MonoBehaviour
             currentDroneStats.Fuel += statsAdded[DroneStatFields.FUEL];
         if (statsAdded.ContainsKey(DroneStatFields.STORAGE))
             currentDroneStats.Storage += statsAdded[DroneStatFields.STORAGE];
-        if (statsAdded.ContainsKey(DroneStatFields.AMMO))
-            currentDroneStats.Ammo += statsAdded[DroneStatFields.AMMO];
 
 
         UpdateCostDisplay();
+        UpdateAttachDistLimit();
     }
 
     public void PartRemoved(DronePart part)
@@ -119,8 +120,6 @@ public class HoloTable : MonoBehaviour
                 currentDroneStats.Fuel += statsRemoved[DroneStatFields.FUEL];
             if (statsRemoved.ContainsKey(DroneStatFields.STORAGE))
                 currentDroneStats.Storage += statsRemoved[DroneStatFields.STORAGE];
-            if (statsRemoved.ContainsKey(DroneStatFields.AMMO))
-                currentDroneStats.Ammo += statsRemoved[DroneStatFields.AMMO];
         }
 
         SerializableDictionary<RESOURCE, float> costIncurred = part.GetResourceCost();
@@ -140,8 +139,6 @@ public class HoloTable : MonoBehaviour
             currentDroneStats.Fuel += statRemoved[DroneStatFields.FUEL];
         if (statRemoved.ContainsKey(DroneStatFields.STORAGE))
             currentDroneStats.Storage += statRemoved[DroneStatFields.STORAGE];
-        if (statRemoved.ContainsKey(DroneStatFields.AMMO))
-            currentDroneStats.Ammo += statRemoved[DroneStatFields.AMMO];
 
         UpdateCostDisplay();
     }
@@ -222,8 +219,6 @@ public class HoloTable : MonoBehaviour
                     point.gameObject.SetActive(false);
                 }
             }
-            else
-                break;
 
             i++;
         }
@@ -248,6 +243,20 @@ public class HoloTable : MonoBehaviour
                 {
                     display.SetPartValid((part.GetAttachType() & selectedAttachPoint.GetAttachType()) != 0);
                 }
+            }
+        }
+    }
+
+    void UpdateAttachDistLimit()
+    {
+        foreach(AttachPoint point in GetComponentsInChildren<AttachPoint>())
+        {
+            if (!point.isActiveAndEnabled)
+                continue;
+
+            if(Vector3.Distance(point.transform.position, centerPoint.position) > maxAttachDistance)
+            {
+                point.gameObject.SetActive(false);
             }
         }
     }
