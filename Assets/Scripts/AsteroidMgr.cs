@@ -10,7 +10,10 @@ public class AsteroidMgr : MonoBehaviour {
     public GameObject asteroidSpawn;
     public GameObject asteroidPrefab;
     public int numAsteroids = 100;
-    
+    [Range(50, 5000)]
+    public float spawnRadius = 100.0f;
+
+
     void Awake() {
         inst = this;
     }
@@ -34,7 +37,7 @@ public class AsteroidMgr : MonoBehaviour {
     }
     
     public void SpawnAsteroid() {
-        Vector3 offset = new Vector3(Random.Range(-100.0f, 100.0f), Random.Range(-10.0f, 10.0f), Random.Range(-100.0f, 100.0f));
+        Vector3 offset = new Vector3(Random.Range(-spawnRadius, spawnRadius), Random.Range(-spawnRadius / 10.0f, spawnRadius / 10.0f), Random.Range(-spawnRadius, spawnRadius));
         Vector3 position = asteroidSpawn.transform.position + offset;
         
         Instantiate(asteroidPrefab, position, asteroidSpawn.transform.rotation);

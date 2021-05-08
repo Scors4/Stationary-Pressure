@@ -22,7 +22,7 @@ public class StatsScreen : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        PowerText.text = "Power: " + GameMgr.inst.Power;
+        PowerText.text = "Power: " + GameMgr.inst.GetPowerLevel().ToString("#.0");
         ResourceText.text = "Iron: " + GameMgr.inst.Resources.Iron.ToString("#.0") + "\n"
             + "Copper: " + GameMgr.inst.Resources.Copper.ToString("#.0") + "\n"
             + "Uranium: " + GameMgr.inst.Resources.Uranium.ToString("#.0") + "\n"

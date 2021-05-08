@@ -25,14 +25,17 @@ public class GameMgr : MonoBehaviour {
     public GameObject pauseScreen;
     public FirstPersonController firstPersonController;
     public ResourceSet Resources = new ResourceSet();
-    public int Power = 1;
+    public Transform hangarLocation = null;
     
     public float timeSurvived = 0.0f;
-    public float timeToNextWave = 30.0f;
+    public float timeToNextWave = 120.0f;
     public float timeToLoss = 60.0f;
     bool inWave = false;
     bool gamePaused = false;
     bool gameLost = false;
+
+    float Power = 60;
+    float powerDrainRate = 0.15f;
 
     void Awake() {
         inst = this;
@@ -43,17 +46,6 @@ public class GameMgr : MonoBehaviour {
     // Update is called once per frame
     void Update() 
     {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Power = 0;
-            timeToLoss = 0.0f;
-        }
-        
-        // TODO: Replace with better lose-con
-        if (DroneMgr.inst.GetUserDrones().Count == 0) {
-            Power = 0;
-            timeToLoss = 0.0f;
-        }
 
         if(!gameLost && Input.GetKeyDown(KeyCode.Escape))
         {
@@ -96,8 +88,22 @@ public class GameMgr : MonoBehaviour {
                 inWave = false;
                 
                 // TODO: Consider making dynamic
-                timeToNextWave = 30.0f;
+                timeToNextWave = Random.Range(30.0f, 120.0f);
             }
+        }
+
+        if(Resources.Uranium > 0 && Power < 250.0f)
+        {
+            Resources.Uranium -= (0.25f * Time.fixedDeltaTime);
+            Power += 1.0f * Time.fixedDeltaTime;
+
+            if (Resources.Uranium < 0f)
+                Resources.Uranium = 0.0f;
+        }
+
+        if (Resources.Ice > 0.0f && Power > 0.0f)
+        {
+            Resources.Ice -= 0.2f * Time.fixedDeltaTime;
         }
 
         if (Power <= 0)
@@ -115,6 +121,13 @@ public class GameMgr : MonoBehaviour {
             else
                 timeToLoss -= Time.fixedDeltaTime;
         }
+        else
+        {
+            if (timeToLoss < 60.0f)
+                timeToLoss = 60.0f;
+
+            Power -= Time.fixedDeltaTime * powerDrainRate;
+        }
     }
 
     public void UnpauseGame()
@@ -126,5 +139,10 @@ public class GameMgr : MonoBehaviour {
         gamePaused = false;
         firstPersonController.cameraCanMove = true;
         firstPersonController.playerCanMove = true;
+    }
+
+    public float GetPowerLevel()
+    {
+        return Power;
     }
 }

@@ -14,6 +14,7 @@ public class UserDrone : MonoBehaviour
 
     DroneStatSet maxStats;
     DroneStatSet currentStats;
+    public ResourceSet minedResources;
     bool isEngagingRaider = false;
     
     // Start is called before the first frame update

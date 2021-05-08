@@ -214,6 +214,7 @@ Transform:
   m_Children:
   - {fileID: 1241812032}
   - {fileID: 124679036}
+  - {fileID: 1964587512}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -578,9 +579,9 @@ MonoBehaviour:
   lossScreen: {fileID: 677949600}
   pauseScreen: {fileID: 1632980450}
   firstPersonController: {fileID: 875279914}
-  Power: 100
+  hangarLocation: {fileID: 1964587512}
   timeSurvived: 0
-  timeToNextWave: 30
+  timeToNextWave: 120
   timeToLoss: 60
 --- !u!1001 &193013938
 PrefabInstance:
@@ -1418,6 +1419,7 @@ MonoBehaviour:
   asteroidSpawn: {fileID: 1129924022}
   asteroidPrefab: {fileID: 679462129005589639, guid: 3c5328116e5648944a25e9f12021440b, type: 3}
   numAsteroids: 100
+  spawnRadius: 1500
 --- !u!1001 &587879839
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4796,6 +4798,36 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Power
+--- !u!1 &1964587511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1964587512}
+  m_Layer: 0
+  m_Name: HangarLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1964587512
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964587511}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -6, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 40234257}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2113895044
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -35,7 +35,10 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     }
     
     /// Try to mine this asteroid
-    public void Mine(float power) {
+    public void Mine(float power, DroneBase drone, UserDrone uDrone) {
+        if (uDrone == null)
+            return;
+
         if (Resources.Iron > 0.0f || Resources.Copper > 0.0f || Resources.Uranium > 0.0f || Resources.Copper > 0.0f) {
 
             float ironMined = Mathf.Clamp(power * resourceRatios.Iron, 0.0f, Resources.Iron);
@@ -45,10 +48,17 @@ public class Asteroid : MonoBehaviour, DroneTargetable
 
             // TODO: The player currently gains some extra resources from each "mine" op
             // since the iron levels in an asteroid can go below zero. Fix this.
-            GameMgr.inst.Resources.Iron += ironMined;
+            /*GameMgr.inst.Resources.Iron += ironMined;
             GameMgr.inst.Resources.Copper += copperMined;
             GameMgr.inst.Resources.Uranium += uraniumMined;
-            GameMgr.inst.Resources.Ice += iceMined;
+            GameMgr.inst.Resources.Ice += iceMined;*/
+
+            uDrone.minedResources.Iron += ironMined;
+            uDrone.minedResources.Copper += copperMined;
+            uDrone.minedResources.Uranium += uraniumMined;
+            uDrone.minedResources.Ice += iceMined;
+
+            drone.AddResourcesStored(ironMined + copperMined + uraniumMined + iceMined);
 
             Resources.Iron -= ironMined;
             Resources.Copper -= copperMined;

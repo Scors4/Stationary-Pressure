@@ -26,7 +26,8 @@ public enum OWNERS
 }
 
 public class DroneBase : MonoBehaviour {
-    SerializableDictionary<DroneStatFields, float> droneStats;
+    DroneStatSet droneStats;
+    DroneStatSet currentStats;
 
     /// The 3D velocity vector
     public Vector3 velocity = Vector3.zero;
@@ -86,10 +87,14 @@ public class DroneBase : MonoBehaviour {
     }
     
     // Start is called before the first frame update
-    void Start() {}
+    void Start() 
+    {
+        currentStats = new DroneStatSet();
+    }
 
-    public void SetDroneStats(SerializableDictionary<DroneStatFields, float> stats) {
+    public void SetDroneStats(DroneStatSet stats) {
         droneStats = stats;
+        currentStats.Health = stats.Health;
     }
 
     // Update is called once per frame
@@ -157,6 +162,26 @@ public class DroneBase : MonoBehaviour {
     public OWNERS GetOwner()
     {
         return owner;
+    }
+
+    public DroneStatSet GetDroneMaxStats()
+    {
+        return droneStats;
+    }
+
+    public DroneStatSet GetDroneCurrentStats()
+    {
+        return currentStats;
+    }
+
+    public void AddResourcesStored(float amount)
+    {
+        currentStats.Storage = Mathf.Clamp(currentStats.Storage + amount, 0.0f, droneStats.Storage);
+    }
+
+    public bool HasStorageAvailable()
+    {
+        return (droneStats.Storage - currentStats.Storage) > 0.0f;
     }
 }
 
@@ -297,7 +322,12 @@ class MineAsteroidCommand : Command {
     
      /// Perform a tick
     public void Tick(DroneBase drone) {
-        target.Mine(drone.damage);
+        UserDrone uDrone = drone.GetComponent<UserDrone>();
+        if (uDrone == null)
+            return;
+
+        if(drone.HasStorageAvailable())
+            target.Mine(drone.damage, drone, uDrone);
     }
     
     /// Whether this is done executing.
