@@ -12,14 +12,18 @@ public class UserDrone : MonoBehaviour
     public DroneCard droneCard = null;
     public int type = 0;
 
-    DroneStatSet maxStats;
-    DroneStatSet currentStats;
+    public float iron;
+    public float copper;
+    public float uranium;
+    public float ice;
+
     public ResourceSet minedResources;
     bool isEngagingRaider = false;
     
     // Start is called before the first frame update
     void Start() {
         droneBase = GetComponent<DroneBase>();
+        minedResources = new ResourceSet();
 
         DroneMgr.inst.UserDroneSpawned(this);
         id = nextId++;
@@ -34,7 +38,7 @@ public class UserDrone : MonoBehaviour
     
     // Fixed Timestep
     void FixedUpdate() {
-        if(droneBase.health <= 0.0) {
+        if(droneBase.GetDroneCurrentStats().Health <= 0.0) {
             DroneMgr.inst.UserDroneDestroyed(this);
             Destroy(gameObject);
             return;
@@ -67,6 +71,11 @@ public class UserDrone : MonoBehaviour
                 droneBase.addCommand(new MineAsteroidCommand(asteroid));
             }   
         }
+
+        iron = minedResources.Iron;
+        copper = minedResources.Copper;
+        uranium = minedResources.Uranium;
+        ice = minedResources.Ice;
     }
     
     void OnEnable() {
@@ -84,13 +93,7 @@ public class UserDrone : MonoBehaviour
 
     public void GetDroneStats(out DroneStatSet current, out DroneStatSet max)    
     {
-        current = currentStats;
-        max = maxStats;
-    }
-
-    public void SetDroneStats(DroneStatSet newStats)
-    {
-        maxStats = newStats;
-        currentStats = newStats;
+        current = droneBase.GetDroneCurrentStats();
+        max = droneBase.GetDroneMaxStats();
     }
 }

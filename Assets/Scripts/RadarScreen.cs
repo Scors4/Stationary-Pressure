@@ -127,8 +127,10 @@ public class RadarScreen : MonoBehaviour
             angle *= Mathf.Deg2Rad;
 
             RectTransform rect = roid.GetComponent<RectTransform>();
-            float posX = Mathf.Sin(angle) * distance * (width / 2);
+            float posX = Mathf.Sin(angle) * distance * (width * 4);
             float posY = Mathf.Cos(angle) * distance * height;
+
+            posX = Mathf.Clamp(posX, -width / 2, width / 2);
 
             rect.anchoredPosition = new Vector2(posX, posY);
         }

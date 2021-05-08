@@ -275,7 +275,7 @@ public class HoloTable : MonoBehaviour
     }
 
     public void PrintDrone() {
-        if(ValidateDroneToPrint())
-            DroneMgr.inst.SpawnUserDrone(currentResourceCost);
+        if (ValidateDroneToPrint())
+            DroneMgr.inst.SpawnUserDrone(currentResourceCost, currentDroneStats);
     }
 }

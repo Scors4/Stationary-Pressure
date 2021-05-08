@@ -1103,7 +1103,7 @@ MonoBehaviour:
   - {fileID: 5364242896977389913}
   pageText: {fileID: 3843456882099121948}
   costText: {fileID: 7142935109544231133}
-  centerPoint: {fileID: 0}
+  centerPoint: {fileID: 5121192385045775557}
   maxAttachDistance: 4
   buildModeButton: {fileID: 2653264057339421654}
 --- !u!1 &8877745098178343153

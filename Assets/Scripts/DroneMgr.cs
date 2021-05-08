@@ -83,7 +83,7 @@ public class DroneMgr : MonoBehaviour
             && resourceCost.Uranium <= currentSupply.Uranium;
     }
 
-    public bool SpawnUserDrone(ResourceSet resourceCost) {
+    public bool SpawnUserDrone(ResourceSet resourceCost, DroneStatSet droneStats) {
         // TODO: Calculate cost dynamically
 
         if (!CanPrintDrone(resourceCost))
@@ -96,7 +96,8 @@ public class DroneMgr : MonoBehaviour
         Vector3 offset = new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f));
         Vector3 position = userDroneSpawn.transform.position + offset;
             
-        Instantiate(userDronePrefab, position, userDroneSpawn.transform.rotation);
+        GameObject go = Instantiate(userDronePrefab, position, userDroneSpawn.transform.rotation);
+        go.GetComponent<DroneBase>().SetDroneStats(droneStats);
             
         return true;
     }

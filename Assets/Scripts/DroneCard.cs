@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,11 +17,11 @@ public class DroneCard : MonoBehaviour
     public Text powerPercent;
     public Text resourcePercent;
 
-    public Image healthBar;
-    public Image powerBar;
-    public Image resourceBar;
+    public Scrollbar healthBar;
+    public Scrollbar powerBar;
+    public Scrollbar resourceBar;
 
-    int barWidth;
+    //int barWidth;
 
     internal void SetDrone(UserDrone drone)
     {
@@ -32,7 +29,7 @@ public class DroneCard : MonoBehaviour
 
         droneID.text = drone.type.ToString("d2") + "-" + drone.id.ToString("d3");
 
-        barWidth = 340;
+        //barWidth = 340;
     }
 
     private void OnDisable()
@@ -51,7 +48,7 @@ public class DroneCard : MonoBehaviour
             Destroy(gameObject);
 
         UpdatePercentageDisplay();
-
+        UpdateTextDisplay();
     }
 
     public void OnReturnClick()
@@ -77,6 +74,9 @@ public class DroneCard : MonoBehaviour
         DroneStatSet currentStats;
         DroneStatSet maxStats;
 
+        if (drone == null)
+            return;
+
         drone.GetDroneStats(out currentStats, out maxStats);
 
         // Stat percentages for both bar and text display
@@ -84,7 +84,7 @@ public class DroneCard : MonoBehaviour
         float pp = currentStats.Power / maxStats.Power;
         float rp = currentStats.Storage / maxStats.Storage;
 
-        // Bar relative y locations
+        /*// Bar relative y locations
         float hpos = (int)(hp * (-0.5 * barWidth));
         float ppos = (int)(pp * (-0.5 * barWidth));
         float rpos = (int)(rp * (-0.5 * barWidth));
@@ -92,22 +92,23 @@ public class DroneCard : MonoBehaviour
         // Bar widths
         float hw = (int)(hp * barWidth);
         float pw = (int)(pp * barWidth);
-        float rw = (int)(rp * barWidth);
+        float rw = (int)(rp * barWidth);*/
 
         healthPercent.text = "%" + (hp * 100).ToString("f2");
         powerPercent.text = "%" + (pp * 100).ToString("f2");
         resourcePercent.text = "%" + (rp * 100).ToString("f2");
 
-        Rect healthRect = healthBar.rectTransform.rect;
-        Rect powerRect = powerBar.rectTransform.rect;
-        Rect resourceRect = resourceBar.rectTransform.rect;
+        healthBar.size = Mathf.Clamp(hp, 0.0f, 1.0f);
+        powerBar.size = Mathf.Clamp(pp, 0.0f, 1.0f);
+        resourceBar.size = Mathf.Clamp(rp, 0.0f, 1.0f);
+    }
 
-        healthRect.width = hw;
-        powerRect.width = pw;
-        resourceRect.width = rw;
-
-        healthRect.y = hpos;
-        powerRect.y = ppos;
-        resourceRect.y = rpos;
+    public void UpdateTextDisplay()
+    {
+        ResourceSet res = drone.minedResources;
+        resourceText.text = "Iron: " + res.Iron.ToString("#.0") + "\n"
+            + "Copper: " + res.Copper.ToString("#.0") + "\n"
+            + "Uranium: " + res.Uranium.ToString("#.0") + "\n"
+            + "Ice: " + res.Ice.ToString("#.0");
     }
 }

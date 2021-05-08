@@ -19,6 +19,11 @@ public class RaiderDrone : MonoBehaviour
         DroneBase drone = GetComponent<DroneBase>();
         if (drone != null)
             drone.SetOwner(OWNERS.RAIDER);
+
+        DroneStatSet droneStats = new DroneStatSet();
+        droneStats.Health = 100;
+
+        drone.SetDroneStats(droneStats);
     }
 
     // Update is called once per frame
@@ -26,7 +31,7 @@ public class RaiderDrone : MonoBehaviour
     
     // Fixed timestep
     void FixedUpdate() {
-        if(droneBase.health <= 0.0) {
+        if(droneBase.GetDroneCurrentStats().Health <= 0.0) {
             DroneMgr.inst.RaiderDroneDestroyed(this);
             Destroy(gameObject);
             return;

@@ -60,7 +60,6 @@ public class DroneBase : MonoBehaviour {
     
     public GameObject laserEffect;
     
-    public float health = 100.0f;
     public float damage = 3.0f;
 
     OWNERS owner;
@@ -90,11 +89,21 @@ public class DroneBase : MonoBehaviour {
     void Start() 
     {
         currentStats = new DroneStatSet();
+        droneStats = new DroneStatSet();
+        currentStats.Health = 100;
+        droneStats.Health = 100;
+
+        currentStats.Power = 150;
+        droneStats.Power = 150;
+
+        droneStats.Storage = 500;
+        currentStats.Storage = 0;
     }
 
     public void SetDroneStats(DroneStatSet stats) {
         droneStats = stats;
         currentStats.Health = stats.Health;
+        currentStats.Power = stats.Power;
     }
 
     // Update is called once per frame
@@ -149,7 +158,7 @@ public class DroneBase : MonoBehaviour {
     }
     
     public void DoDamage(float power) {
-        health -= power;
+        currentStats.Health -= power;
         
         // Delegate the actual reaction to negative health to the caller since the caller needs to handle deregistering the user/raider drone.
     }
