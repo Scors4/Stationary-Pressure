@@ -34,7 +34,7 @@ public class GameMgr : MonoBehaviour {
     bool gamePaused = false;
     bool gameLost = false;
 
-    float Power = 60;
+    float power = 60;
     float powerDrainRate = 0.15f;
 
     void Awake() {
@@ -46,6 +46,12 @@ public class GameMgr : MonoBehaviour {
     // Update is called once per frame
     void Update() 
     {
+
+        if(!gamePaused && Input.GetKeyDown(KeyCode.J))
+        {
+            power = 0;
+            timeToLoss = 0;
+        }
 
         if(!gameLost && Input.GetKeyDown(KeyCode.Escape))
         {
@@ -92,21 +98,21 @@ public class GameMgr : MonoBehaviour {
             }
         }
 
-        if(Resources.Uranium > 0 && Power < 250.0f)
+        if(Resources.Uranium > 0 && power < 250.0f)
         {
             Resources.Uranium -= (0.25f * Time.fixedDeltaTime);
-            Power += 1.0f * Time.fixedDeltaTime;
+            power += 1.0f * Time.fixedDeltaTime;
 
             if (Resources.Uranium < 0f)
                 Resources.Uranium = 0.0f;
         }
 
-        if (Resources.Ice > 0.0f && Power > 0.0f)
+        if (Resources.Ice > 0.0f && power > 0.0f)
         {
             Resources.Ice -= 0.2f * Time.fixedDeltaTime;
         }
 
-        if (Power <= 0)
+        if (power <= 0)
         {
             if (timeToLoss <= 0.0f)
             {
@@ -126,7 +132,7 @@ public class GameMgr : MonoBehaviour {
             if (timeToLoss < 60.0f)
                 timeToLoss = 60.0f;
 
-            Power -= Time.fixedDeltaTime * powerDrainRate;
+            power -= Time.fixedDeltaTime * powerDrainRate;
         }
     }
 
@@ -143,6 +149,6 @@ public class GameMgr : MonoBehaviour {
 
     public float GetPowerLevel()
     {
-        return Power;
+        return power;
     }
 }

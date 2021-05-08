@@ -22,7 +22,7 @@ public class MainMenu : MonoBehaviour
     }
     
     public void Play() {
-        SceneManager.LoadScene("DevScene");
+        SceneManager.LoadScene("StationLevel");
     }
     
     public void ShowInstructions() {
