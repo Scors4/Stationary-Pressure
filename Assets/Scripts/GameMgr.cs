@@ -26,6 +26,7 @@ public class GameMgr : MonoBehaviour {
     public FirstPersonController firstPersonController;
     public ResourceSet Resources = new ResourceSet();
     public Transform hangarLocation = null;
+    public List<Light> poweredLights;
     
     public float timeSurvived = 0.0f;
     public float timeToNextWave = 120.0f;
@@ -33,6 +34,7 @@ public class GameMgr : MonoBehaviour {
     bool inWave = false;
     bool gamePaused = false;
     bool gameLost = false;
+    bool lightsPowered = true;
 
     float power = 60;
     float powerDrainRate = 0.15f;
@@ -47,7 +49,7 @@ public class GameMgr : MonoBehaviour {
     void Update() 
     {
 
-        if(!gamePaused && Input.GetKeyDown(KeyCode.J))
+        if(!gamePaused && Input.GetKeyDown(KeyCode.Q))
         {
             power = 0;
             timeToLoss = 0;
@@ -101,19 +103,24 @@ public class GameMgr : MonoBehaviour {
         if(Resources.Uranium > 0 && power < 250.0f)
         {
             Resources.Uranium -= (0.25f * Time.fixedDeltaTime);
-            power += 1.0f * Time.fixedDeltaTime;
+            power += 15.0f * Time.fixedDeltaTime;
 
             if (Resources.Uranium < 0f)
                 Resources.Uranium = 0.0f;
         }
 
-        if (Resources.Ice > 0.0f && power > 0.0f)
-        {
-            Resources.Ice -= 0.2f * Time.fixedDeltaTime;
-        }
-
         if (power <= 0)
         {
+            if(lightsPowered)
+            {
+                lightsPowered = false;
+                if(poweredLights != null)
+                {
+                    foreach (Light light in poweredLights)
+                        light.enabled = false;
+                }
+            }
+
             if (timeToLoss <= 0.0f)
             {
                 gameLost = true;
@@ -129,6 +136,16 @@ public class GameMgr : MonoBehaviour {
         }
         else
         {
+            if (!lightsPowered)
+            {
+                lightsPowered = true;
+                if (poweredLights != null)
+                {
+                    foreach (Light light in poweredLights)
+                        light.enabled = true;
+                }
+            }
+
             if (timeToLoss < 60.0f)
                 timeToLoss = 60.0f;
 
@@ -150,5 +167,13 @@ public class GameMgr : MonoBehaviour {
     public float GetPowerLevel()
     {
         return power;
+    }
+
+    public void AddResources(ResourceSet resourcesIn)
+    {
+        Resources.Iron += resourcesIn.Iron;
+        Resources.Copper += resourcesIn.Copper;
+        Resources.Uranium += resourcesIn.Uranium;
+        Resources.Ice += resourcesIn.Ice;
     }
 }

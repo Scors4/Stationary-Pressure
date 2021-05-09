@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum UserDroneState {
+public enum UserDroneState {
     ReturnToBase,
     Normal,
 }
@@ -17,16 +17,12 @@ public class UserDrone : MonoBehaviour
     public DroneCard droneCard = null;
     public int type = 0;
 
-    public float iron;
-    public float copper;
-    public float uranium;
-    public float ice;
-
     public ResourceSet minedResources;
+    public bool isDocked = false;
     
     bool isEngagingRaider = false;
     bool isReturningHome = false;
-    UserDroneState state = UserDroneState.Normal;
+    public UserDroneState state = UserDroneState.Normal;
     
     public Transform homeBase = null;
     
@@ -53,14 +49,27 @@ public class UserDrone : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        if (!droneBase.HasStorageAvailable() && !isReturningHome)
+            ReturnToBase();
+
+        if (!droneBase.HasPower() && !isReturningHome)
+            ReturnToBase();
         
         if(state == UserDroneState.ReturnToBase) {
-            Vector3 positionDiff = homeBase.transform.position - droneBase.transform.position;
+            Vector3 positionDiff = homeBase.position - droneBase.transform.position;
             if(positionDiff.magnitude > 25.0f && !isReturningHome) {
                 isReturningHome = true;
                 
                 droneBase.addCommand(new ApproachTargetToRadiusCommand(homeBase));
                 droneBase.addCommand(new ZeroVelocityCommand(droneBase));
+            }
+            else if (droneBase.isIdle() && isReturningHome)
+            {
+                this.gameObject.SetActive(false);
+                isDocked = true;
+                UnloadResources();
+                this.ChangeState(UserDroneState.Normal);
             }
         } else {
             RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
@@ -70,8 +79,10 @@ public class UserDrone : MonoBehaviour
             
             if(raiderDrone != null) {
                 Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
-                if(positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0) 
-                    raiderDrone.GetDroneBase().DoDamage(droneBase.damage);
+                if (positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0)
+                {
+                    raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage));
+                }
             }
         
         
@@ -91,11 +102,6 @@ public class UserDrone : MonoBehaviour
                 }   
             }
         }
-
-        iron = minedResources.Iron;
-        copper = minedResources.Copper;
-        uranium = minedResources.Uranium;
-        ice = minedResources.Ice;
     }
     
     void OnEnable() {
@@ -103,7 +109,7 @@ public class UserDrone : MonoBehaviour
             DroneMgr.inst.UserDroneSpawned(this);
     }
     
-    void OnDisable() {
+    void OnDestroy() {
         DroneMgr.inst.UserDroneDestroyed(this);
     }
     
@@ -116,15 +122,41 @@ public class UserDrone : MonoBehaviour
         current = droneBase.GetDroneCurrentStats();
         max = droneBase.GetDroneMaxStats();
     }
-    
-    public void returnToBase() {
-        this.changeState(UserDroneState.ReturnToBase);
+
+    public UserDroneState GetDroneState()
+    {
+        return state;
     }
     
-    void changeState(UserDroneState state) {
+    public void ReturnToBase() {
+        this.ChangeState(UserDroneState.ReturnToBase);
+    }
+    
+    void ChangeState(UserDroneState state) {
         droneBase.ClearCommands();
         this.state = state;
         this.isEngagingRaider = false;
         this.isReturningHome = false;
+    }
+
+    void UnloadResources()
+    {
+        GameMgr.inst.AddResources(minedResources);
+        minedResources = new ResourceSet();
+        droneBase.ClearStorage();
+    }
+
+    public void LaunchDrone()
+    {
+        if (!isDocked)
+            return;
+
+        this.gameObject.SetActive(true);
+        isDocked = false;
+    }
+
+    public void SetDroneHome(Transform newHome)
+    {
+        homeBase = newHome;
     }
 }

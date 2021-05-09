@@ -9,7 +9,9 @@ public class DroneMgr : MonoBehaviour
     public List<UserDrone> userDrones = new List<UserDrone>();
     public List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
     public List<DroneBase> allDrones = new List<DroneBase>();
-    
+
+    public Transform homeSite;
+
     public GameObject userDroneSpawn;
     public GameObject userDronePrefab;
     
@@ -98,6 +100,7 @@ public class DroneMgr : MonoBehaviour
             
         GameObject go = Instantiate(userDronePrefab, position, userDroneSpawn.transform.rotation);
         go.GetComponent<DroneBase>().SetDroneStats(droneStats);
+        go.GetComponent<UserDrone>().SetDroneHome(homeSite);
             
         return true;
     }
@@ -109,7 +112,7 @@ public class DroneMgr : MonoBehaviour
         Vector3 position = raiderDroneSpawn.transform.position + offset;
             
         Instantiate(raiderDronePrefab, position, raiderDroneSpawn.transform.rotation);
-            
+
         return true;
     }
     

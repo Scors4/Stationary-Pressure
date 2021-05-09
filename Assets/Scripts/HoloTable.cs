@@ -194,9 +194,9 @@ public class HoloTable : MonoBehaviour
         int i = page * partDisplays.Count;
         foreach (PartDisplay display in partDisplays)
         {
-            if (display.transform.childCount > 0)
+            if (display.GetDisplayedPart() != null)
             {
-                Destroy(display.transform.GetChild(0).gameObject);
+                Destroy(display.GetDisplayedPart().gameObject);
                 display.SetDisplayedPart(null);
             }
 

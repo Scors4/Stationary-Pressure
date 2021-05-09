@@ -31,5 +31,7 @@ public class DroneList : MonoBehaviour
     
     public void DroneDestroyed(UserDrone drone) {
         cards.Remove(drone.droneCard);
+        if(drone.droneCard != null)
+            Destroy(drone.droneCard.gameObject);
     }
 }

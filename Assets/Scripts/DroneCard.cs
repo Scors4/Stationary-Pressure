@@ -23,6 +23,12 @@ public class DroneCard : MonoBehaviour
 
     //int barWidth;
 
+    private void Start()
+    {
+        launchButton.interactable = false;
+        returnButton.interactable = false;
+    }
+
     internal void SetDrone(UserDrone drone)
     {
         this.drone = drone;
@@ -49,24 +55,44 @@ public class DroneCard : MonoBehaviour
 
         UpdatePercentageDisplay();
         UpdateTextDisplay();
+
+        UpdateButtonState();
     }
 
     public void OnReturnClick()
     {
         if (!ValidateDrone())
             Destroy(gameObject);
+
+        drone.ReturnToBase();
+        returnButton.interactable = false;
     }
 
     public void OnLaunchClick()
     {
         if (!ValidateDrone())
             Destroy(gameObject);
+
+        drone.LaunchDrone();
+        launchButton.interactable = false;
     }
 
     public void OnPowerClick()
     {
         if (!ValidateDrone())
             Destroy(gameObject);
+
+        Destroy(drone.gameObject);
+        Destroy(gameObject);
+    }
+
+    void UpdateButtonState()
+    {
+        if (!returnButton.interactable && drone.GetDroneState() != UserDroneState.ReturnToBase)
+            returnButton.interactable = true;
+
+        if (!launchButton.interactable && drone.isDocked)
+            launchButton.interactable = true;
     }
 
     public void UpdatePercentageDisplay()

@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PartDisplay : MonoBehaviour, Interactable
 {
@@ -14,6 +13,9 @@ public class PartDisplay : MonoBehaviour, Interactable
     public Material hoveredMaterial;
     public Material invalidMaterial;
     protected Material originalMaterial;
+
+    public Canvas textCanvas;
+    public Text nameText;
 
     MeshRenderer meshRender;
     HoloTable holoTable;
@@ -36,6 +38,7 @@ public class PartDisplay : MonoBehaviour, Interactable
         {
             isHovered = false;
             meshRender.material = originalMaterial;
+            textCanvas.gameObject.SetActive(false);
         }
     }
 
@@ -49,6 +52,12 @@ public class PartDisplay : MonoBehaviour, Interactable
         {
             isHovered = true;
             meshRender.material = hoveredMaterial;
+
+            if(displayedPart.showName)
+            {
+                nameText.text = displayedPart.displayName;
+                textCanvas.gameObject.SetActive(true);
+            }
         }
     }
 

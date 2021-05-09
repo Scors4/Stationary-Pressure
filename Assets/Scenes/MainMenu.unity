@@ -510,10 +510,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 24
+    m_FontSize: 19
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -526,7 +526,24 @@ MonoBehaviour:
     The objective of this game is to build drones to mine
     resources and keep your base''s power on. Use the Holotable to construct drones.
     Use the stats screen to view your resources and monitor for Raider attacks. Your
-    drones will automatically fend off attacks and mine resources for you.'
+    drones will automatically fend off attacks and mine resources for you.
+
+
+    To
+    build new drones, enable Build Mode on the table in the middle of the station. 
+    Select an attach point to attach a piece to that location then select the piece
+    to attach.  Print the drone when the design is sufficient and the station has
+    enough resources in storage.
+
+
+    Command the drones using the drone management
+    screen.  <Up Arrow> will launch a docked drone.  <Down Arrow> will recall a drone
+    to base.  <Do Not Cross> will self-destruct the drone.
+
+
+    Manage Company Events
+    or they will continue to send additional drones to force your hand.  The Compaany
+    is not liable for personal injury or death resulting from Delinquency of Duty.'
 --- !u!222 &462782186
 CanvasRenderer:
   m_ObjectHideFlags: 0

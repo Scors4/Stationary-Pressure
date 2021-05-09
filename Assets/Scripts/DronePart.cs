@@ -8,6 +8,9 @@ public class DronePart : MonoBehaviour, Interactable
     public float mass;
     public Vector3 displayScale = Vector3.one;
 
+    public bool showName = false;
+    public string displayName = "";
+
     public SerializableDictionary<RESOURCE, float> resourceCost;
     public SerializableDictionary<DroneStatFields, float> statsGiven;
 

@@ -25,9 +25,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ore_Cell_1
       objectReference: {fileID: 0}
+    - target: {fileID: 216511788400352506, guid: a30d2814d7500954695e93c447e45b79, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: mass
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
+      propertyPath: showName
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
+      propertyPath: displayName
+      value: Storage Cell
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: buildScale.x
@@ -43,15 +55,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: displayScale.x
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: displayScale.y
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: displayScale.z
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: anchorPoints.Array.size
@@ -207,9 +219,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5991391873743486952, guid: 9b8eb3977e316df4a844588b024c4e67, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5991391873743486956, guid: 9b8eb3977e316df4a844588b024c4e67, type: 3}
       propertyPath: m_Name
       value: EnergyCell_2_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991391873743486956, guid: 9b8eb3977e316df4a844588b024c4e67, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b8eb3977e316df4a844588b024c4e67, type: 3}
@@ -225,6 +245,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 124802249737938468}
     m_Modifications:
+    - target: {fileID: 1342402230661551605, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -269,6 +293,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6675142054359232812, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7830410197661424758, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_Name
       value: AttachPoint
@@ -297,6 +325,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 124802249737938468}
     m_Modifications:
+    - target: {fileID: 1342402230661551605, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -340,6 +372,10 @@ PrefabInstance:
     - target: {fileID: 4542452858469743118, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675142054359232812, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7830410197661424758, guid: a8973f5304d68eb4997d3a3d5ee37951, type: 3}
       propertyPath: m_Name

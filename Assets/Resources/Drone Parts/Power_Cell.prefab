@@ -63,7 +63,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightMat: {fileID: 2100000, guid: cf4cfccc462f3ab4eb0120cc335d93ad, type: 2}
   mass: 20
-  displayScale: {x: 1, y: 1, z: 1}
+  displayScale: {x: 0.8, y: 0.8, z: 0.8}
+  showName: 1
+  displayName: Power Cell
   resourceCost:
     list:
     - Key: 0

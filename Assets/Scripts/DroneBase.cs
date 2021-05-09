@@ -192,6 +192,28 @@ public class DroneBase : MonoBehaviour {
     {
         return (droneStats.Storage - currentStats.Storage) > 0.0f;
     }
+
+    public float GetPowerLevel()
+    {
+        return currentStats.Power;
+    }
+
+    public float DrawPower(float max)
+    {
+        float powerUsed = Mathf.Min(max, GetPowerLevel());
+        currentStats.Power -= powerUsed;
+        return powerUsed;
+    }
+
+    public bool HasPower()
+    {
+        return (currentStats.Power > 0.0f);
+    }
+
+    public void ClearStorage()
+    {
+        currentStats.Storage = 0.0f;
+    }
 }
 
 /// A command for a drone
