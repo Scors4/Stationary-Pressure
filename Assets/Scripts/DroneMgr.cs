@@ -101,6 +101,14 @@ public class DroneMgr : MonoBehaviour
         GameObject go = Instantiate(userDronePrefab, position, userDroneSpawn.transform.rotation);
         go.GetComponent<DroneBase>().SetDroneStats(droneStats);
         go.GetComponent<UserDrone>().SetDroneHome(homeSite);
+
+        // Drone type 1 is a dedicated Miner
+        if (droneStats.Power == 0.0f)
+            go.GetComponent<UserDrone>().SetDroneType(1);
+
+        // Drone type 2 is a dedicated Combat Unit
+        if (droneStats.Storage == 0.0f)
+            go.GetComponent<UserDrone>().SetDroneType(2);
             
         return true;
     }

@@ -87,7 +87,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: statsGiven.list.Array.data[1].Key
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2208115521929725120, guid: a30d2814d7500954695e93c447e45b79, type: 3}
       propertyPath: resourceCost.list.Array.data[1].Key

@@ -64,6 +64,7 @@ public class DroneBase : MonoBehaviour {
 
     OWNERS owner;
     public bool isRadarHidden = false;
+    bool statsFilled = false;
     
     /// Get this drone's position
     public Vector3 GetPosition() {
@@ -88,6 +89,10 @@ public class DroneBase : MonoBehaviour {
     // Start is called before the first frame update
     void Start() 
     {
+        if (statsFilled)
+            return;
+
+        statsFilled = true;
         currentStats = new DroneStatSet();
         droneStats = new DroneStatSet();
         currentStats.Health = 100;
@@ -101,9 +106,15 @@ public class DroneBase : MonoBehaviour {
     }
 
     public void SetDroneStats(DroneStatSet stats) {
-        droneStats = stats;
+        droneStats.Power = stats.Power;
+        droneStats.Health = stats.Health;
+        droneStats.Storage = stats.Storage;
+        droneStats.Fuel = stats.Fuel;
         currentStats.Health = stats.Health;
         currentStats.Power = stats.Power;
+
+        Debug.Log("New stats: " + droneStats.Health + ":" + droneStats.Power + ":" + droneStats.Storage + ":" + droneStats.Fuel);
+        statsFilled = true;
     }
 
     // Update is called once per frame
@@ -346,14 +357,15 @@ class ApproachTargetToRadiusCommand : Command {
 class MineAsteroidCommand : Command {
     /// The target position
     private Asteroid target;
+    private UserDrone uDrone;
     
-    public MineAsteroidCommand(Asteroid target) {
+    public MineAsteroidCommand(Asteroid target, UserDrone uDrone) {
         this.target = target;
+        this.uDrone = uDrone;
     }
     
      /// Perform a tick
     public void Tick(DroneBase drone) {
-        UserDrone uDrone = drone.GetComponent<UserDrone>();
         if (uDrone == null)
             return;
 

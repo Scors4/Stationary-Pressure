@@ -75,6 +75,6 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     /// Whether this asteroid is empty
     public bool IsEmpty() {
         // TODO: Check for all resources
-        return Resources.Iron <= 0.0f && Resources.Copper <= 0.0f && Resources.Uranium <= 0.0f && Resources.Ice <= 0.0f;
+        return Resources.Iron <= 0.01f && Resources.Copper <= 0.01f && Resources.Uranium <= 0.01f && Resources.Ice <= 0.01f;
     }
 }

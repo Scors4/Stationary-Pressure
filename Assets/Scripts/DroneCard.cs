@@ -137,4 +137,9 @@ public class DroneCard : MonoBehaviour
             + "Uranium: " + res.Uranium.ToString("#.0") + "\n"
             + "Ice: " + res.Ice.ToString("#.0");
     }
+
+    public void UpdateStaticText()
+    {
+        droneID.text = drone.type.ToString("d2") + "-" + drone.id.ToString("d3");
+    }
 }

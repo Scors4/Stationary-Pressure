@@ -15,7 +15,7 @@ public class EventMgr : MonoBehaviour
 
     ResourceSet eventCost;
     bool inDelinquency = false;
-    float timeToEvent = 0.0f;
+    public float timeToEvent = 0.0f;
     float delinquencyTimer = 0.0f;
     float nextDelinquencyWave = 0.0f;
     int timesCompleted = 0;

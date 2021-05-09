@@ -92,7 +92,6 @@ public class HoloTable : MonoBehaviour
         if (statsAdded.ContainsKey(DroneStatFields.STORAGE))
             currentDroneStats.Storage += statsAdded[DroneStatFields.STORAGE];
 
-
         UpdateCostDisplay();
         UpdateAttachDistLimit();
     }
@@ -113,16 +112,16 @@ public class HoloTable : MonoBehaviour
 
             SerializableDictionary<DroneStatFields, float> statsRemoved = removedPart.GetStatFields();
             if (statsRemoved.ContainsKey(DroneStatFields.HEALTH))
-                currentDroneStats.Health += statsRemoved[DroneStatFields.HEALTH];
+                currentDroneStats.Health -= statsRemoved[DroneStatFields.HEALTH];
             if (statsRemoved.ContainsKey(DroneStatFields.POWER))
-                currentDroneStats.Power += statsRemoved[DroneStatFields.POWER];
+                currentDroneStats.Power -= statsRemoved[DroneStatFields.POWER];
             if (statsRemoved.ContainsKey(DroneStatFields.FUEL))
-                currentDroneStats.Fuel += statsRemoved[DroneStatFields.FUEL];
+                currentDroneStats.Fuel -= statsRemoved[DroneStatFields.FUEL];
             if (statsRemoved.ContainsKey(DroneStatFields.STORAGE))
-                currentDroneStats.Storage += statsRemoved[DroneStatFields.STORAGE];
+                currentDroneStats.Storage -= statsRemoved[DroneStatFields.STORAGE];
         }
 
-        SerializableDictionary<RESOURCE, float> costIncurred = part.GetResourceCost();
+        /*SerializableDictionary<RESOURCE, float> costIncurred = part.GetResourceCost();
         if (costIncurred.ContainsKey(RESOURCE.IRON))
             currentResourceCost.Iron -= costIncurred[RESOURCE.IRON];
         if (costIncurred.ContainsKey(RESOURCE.COPPER))
@@ -132,13 +131,16 @@ public class HoloTable : MonoBehaviour
 
         SerializableDictionary<DroneStatFields, float> statRemoved = part.GetStatFields();
         if (statRemoved.ContainsKey(DroneStatFields.HEALTH))
-            currentDroneStats.Health += statRemoved[DroneStatFields.HEALTH];
+            currentDroneStats.Health -= statRemoved[DroneStatFields.HEALTH];
         if (statRemoved.ContainsKey(DroneStatFields.POWER))
-            currentDroneStats.Power += statRemoved[DroneStatFields.POWER];
+            currentDroneStats.Power -= statRemoved[DroneStatFields.POWER];
         if (statRemoved.ContainsKey(DroneStatFields.FUEL))
-            currentDroneStats.Fuel += statRemoved[DroneStatFields.FUEL];
+            currentDroneStats.Fuel -= statRemoved[DroneStatFields.FUEL];
         if (statRemoved.ContainsKey(DroneStatFields.STORAGE))
-            currentDroneStats.Storage += statRemoved[DroneStatFields.STORAGE];
+            currentDroneStats.Storage -= statRemoved[DroneStatFields.STORAGE];*/
+
+
+        
 
         UpdateCostDisplay();
     }
@@ -265,14 +267,14 @@ public class HoloTable : MonoBehaviour
     {
         bool print = true;
 
-        if (currentDroneStats.Health <= 0.0f)
+        if (currentDroneStats.Health <= 0)
             print = false;
 
-        if (currentDroneStats.Power <= 0.0f)
+        if (currentDroneStats.Power <= 0 && currentDroneStats.Storage <= 0)
             print = false;
 
         return print;
-    }
+    } 
 
     public void PrintDrone() {
         if (ValidateDroneToPrint())
