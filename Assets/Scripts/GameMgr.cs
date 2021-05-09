@@ -49,7 +49,7 @@ public class GameMgr : MonoBehaviour {
     void Update() 
     {
 
-        if(!gamePaused && Input.GetKeyDown(KeyCode.Q))
+        if(!gamePaused && DroneMgr.inst.offeringEscape && Input.GetKeyDown(KeyCode.Q))
         {
             power = 0;
             timeToLoss = 0;

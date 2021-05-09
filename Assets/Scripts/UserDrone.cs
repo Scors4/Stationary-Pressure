@@ -33,7 +33,8 @@ public class UserDrone : MonoBehaviour
 
         id = nextId++;
         DroneMgr.inst.UserDroneSpawned(this);
-        
+        if (droneCard != null)
+            droneCard.UpdateStaticText();
 
         DroneBase drone = GetComponent<DroneBase>();
         if (drone != null)

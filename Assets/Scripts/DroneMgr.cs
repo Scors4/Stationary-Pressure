@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DroneMgr : MonoBehaviour
 {
     public static DroneMgr inst;
+    public Canvas quickEscape;
+    public bool offeringEscape = false;
 
     public List<UserDrone> userDrones = new List<UserDrone>();
     public List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
@@ -32,6 +35,12 @@ public class DroneMgr : MonoBehaviour
             DroneBase db = newDrone.GetComponent<DroneBase>();
             if (db != null)
                 allDrones.Add(db);
+
+            if(offeringEscape)
+            {
+                offeringEscape = false;
+                quickEscape.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -43,6 +52,12 @@ public class DroneMgr : MonoBehaviour
             DroneBase db = destroyed.GetComponent<DroneBase>();
             if (db != null)
                 allDrones.Remove(db);
+
+            if(userDrones.Count <= 0)
+            {
+                quickEscape.gameObject.SetActive(true);
+                offeringEscape = true;
+            }
         }
     }
     
