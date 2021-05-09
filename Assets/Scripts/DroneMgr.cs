@@ -8,6 +8,8 @@ public class DroneMgr : MonoBehaviour
     public static DroneMgr inst;
     public Canvas quickEscape;
     public bool offeringEscape = false;
+    bool raiderWarning = false;
+    public AudioSource raiderAlarm;
 
     public List<UserDrone> userDrones = new List<UserDrone>();
     public List<RaiderDrone> raiderDrones = new List<RaiderDrone>();
@@ -55,7 +57,8 @@ public class DroneMgr : MonoBehaviour
 
             if(userDrones.Count <= 0)
             {
-                quickEscape.gameObject.SetActive(true);
+                if(quickEscape != null)
+                    quickEscape.gameObject.SetActive(true);
                 offeringEscape = true;
             }
         }
@@ -68,6 +71,12 @@ public class DroneMgr : MonoBehaviour
             DroneBase db = newDrone.GetComponent<DroneBase>();
             if (db != null)
                 allDrones.Add(db);
+
+            if (!raiderWarning)
+            {
+                raiderWarning = true;
+                raiderAlarm.Play();
+            }
         }
     }
 
@@ -77,6 +86,13 @@ public class DroneMgr : MonoBehaviour
         DroneBase db = destroyed.GetComponent<DroneBase>();
         if (db != null)
             allDrones.Remove(db);
+
+        if(raiderWarning && raiderDrones.Count <= 0)
+        {
+            raiderWarning = false;
+            raiderAlarm.Stop();
+        }
+
     }
 
     public List<UserDrone> GetUserDrones() {
