@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+enum UserDroneState {
+    ReturnToBase,
+    Normal,
+}
+
 public class UserDrone : MonoBehaviour
 {
     DroneBase droneBase = null;
@@ -18,7 +23,12 @@ public class UserDrone : MonoBehaviour
     public float ice;
 
     public ResourceSet minedResources;
+    
     bool isEngagingRaider = false;
+    bool isReturningHome = false;
+    UserDroneState state = UserDroneState.Normal;
+    
+    public Transform homeBase = null;
     
     // Start is called before the first frame update
     void Start() {
@@ -44,32 +54,42 @@ public class UserDrone : MonoBehaviour
             return;
         }
         
-        RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
-        
-        if(isEngagingRaider && droneBase.isIdle())
-            isEngagingRaider = false;
-        
-        if(raiderDrone != null) {
-            Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
-            if(positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0) 
-                raiderDrone.GetDroneBase().DoDamage(droneBase.damage);
-        }
-        
-        
-        if (!isEngagingRaider && raiderDrone != null) {
-            isEngagingRaider = true;
-            droneBase.ClearCommands();
-            
-            droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
-        } else if (droneBase.isIdle()){
-            Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
-            
-            if(asteroid != null && asteroid.isActiveAndEnabled) {                
-                droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
+        if(state == UserDroneState.ReturnToBase) {
+            Vector3 positionDiff = homeBase.transform.position - droneBase.transform.position;
+            if(positionDiff.magnitude > 25.0f && !isReturningHome) {
+                isReturningHome = true;
+                
+                droneBase.addCommand(new ApproachTargetToRadiusCommand(homeBase));
                 droneBase.addCommand(new ZeroVelocityCommand(droneBase));
-                droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
-                droneBase.addCommand(new MineAsteroidCommand(asteroid));
-            }   
+            }
+        } else {
+            RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
+            
+            if(isEngagingRaider && droneBase.isIdle())
+                isEngagingRaider = false;
+            
+            if(raiderDrone != null) {
+                Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
+                if(positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0) 
+                    raiderDrone.GetDroneBase().DoDamage(droneBase.damage);
+            }
+        
+        
+            if (!isEngagingRaider && raiderDrone != null) {
+                isEngagingRaider = true;
+                droneBase.ClearCommands();
+                
+                droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
+            } else if (droneBase.isIdle()){
+                Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
+                
+                if(asteroid != null && asteroid.isActiveAndEnabled) {                
+                    droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
+                    droneBase.addCommand(new ZeroVelocityCommand(droneBase));
+                    droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
+                    droneBase.addCommand(new MineAsteroidCommand(asteroid));
+                }   
+            }
         }
 
         iron = minedResources.Iron;
@@ -95,5 +115,16 @@ public class UserDrone : MonoBehaviour
     {
         current = droneBase.GetDroneCurrentStats();
         max = droneBase.GetDroneMaxStats();
+    }
+    
+    public void returnToBase() {
+        this.changeState(UserDroneState.ReturnToBase);
+    }
+    
+    void changeState(UserDroneState state) {
+        droneBase.ClearCommands();
+        this.state = state;
+        this.isEngagingRaider = false;
+        this.isReturningHome = false;
     }
 }

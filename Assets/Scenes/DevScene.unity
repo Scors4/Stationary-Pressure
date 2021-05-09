@@ -455,6 +455,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1085119327012111145, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1285740866143992696, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1399837203343383505, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2248488353603157942, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -511,7 +523,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4287855701843690178, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968746181026366287, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853630357261638524, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 583114873274427745, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
 --- !u!1 &770184541
 GameObject:
@@ -768,6 +793,7 @@ MonoBehaviour:
   asteroidSpawn: {fileID: 279579059}
   asteroidPrefab: {fileID: 679462129005589639, guid: 3c5328116e5648944a25e9f12021440b, type: 3}
   numAsteroids: 100
+  spawnRadius: 100
 --- !u!1 &1070244165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,7 +1656,7 @@ MonoBehaviour:
   lossScreen: {fileID: 1235034747}
   pauseScreen: {fileID: 7313555372456867202}
   firstPersonController: {fileID: 395793584}
-  Power: 100
+  hangarLocation: {fileID: 0}
   timeSurvived: 0
   timeToNextWave: 30
   timeToLoss: 60
