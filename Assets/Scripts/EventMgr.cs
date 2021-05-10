@@ -11,7 +11,7 @@ public class EventMgr : MonoBehaviour
     public Text delinquencyText;
 
     [Range(60.0f, 3600.0f)]
-    public float defaultEventTime = 600.0f;
+    public float defaultEventTime = 3600.0f;
 
     ResourceSet eventCost;
     bool inDelinquency = false;
@@ -19,7 +19,7 @@ public class EventMgr : MonoBehaviour
     float delinquencyTimer = 0.0f;
     float nextDelinquencyWave = 0.0f;
     int timesCompleted = 0;
-    int delinquencySpawnCount = 0;
+    int delinquencyCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,10 +62,17 @@ public class EventMgr : MonoBehaviour
                 nextDelinquencyWave = 0.0f;
 
                 //TODO: Spawn raider drones here.
-                for (int i = 0; i < (delinquencySpawnCount * 2) + 3; i++)
+                for (int i = 0; i < (delinquencyCount * 2) + 3; i++)
                     DroneMgr.inst.SpawnRaiderDrone();
 
-                delinquencySpawnCount++;
+                //eventCost.Iron *= 1.05f;
+                //eventCost.Copper *= 1.05f;
+                //eventCost.Uranium *= 1.05f;
+                //eventCost.Ice *= 1.05f;
+
+
+
+                delinquencyCount++;
             }
         }
 
