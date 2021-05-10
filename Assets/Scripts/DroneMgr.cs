@@ -24,6 +24,8 @@ public class DroneMgr : MonoBehaviour
     public GameObject raiderDronePrefab;
     
     public DroneList droneList;
+    
+    public int spawnNumRaiders = 1;
 
     void Awake() {
         inst = this;
@@ -117,8 +119,6 @@ public class DroneMgr : MonoBehaviour
     }
 
     public bool SpawnUserDrone(ResourceSet resourceCost, DroneStatSet droneStats) {
-        // TODO: Calculate cost dynamically
-
         if (!CanPrintDrone(resourceCost))
             return false;
 
@@ -157,8 +157,10 @@ public class DroneMgr : MonoBehaviour
     
     public void SpawnRaiderWave() {
         // TODO: Scale with input difficulty param
-        for(int i = 0; i < 5; i++) 
+        for(int i = 0; i < spawnNumRaiders; i++) 
             SpawnRaiderDrone();
+        
+        spawnNumRaiders += 1;
     }
     
     public UserDrone GetClosestUserDrone(Vector3 pos) {
@@ -197,5 +199,10 @@ public class DroneMgr : MonoBehaviour
         } else {
             return raiderDrones[minIndex];
         }
+    }
+    
+    public void StopRaiderAlarm() {
+        Debug.Log("Stopping Raider Alarm");
+        raiderAlarm.Stop();
     }
 }
