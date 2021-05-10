@@ -152,11 +152,11 @@ public class DroneMgr : MonoBehaviour
 
         // Drone type 1 is a dedicated Miner
         if (droneStats.Power == 0.0f)
-            go.GetComponent<UserDrone>().SetDroneType(1);
+            go.GetComponent<UserDrone>().SetDroneType(DroneType.Miner);
 
         // Drone type 2 is a dedicated Combat Unit
         if (droneStats.Storage == 0.0f)
-            go.GetComponent<UserDrone>().SetDroneType(2);
+            go.GetComponent<UserDrone>().SetDroneType(DroneType.Combat);
             
         return true;
     }

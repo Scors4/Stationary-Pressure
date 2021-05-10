@@ -7,6 +7,12 @@ public enum UserDroneState {
     Normal,
 }
 
+/// The drone type
+public enum DroneType {
+    Miner,
+    Combat,
+}
+
 public class UserDrone : MonoBehaviour
 {
     DroneBase droneBase = null;
@@ -15,7 +21,7 @@ public class UserDrone : MonoBehaviour
     public int id = 0;
     
     public DroneCard droneCard = null;
-    public int type = 0;
+    public DroneType type = DroneType.Miner;
 
     public ResourceSet minedResources;
     public bool isDocked = false;
@@ -48,10 +54,10 @@ public class UserDrone : MonoBehaviour
     
     // Fixed Timestep
     void FixedUpdate() {
-        if (type != 2 && !droneBase.HasStorageAvailable() && !isReturningHome)
+        if (type != DroneType.Combat && !droneBase.HasStorageAvailable() && !isReturningHome)
             ReturnToBase();
 
-        if (type != 1 && !droneBase.HasPower() && !isReturningHome)
+        if (type != DroneType.Miner && !droneBase.HasPower() && !isReturningHome)
             ReturnToBase();
         
         if(state == UserDroneState.ReturnToBase) {
@@ -71,7 +77,7 @@ public class UserDrone : MonoBehaviour
             }
         } else {
 
-            if (type != 1)
+            if (type != DroneType.Miner)
             {
                 RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
 
@@ -95,7 +101,7 @@ public class UserDrone : MonoBehaviour
 
                     droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
                 }
-                else if (type != 2 && droneBase.isIdle())
+                else if (type != DroneType.Combat && droneBase.isIdle())
                 {
                     Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
 
@@ -179,9 +185,27 @@ public class UserDrone : MonoBehaviour
         homeBase = newHome;
     }
 
-    public void SetDroneType(int typeIn)
+    public void SetDroneType(DroneType type)
     {
-        type = typeIn;
+        this.type = type;
         droneCard.UpdateStaticText();
+    }
+    
+    /// Return the string id of this drone
+    public string GetStringIdentifier() {
+        int typeId = 0;  
+        switch(type) {
+            case DroneType.Miner:
+                typeId = 1;
+                break;
+            case DroneType.Combat:
+                typeId = 2;
+                break;
+            default:
+                Debug.LogWarning("Unknown DroneType: " + type.ToString());
+                break;
+        }
+        
+        return typeId.ToString("d2") + "-" + id.ToString("d3");
     }
 }

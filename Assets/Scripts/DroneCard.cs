@@ -33,7 +33,7 @@ public class DroneCard : MonoBehaviour
     {
         this.drone = drone;
 
-        droneID.text = drone.type.ToString("d2") + "-" + drone.id.ToString("d3");
+        droneID.text = drone.GetStringIdentifier();
 
         //barWidth = 340;
     }
@@ -142,6 +142,6 @@ public class DroneCard : MonoBehaviour
 
     public void UpdateStaticText()
     {
-        droneID.text = drone.type.ToString("d2") + "-" + drone.id.ToString("d3");
+        droneID.text = drone.GetStringIdentifier();
     }
 }

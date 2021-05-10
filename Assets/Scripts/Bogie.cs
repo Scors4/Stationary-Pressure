@@ -40,9 +40,7 @@ public class Bogie : MonoBehaviour
 
         UserDrone uDrone = drone.GetComponent<UserDrone>();
         if(uDrone != null)
-        {
-            idText.text = uDrone.type.ToString("d2") + "-" + uDrone.id.ToString("d3");
-        }
+            idText.text = uDrone.GetStringIdentifier();
     }
 
 }
