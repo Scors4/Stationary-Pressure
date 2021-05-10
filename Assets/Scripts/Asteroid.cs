@@ -11,7 +11,7 @@ public class Asteroid : MonoBehaviour, DroneTargetable
     // Start is called before the first frame update
     void Start() {
         resourceRatios.Uranium = Random.Range(0.01f, 0.3f);
-        resourceRatios.Copper = Random.Range(0.01f, 0.3f);
+        resourceRatios.Copper = Random.Range(0.01f, 0.4f);
         resourceRatios.Ice = Random.Range(0.01f, 0.1f);
         resourceRatios.Iron = 1.0f - (resourceRatios.Uranium + resourceRatios.Copper + resourceRatios.Ice);
 

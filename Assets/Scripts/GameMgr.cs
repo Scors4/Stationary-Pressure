@@ -37,7 +37,7 @@ public class GameMgr : MonoBehaviour
     public List<Light> poweredLights;
 
     public float timeSurvived = 0.0f;
-    public float timeToNextWave = 120.0f;
+    public float timeToNextWave = 480.0f;
     public float timeToLoss = 60.0f;
     bool inWave = false;
     bool gamePaused = false;
@@ -116,7 +116,7 @@ public class GameMgr : MonoBehaviour
                 inWave = false;
 
                 // TODO: Consider making dynamic
-                timeToNextWave = Random.Range(30.0f, 120.0f);
+                timeToNextWave = Random.Range(120.0f, 480.0f);
             }
         }
 
