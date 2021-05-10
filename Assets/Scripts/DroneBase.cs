@@ -113,7 +113,7 @@ public class DroneBase : MonoBehaviour {
         currentStats.Health = stats.Health;
         currentStats.Power = stats.Power;
 
-        Debug.Log("New stats: " + droneStats.Health + ":" + droneStats.Power + ":" + droneStats.Storage + ":" + droneStats.Fuel);
+
         statsFilled = true;
     }
 
