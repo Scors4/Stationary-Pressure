@@ -66,7 +66,7 @@ public class UserDrone : MonoBehaviour
                 droneBase.addCommand(new ApproachTargetToRadiusCommand(homeBase));
                 droneBase.addCommand(new ZeroVelocityCommand(droneBase));
             }
-            else if (droneBase.isIdle() && isReturningHome)
+            else if (!isDocked && droneBase.isIdle() && isReturningHome)
             {
                 this.gameObject.SetActive(false);
                 isDocked = true;
