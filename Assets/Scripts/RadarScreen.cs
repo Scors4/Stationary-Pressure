@@ -52,10 +52,8 @@ public class RadarScreen : MonoBehaviour
             
             if (droneIcons.Count > activeDrones.Count)
             {
-                for(int i = activeDrones.Count; i < droneIcons.Count - activeDrones.Count; i++)
+                for(int i = activeDrones.Count; i < droneIcons.Count; i++)
                     Destroy(droneIcons[i].gameObject);
-
-                Debug.Log("Drone Icon Count: " + droneIcons.Count + ":" + activeDrones.Count);
 
                 droneIcons.RemoveRange(activeDrones.Count, (droneIcons.Count - activeDrones.Count));
             }
@@ -84,7 +82,7 @@ public class RadarScreen : MonoBehaviour
 
             if (roidIcons.Count > activeRoids.Count)
             {
-                for (int i = activeRoids.Count; i < roidIcons.Count - activeRoids.Count; i++)
+                for (int i = activeRoids.Count; i < roidIcons.Count; i++)
                     Destroy(roidIcons[i].gameObject);
                 roidIcons.RemoveRange(activeRoids.Count, (roidIcons.Count - activeRoids.Count));
             }
