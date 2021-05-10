@@ -10,7 +10,7 @@ public class EventMgr : MonoBehaviour
     public Text eventCountdown;
     public Text delinquencyText;
 
-    [Range(60.0f, 1200f)]
+    [Range(60.0f, 3600.0f)]
     public float defaultEventTime = 600.0f;
 
     ResourceSet eventCost;

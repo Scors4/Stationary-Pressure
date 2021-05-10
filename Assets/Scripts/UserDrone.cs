@@ -79,6 +79,7 @@ public class UserDrone : MonoBehaviour
                 UnloadResources();
                 droneBase.RefillPower();
                 this.ChangeState(UserDroneState.Idle);
+                droneCard.BeginAutoLaunch();
             }
         } 
         

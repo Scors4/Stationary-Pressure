@@ -682,7 +682,7 @@ MonoBehaviour:
   - {fileID: 1599403478}
   - {fileID: 1144385089}
   timeSurvived: 0
-  timeToNextWave: 120
+  timeToNextWave: 480
   timeToLoss: 60
 --- !u!1001 &193013938
 PrefabInstance:
@@ -4329,7 +4329,7 @@ MonoBehaviour:
   requiredResources: {fileID: 1920090401}
   eventCountdown: {fileID: 1256857097}
   delinquencyText: {fileID: 1646538667}
-  defaultEventTime: 600
+  defaultEventTime: 1200
   timeToEvent: 0
 --- !u!1001 &1402792992
 PrefabInstance:
@@ -5320,6 +5320,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+--- !u!82 &1755027679 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 272796421164206056, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
+  m_PrefabInstance: {fileID: 1755027678}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1755027680 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2248488353603157941, guid: 87c109ef493544a498cf3436fd55fb8a, type: 3}
@@ -5573,6 +5578,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
+      - m_Target: {fileID: 1755027679}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: PlayOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 38fa48b3ac6ee4aeb8109c0aa792fb97, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1830331526
 MonoBehaviour:
   m_ObjectHideFlags: 0

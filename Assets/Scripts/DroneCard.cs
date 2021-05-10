@@ -12,6 +12,7 @@ public class DroneCard : MonoBehaviour
     public Button launchButton;
     public Button powerButton;
     public Button returnButton;
+    public Button autoLaunchButton;
 
     public Text healthPercent;
     public Text powerPercent;
@@ -22,6 +23,8 @@ public class DroneCard : MonoBehaviour
     public Scrollbar resourceBar;
 
     //int barWidth;
+    bool autoLaunch = false;
+    float timeToAutoLaunch = 20.0f;
 
     private void Start()
     {
@@ -52,6 +55,14 @@ public class DroneCard : MonoBehaviour
     {
         if (drone == null)
             Destroy(gameObject);
+
+        if (drone.isDocked)
+        {
+            if (autoLaunch && timeToAutoLaunch > 0.0f)
+                timeToAutoLaunch -= Time.fixedDeltaTime;
+            else if (timeToAutoLaunch <= 0.0f)
+                AutoLaunchMiner();
+        }
 
         UpdatePercentageDisplay();
         UpdateTextDisplay();
@@ -86,13 +97,23 @@ public class DroneCard : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void OnAutoLaunchClick()
+    {
+        autoLaunch = !autoLaunch;
+        ColorBlock c = autoLaunchButton.colors;
+        c.normalColor = autoLaunch ? Color.green : Color.white;
+        autoLaunchButton.colors = c;
+    }
+
     void UpdateButtonState()
     {
-        if (!returnButton.interactable && drone.GetDroneState() != UserDroneState.ReturnToBase)
+        if (!returnButton.interactable && drone.GetDroneState() != UserDroneState.ReturnToBase && !drone.isDocked)
             returnButton.interactable = true;
 
         if (!launchButton.interactable && drone.isDocked)
             launchButton.interactable = true;
+        else if (!drone.isDocked && launchButton.interactable)
+            launchButton.interactable = false;
     }
 
     public void UpdatePercentageDisplay()
@@ -143,5 +164,20 @@ public class DroneCard : MonoBehaviour
     public void UpdateStaticText()
     {
         droneID.text = drone.GetStringIdentifier();
+    }
+
+    public bool GetAutoLaunch()
+    {
+        return autoLaunch;
+    }
+
+    public void BeginAutoLaunch()
+    {
+        timeToAutoLaunch = 20.0f;
+    }
+
+    void AutoLaunchMiner()
+    {
+        drone.LaunchDrone();
     }
 }
