@@ -230,6 +230,10 @@ public class DroneBase : MonoBehaviour {
     {
         currentStats.Storage = 0.0f;
     }
+    
+    public void RefillPower() {
+        currentStats.Power = droneStats.Power;
+    }
 }
 
 /// A command for a drone

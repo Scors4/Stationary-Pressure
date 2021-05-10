@@ -173,7 +173,6 @@ public class DroneMgr : MonoBehaviour
     }
     
     public void SpawnRaiderWave() {
-        // TODO: Scale with input difficulty param
         for(int i = 0; i < spawnNumRaiders; i++) 
             SpawnRaiderDrone();
         

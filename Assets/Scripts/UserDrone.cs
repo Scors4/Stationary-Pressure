@@ -78,6 +78,7 @@ public class UserDrone : MonoBehaviour
                 this.gameObject.SetActive(false);
                 isDocked = true;
                 UnloadResources();
+                droneBase.RefillPower();
                 this.ChangeState(UserDroneState.Normal);
             }
         } else {
@@ -164,7 +165,7 @@ public class UserDrone : MonoBehaviour
         minedResources = new ResourceSet();
         droneBase.ClearStorage();
     }
-
+    
     public void LaunchDrone()
     {
         if (!isDocked)
