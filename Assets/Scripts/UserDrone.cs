@@ -67,7 +67,7 @@ public class UserDrone : MonoBehaviour
         if((type == DroneType.Hybrid || type == DroneType.Combat) && raiderDrone != null) {
             Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
             if (positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0)
-                raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage * (droneBase.GetDroneCurrentStats().Power / 100)));
+                raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage * (droneBase.GetDroneMaxStats().Power / 100)));
         }
         
         if(state == UserDroneState.ReturnToBase) {
