@@ -177,7 +177,11 @@ public class DroneMgr : MonoBehaviour
         for(int i = 0; i < spawnNumRaiders; i++) 
             SpawnRaiderDrone();
         
-        spawnNumRaiders += 1;
+        if(GameMgr.difficulty == Difficulty.Hard) {
+            spawnNumRaiders += 2;
+        } else {
+            spawnNumRaiders += 1;
+        }
     }
     
     public UserDrone GetClosestUserDrone(Vector3 pos) {

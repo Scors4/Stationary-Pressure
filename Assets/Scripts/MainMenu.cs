@@ -21,7 +21,13 @@ public class MainMenu : MonoBehaviour
         
     }
     
-    public void Play() {
+    public void PlayNormal() {
+        GameMgr.difficulty = Difficulty.Normal;
+        SceneManager.LoadScene("StationLevel");
+    }
+    
+    public void PlayHard() {
+        GameMgr.difficulty = Difficulty.Hard;
         SceneManager.LoadScene("StationLevel");
     }
     

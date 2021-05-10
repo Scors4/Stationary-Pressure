@@ -10,6 +10,11 @@ public enum RESOURCE
     URANIUM
 }
 
+public enum Difficulty {
+    Normal,
+    Hard,
+}
+
 /// A set of all possible resources, excluding power
 public class ResourceSet {
     public float Iron = 0.0f;
@@ -20,6 +25,8 @@ public class ResourceSet {
 
 public class GameMgr : MonoBehaviour {
     public static GameMgr inst;
+    
+    public static Difficulty difficulty = Difficulty.Normal;
 
     public GameObject lossScreen;
     public GameObject pauseScreen;
@@ -43,12 +50,13 @@ public class GameMgr : MonoBehaviour {
         inst = this;
     }
 
-    void Start() {}
+    void Start() {
+        Debug.Log("Game Difficulty: " + GameMgr.difficulty.ToString());
+    }
 
     // Update is called once per frame
     void Update() 
     {
-
         if(!gamePaused && DroneMgr.inst.offeringEscape && Input.GetKeyDown(KeyCode.Q))
         {
             power = 0;
