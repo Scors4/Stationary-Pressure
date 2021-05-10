@@ -4,11 +4,14 @@ using UnityEngine;
 
 public enum UserDroneState {
     ReturnToBase,
-    Normal,
+    Idle,
+    Mining,
+    Combat,
 }
 
 /// The drone type
 public enum DroneType {
+    Hybrid,
     Miner,
     Combat,
 }
@@ -21,14 +24,12 @@ public class UserDrone : MonoBehaviour
     public int id = 0;
     
     public DroneCard droneCard = null;
-    public DroneType type = DroneType.Miner;
+    public DroneType type = DroneType.Hybrid;
 
     public ResourceSet minedResources;
     public bool isDocked = false;
     
-    bool isEngagingRaider = false;
-    bool isReturningHome = false;
-    public UserDroneState state = UserDroneState.Normal;
+    public UserDroneState state = UserDroneState.Idle;
     
     public Transform homeBase = null;
     
@@ -51,76 +52,60 @@ public class UserDrone : MonoBehaviour
     
     // Fixed Timestep
     void FixedUpdate() {
-        switch(type) {
-            case DroneType.Miner:
-                if(!droneBase.HasStorageAvailable() && !isReturningHome) 
-                    ReturnToBase();
-                break;
-            case DroneType.Combat:
-                if(!droneBase.HasPower() && !isReturningHome)
-                    ReturnToBase();
-                break;
-            default:
-                Debug.LogWarning("Unknown DroneType: " + type);
-                break;
+        if(type == DroneType.Hybrid || type == DroneType.Miner) {
+            if(!droneBase.HasStorageAvailable() && state != UserDroneState.ReturnToBase) 
+                ReturnToBase();
+        }
+        
+        if(type == DroneType.Hybrid || type == DroneType.Combat) {
+            if(!droneBase.HasPower() && state != UserDroneState.ReturnToBase)
+                ReturnToBase();
+        }
+        
+        // Do damage to nearest drone in angle/range
+        RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
+        if((type == DroneType.Hybrid || type == DroneType.Combat) && raiderDrone != null) {
+            Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
+            if (positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0)
+                raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage));
         }
         
         if(state == UserDroneState.ReturnToBase) {
-            Vector3 positionDiff = homeBase.position - droneBase.transform.position;
-            if(positionDiff.magnitude > 25.0f && !isReturningHome) {
-                isReturningHome = true;
-                
-                droneBase.addCommand(new ApproachTargetToRadiusCommand(homeBase));
-                droneBase.addCommand(new ZeroVelocityCommand(droneBase));
-            }
-            else if (!isDocked && droneBase.isIdle() && isReturningHome)
+            // If its done returning to base and not docked...
+            if (!isDocked && droneBase.isIdle())
             {
                 this.gameObject.SetActive(false);
                 isDocked = true;
                 UnloadResources();
                 droneBase.RefillPower();
-                this.ChangeState(UserDroneState.Normal);
+                this.ChangeState(UserDroneState.Idle);
             }
-        } else {
-            switch(type) {
-                case DroneType.Miner:
-                    Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
-                    
-                    // If valid asteroid is found, mine it
-                    if (asteroid != null && asteroid.isActiveAndEnabled) {
-                        droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
-                        droneBase.addCommand(new ZeroVelocityCommand(droneBase));
-                        droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
-                        droneBase.addCommand(new MineAsteroidCommand(asteroid, this));
-                    }
-                    break;
-                case DroneType.Combat:
-                    RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
-                    
-                    // Reset before aquiring new target
-                    if (isEngagingRaider && droneBase.isIdle())
-                        isEngagingRaider = false;
-                    
-                    // Do damage to nearest drone in angle/range
-                    if (raiderDrone != null) {
-                        Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
-                        if (positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0)
-                            raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage));
-                        
-                        // If not targeting raider, target raider
-                        if(!isEngagingRaider) {
-                            isEngagingRaider = true;
-                            droneBase.ClearCommands();
-
-                            droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
-                        }
-                    }
-                    
-                    break;
-                default:
-                    Debug.LogWarning("Unknown DroneType: " + type);
-                    break;
-            }
+        } 
+        
+        if(state == UserDroneState.Idle) {
+            // Combat tasking takes priority
+            if(type == DroneType.Hybrid || type == DroneType.Combat) 
+                CombatRaider();
+            
+            // Mine asteroid
+            if(type == DroneType.Hybrid || type == DroneType.Miner)
+                MineAsteroid();
+        }
+        
+        if(state == UserDroneState.Mining) {
+            // Stop mining and attack raiders if they exist
+            if(type == DroneType.Hybrid || type == DroneType.Combat) 
+                CombatRaider();
+            
+            // If idle, transition to idle state
+            if(droneBase.isIdle()) 
+                ChangeState(UserDroneState.Idle);
+        }
+        
+        if(state == UserDroneState.Combat) {
+            // If idle, transition to idle state
+            if(droneBase.isIdle()) 
+                ChangeState(UserDroneState.Idle);
         }
     }
     
@@ -150,13 +135,36 @@ public class UserDrone : MonoBehaviour
     
     public void ReturnToBase() {
         this.ChangeState(UserDroneState.ReturnToBase);
+        droneBase.addCommand(new ApproachTargetToRadiusCommand(homeBase));
+        droneBase.addCommand(new ZeroVelocityCommand(droneBase));
+    }
+    
+    public void MineAsteroid() {
+        Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
+                    
+        // If valid asteroid is found, mine it
+        if (asteroid != null && asteroid.isActiveAndEnabled) {
+            ChangeState(UserDroneState.Mining);
+            droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
+            droneBase.addCommand(new ZeroVelocityCommand(droneBase));
+            droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
+            droneBase.addCommand(new MineAsteroidCommand(asteroid, this));
+        }
+    }
+    
+    public void CombatRaider() {
+        RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);                  
+        
+        if (raiderDrone != null) {
+            ChangeState(UserDroneState.Combat);
+            droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
+            droneBase.addCommand(new ZeroVelocityCommand(droneBase));
+        }
     }
     
     void ChangeState(UserDroneState state) {
         droneBase.ClearCommands();
         this.state = state;
-        this.isEngagingRaider = false;
-        this.isReturningHome = false;
     }
 
     void UnloadResources()
@@ -190,6 +198,9 @@ public class UserDrone : MonoBehaviour
     public string GetStringIdentifier() {
         int typeId = 0;  
         switch(type) {
+            case DroneType.Hybrid:
+                typeId = 0;
+                break;
             case DroneType.Miner:
                 typeId = 1;
                 break;
