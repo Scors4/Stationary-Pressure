@@ -22,6 +22,9 @@ public class DroneCard : MonoBehaviour
     public Scrollbar powerBar;
     public Scrollbar resourceBar;
 
+    [Range(0.1f, 10f)]
+    float repairRate = 0.5f;
+
     //int barWidth;
     bool autoLaunch = false;
     float timeToAutoLaunch = 20.0f;
@@ -58,6 +61,8 @@ public class DroneCard : MonoBehaviour
 
         if (drone.isDocked)
         {
+            drone.Repair(repairRate * Time.fixedDeltaTime);
+
             if (autoLaunch && timeToAutoLaunch > 0.0f)
                 timeToAutoLaunch -= Time.fixedDeltaTime;
             else if (timeToAutoLaunch <= 0.0f)
@@ -66,7 +71,6 @@ public class DroneCard : MonoBehaviour
 
         UpdatePercentageDisplay();
         UpdateTextDisplay();
-
         UpdateButtonState();
     }
 

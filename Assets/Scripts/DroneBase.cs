@@ -234,6 +234,11 @@ public class DroneBase : MonoBehaviour {
     public void RefillPower() {
         currentStats.Power = droneStats.Power;
     }
+
+    public void Repair(float amt)
+    {
+        currentStats.Health += amt;
+    }
 }
 
 /// A command for a drone

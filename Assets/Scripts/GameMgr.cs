@@ -23,9 +23,10 @@ public class ResourceSet {
     public float Ice = 0.0f;
 }
 
-public class GameMgr : MonoBehaviour {
+public class GameMgr : MonoBehaviour
+{
     public static GameMgr inst;
-    
+
     public static Difficulty difficulty = Difficulty.Normal;
 
     public GameObject lossScreen;
@@ -34,7 +35,7 @@ public class GameMgr : MonoBehaviour {
     public ResourceSet Resources = new ResourceSet();
     public Transform hangarLocation = null;
     public List<Light> poweredLights;
-    
+
     public float timeSurvived = 0.0f;
     public float timeToNextWave = 120.0f;
     public float timeToLoss = 60.0f;
@@ -46,26 +47,29 @@ public class GameMgr : MonoBehaviour {
     float power = 60;
     float powerDrainRate = 0.15f;
 
-    void Awake() {
+    void Awake()
+    {
         inst = this;
     }
 
-    void Start() {
+    void Start()
+    {
         Debug.Log("Game Difficulty: " + GameMgr.difficulty.ToString());
     }
 
     // Update is called once per frame
-    void Update() 
+    void Update()
     {
-        if(!gamePaused && DroneMgr.inst.offeringEscape && Input.GetKeyDown(KeyCode.Q))
+        if (!gamePaused && DroneMgr.inst.offeringEscape && Input.GetKeyDown(KeyCode.Q))
         {
             power = 0;
             timeToLoss = 0;
+            SetGameLost();
         }
 
-        if(!gameLost && Input.GetKeyDown(KeyCode.Escape))
+        if (!gameLost && Input.GetKeyDown(KeyCode.Escape))
         {
-            if(gamePaused)
+            if (gamePaused)
             {
                 Time.timeScale = 1.0f;
                 pauseScreen.SetActive(false);
@@ -87,28 +91,36 @@ public class GameMgr : MonoBehaviour {
             }
         }
     }
-    
-    void FixedUpdate() {
+
+    void FixedUpdate()
+    {
         timeSurvived = Time.timeSinceLevelLoad;
-        
-        if (!inWave) {
-            if(timeToNextWave <= 0.0f) {
+
+        if (!inWave)
+        {
+            if (timeToNextWave <= 0.0f)
+            {
                 timeToNextWave = 0.0f;
                 inWave = true;
                 DroneMgr.inst.SpawnRaiderWave();
-            } else {
+            }
+            else
+            {
                 timeToNextWave -= Time.fixedDeltaTime;
             }
-        } else if (inWave) {
-            if(DroneMgr.inst.GetRaiderDrones().Count == 0) {
+        }
+        else if (inWave)
+        {
+            if (DroneMgr.inst.GetRaiderDrones().Count == 0)
+            {
                 inWave = false;
-                
+
                 // TODO: Consider making dynamic
                 timeToNextWave = Random.Range(30.0f, 120.0f);
             }
         }
 
-        if(Resources.Uranium > 0 && power < 250.0f)
+        if (Resources.Uranium > 0 && power < 250.0f)
         {
             Resources.Uranium -= (0.25f * Time.fixedDeltaTime);
             power += 15.0f * Time.fixedDeltaTime;
@@ -119,10 +131,10 @@ public class GameMgr : MonoBehaviour {
 
         if (power <= 0)
         {
-            if(lightsPowered)
+            if (lightsPowered)
             {
                 lightsPowered = false;
-                if(poweredLights != null)
+                if (poweredLights != null)
                 {
                     foreach (Light light in poweredLights)
                         light.enabled = false;
@@ -131,13 +143,7 @@ public class GameMgr : MonoBehaviour {
 
             if (timeToLoss <= 0.0f)
             {
-                gameLost = true;
-                Time.timeScale = 0.0f;
-                lossScreen.SetActive(true);
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.Confined;
-                firstPersonController.cameraCanMove = false;
-                firstPersonController.playerCanMove = false;
+                SetGameLost();
             }
             else
                 timeToLoss -= Time.fixedDeltaTime;
@@ -183,5 +189,16 @@ public class GameMgr : MonoBehaviour {
         Resources.Copper += resourcesIn.Copper;
         Resources.Uranium += resourcesIn.Uranium;
         Resources.Ice += resourcesIn.Ice;
+    }
+
+    public void SetGameLost()
+    {
+        gameLost = true;
+        Time.timeScale = 0.0f;
+        lossScreen.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        firstPersonController.cameraCanMove = false;
+        firstPersonController.playerCanMove = false;
     }
 }

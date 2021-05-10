@@ -215,4 +215,9 @@ public class UserDrone : MonoBehaviour
         
         return typeId.ToString("d2") + "-" + id.ToString("d3");
     }
+
+    public void Repair(float amt)
+    {
+        droneBase.Repair(amt);
+    }
 }
