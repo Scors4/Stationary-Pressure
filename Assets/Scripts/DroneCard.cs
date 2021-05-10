@@ -108,7 +108,9 @@ public class DroneCard : MonoBehaviour
         // Stat percentages for both bar and text display
         float hp = currentStats.Health / maxStats.Health;
         float pp = currentStats.Power / maxStats.Power;
-        float rp = currentStats.Storage / maxStats.Storage;
+        float rp = 0.0f;
+        if(currentStats.Storage != 0.0f) 
+            rp = currentStats.Storage / maxStats.Storage;
 
         /*// Bar relative y locations
         float hpos = (int)(hp * (-0.5 * barWidth));
