@@ -30,13 +30,7 @@ public class RaiderDrone : MonoBehaviour
     void Update() {}
     
     // Fixed timestep
-    void FixedUpdate() {
-        if(droneBase.GetDroneCurrentStats().Health <= 0.0) {
-            DroneMgr.inst.RaiderDroneDestroyed(this);
-            Destroy(gameObject);
-            return;
-        }
-        
+    void FixedUpdate() {        
         UserDrone userDrone = DroneMgr.inst.GetClosestUserDrone(transform.position);
         
         if(isEngagingUserDrone && droneBase.isIdle())

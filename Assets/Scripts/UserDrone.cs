@@ -7,6 +7,12 @@ public enum UserDroneState {
     Normal,
 }
 
+/// The drone type
+public enum DroneType {
+    Miner,
+    Combat,
+}
+
 public class UserDrone : MonoBehaviour
 {
     DroneBase droneBase = null;
@@ -15,7 +21,7 @@ public class UserDrone : MonoBehaviour
     public int id = 0;
     
     public DroneCard droneCard = null;
-    public int type = 0;
+    public DroneType type = DroneType.Miner;
 
     public ResourceSet minedResources;
     public bool isDocked = false;
@@ -26,19 +32,18 @@ public class UserDrone : MonoBehaviour
     
     public Transform homeBase = null;
     
+    void Awake() {
+        droneBase = GetComponent<DroneBase>();
+        droneBase.SetOwner(OWNERS.PLAYER);
+        minedResources = new ResourceSet();
+        id = nextId++;
+    }
+    
     // Start is called before the first frame update
     void Start() {
-        droneBase = GetComponent<DroneBase>();
-        minedResources = new ResourceSet();
-
-        id = nextId++;
         DroneMgr.inst.UserDroneSpawned(this);
         if (droneCard != null)
-            droneCard.UpdateStaticText();
-
-        DroneBase drone = GetComponent<DroneBase>();
-        if (drone != null)
-            drone.SetOwner(OWNERS.PLAYER);
+            droneCard.UpdateStaticText();   
     }
 
     // Update is called once per frame
@@ -46,17 +51,19 @@ public class UserDrone : MonoBehaviour
     
     // Fixed Timestep
     void FixedUpdate() {
-        if(droneBase.GetDroneCurrentStats().Health <= 0.0) {
-            DroneMgr.inst.UserDroneDestroyed(this);
-            Destroy(gameObject);
-            return;
+        switch(type) {
+            case DroneType.Miner:
+                if(!droneBase.HasStorageAvailable() && !isReturningHome) 
+                    ReturnToBase();
+                break;
+            case DroneType.Combat:
+                if(!droneBase.HasPower() && !isReturningHome)
+                    ReturnToBase();
+                break;
+            default:
+                Debug.LogWarning("Unknown DroneType: " + type);
+                break;
         }
-
-        if (type != 2 && !droneBase.HasStorageAvailable() && !isReturningHome)
-            ReturnToBase();
-
-        if (type != 1 && !droneBase.HasPower() && !isReturningHome)
-            ReturnToBase();
         
         if(state == UserDroneState.ReturnToBase) {
             Vector3 positionDiff = homeBase.position - droneBase.transform.position;
@@ -74,55 +81,44 @@ public class UserDrone : MonoBehaviour
                 this.ChangeState(UserDroneState.Normal);
             }
         } else {
-
-            if (type != 1)
-            {
-                RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
-
-                if (isEngagingRaider && droneBase.isIdle())
-                    isEngagingRaider = false;
-
-                if (raiderDrone != null)
-                {
-                    Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
-                    if (positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0)
-                    {
-                        raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage));
-                    }
-                }
-
-
-                if (!isEngagingRaider && raiderDrone != null)
-                {
-                    isEngagingRaider = true;
-                    droneBase.ClearCommands();
-
-                    droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
-                }
-                else if (type != 2 && droneBase.isIdle())
-                {
+            switch(type) {
+                case DroneType.Miner:
                     Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
-
-                    if (asteroid != null && asteroid.isActiveAndEnabled)
-                    {
+                    
+                    // If valid asteroid is found, mine it
+                    if (asteroid != null && asteroid.isActiveAndEnabled) {
                         droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
                         droneBase.addCommand(new ZeroVelocityCommand(droneBase));
                         droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
                         droneBase.addCommand(new MineAsteroidCommand(asteroid, this));
                     }
-                }
-            }
-            else
-            {
-                Asteroid asteroid = AsteroidMgr.inst.getClosestAsteroid(transform.position);
+                    break;
+                case DroneType.Combat:
+                    RaiderDrone raiderDrone = DroneMgr.inst.GetClosestRaiderDrone(transform.position);
+                    
+                    // Reset before aquiring new target
+                    if (isEngagingRaider && droneBase.isIdle())
+                        isEngagingRaider = false;
+                    
+                    // Do damage to nearest drone in angle/range
+                    if (raiderDrone != null) {
+                        Vector3 positionDiff = raiderDrone.transform.position - droneBase.transform.position;
+                        if (positionDiff.magnitude <= 25.0f && Quaternion.Angle(Quaternion.LookRotation(positionDiff.normalized), transform.rotation) < 5.0)
+                            raiderDrone.GetDroneBase().DoDamage(droneBase.DrawPower(droneBase.damage));
+                        
+                        // If not targeting raider, target raider
+                        if(!isEngagingRaider) {
+                            isEngagingRaider = true;
+                            droneBase.ClearCommands();
 
-                if (asteroid != null && asteroid.isActiveAndEnabled)
-                {
-                    droneBase.addCommand(new ApproachTargetToRadiusCommand(asteroid.transform));
-                    droneBase.addCommand(new ZeroVelocityCommand(droneBase));
-                    droneBase.addCommand(new RotateToPointCommand(asteroid.transform.position));
-                    droneBase.addCommand(new MineAsteroidCommand(asteroid, this));
-                }
+                            droneBase.addCommand(new PursueTargetToRadiusCommand(raiderDrone.GetDroneBase()));
+                        }
+                    }
+                    
+                    break;
+                default:
+                    Debug.LogWarning("Unknown DroneType: " + type);
+                    break;
             }
         }
     }
@@ -183,9 +179,27 @@ public class UserDrone : MonoBehaviour
         homeBase = newHome;
     }
 
-    public void SetDroneType(int typeIn)
+    public void SetDroneType(DroneType type)
     {
-        type = typeIn;
+        this.type = type;
         droneCard.UpdateStaticText();
+    }
+    
+    /// Return the string id of this drone
+    public string GetStringIdentifier() {
+        int typeId = 0;  
+        switch(type) {
+            case DroneType.Miner:
+                typeId = 1;
+                break;
+            case DroneType.Combat:
+                typeId = 2;
+                break;
+            default:
+                Debug.LogWarning("Unknown DroneType: " + type.ToString());
+                break;
+        }
+        
+        return typeId.ToString("d2") + "-" + id.ToString("d3");
     }
 }

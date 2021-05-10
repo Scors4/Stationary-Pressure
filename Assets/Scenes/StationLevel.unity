@@ -863,6 +863,7 @@ MonoBehaviour:
   raiderDroneSpawn: {fileID: 591634646}
   raiderDronePrefab: {fileID: 2736371479181131665, guid: 4cf403ce3d1681448a498c85eec2fc19, type: 3}
   droneList: {fileID: 2117691594}
+  spawnNumRaiders: 1
 --- !u!1001 &317838713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5537,7 +5538,19 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
+      - m_Target: {fileID: 263359787}
+        m_TargetAssemblyTypeName: DroneMgr, Assembly-CSharp
+        m_MethodName: StopRaiderAlarm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &1830331526
 MonoBehaviour:
   m_ObjectHideFlags: 0

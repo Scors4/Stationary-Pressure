@@ -24,6 +24,8 @@ public class DroneMgr : MonoBehaviour
     public GameObject raiderDronePrefab;
     
     public DroneList droneList;
+    
+    public int spawnNumRaiders = 1;
 
     void Awake() {
         inst = this;
@@ -43,6 +45,23 @@ public class DroneMgr : MonoBehaviour
                 offeringEscape = false;
                 quickEscape.gameObject.SetActive(false);
             }
+        }
+    }
+    
+    public void DroneDestroyed(DroneBase drone) {
+        UserDrone userDrone = drone.GetComponent<UserDrone>();
+        RaiderDrone raiderDrone = drone.GetComponent<RaiderDrone>();
+        
+        if(userDrone != null && raiderDrone != null) {
+            Debug.LogWarning("A drone was destroyed with both a UserDrone and RaiderDrone script.");
+        }
+        
+        if(userDrone != null) {
+            UserDroneDestroyed(userDrone);
+        } else if (raiderDrone != null) {
+            RaiderDroneDestroyed(raiderDrone);
+        } else {
+            Debug.LogWarning("A drone was destroyed without a UserDrone and RaiderDrone script.");
         }
     }
 
@@ -117,8 +136,6 @@ public class DroneMgr : MonoBehaviour
     }
 
     public bool SpawnUserDrone(ResourceSet resourceCost, DroneStatSet droneStats) {
-        // TODO: Calculate cost dynamically
-
         if (!CanPrintDrone(resourceCost))
             return false;
 
@@ -135,11 +152,11 @@ public class DroneMgr : MonoBehaviour
 
         // Drone type 1 is a dedicated Miner
         if (droneStats.Power == 0.0f)
-            go.GetComponent<UserDrone>().SetDroneType(1);
+            go.GetComponent<UserDrone>().SetDroneType(DroneType.Miner);
 
         // Drone type 2 is a dedicated Combat Unit
         if (droneStats.Storage == 0.0f)
-            go.GetComponent<UserDrone>().SetDroneType(2);
+            go.GetComponent<UserDrone>().SetDroneType(DroneType.Combat);
             
         return true;
     }
@@ -157,8 +174,14 @@ public class DroneMgr : MonoBehaviour
     
     public void SpawnRaiderWave() {
         // TODO: Scale with input difficulty param
-        for(int i = 0; i < 5; i++) 
+        for(int i = 0; i < spawnNumRaiders; i++) 
             SpawnRaiderDrone();
+        
+        if(GameMgr.difficulty == Difficulty.Hard) {
+            spawnNumRaiders += 2;
+        } else {
+            spawnNumRaiders += 1;
+        }
     }
     
     public UserDrone GetClosestUserDrone(Vector3 pos) {
@@ -197,5 +220,10 @@ public class DroneMgr : MonoBehaviour
         } else {
             return raiderDrones[minIndex];
         }
+    }
+    
+    public void StopRaiderAlarm() {
+        Debug.Log("Stopping Raider Alarm");
+        raiderAlarm.Stop();
     }
 }
