@@ -223,7 +223,6 @@ public class DroneMgr : MonoBehaviour
     }
     
     public void StopRaiderAlarm() {
-        Debug.Log("Stopping Raider Alarm");
         raiderAlarm.Stop();
     }
 }

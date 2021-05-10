@@ -54,6 +54,9 @@ public class RadarScreen : MonoBehaviour
             {
                 for(int i = activeDrones.Count; i < droneIcons.Count - activeDrones.Count; i++)
                     Destroy(droneIcons[i].gameObject);
+
+                Debug.Log("Drone Icon Count: " + droneIcons.Count + ":" + activeDrones.Count);
+
                 droneIcons.RemoveRange(activeDrones.Count, (droneIcons.Count - activeDrones.Count));
             }
 
