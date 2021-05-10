@@ -12,5 +12,8 @@ public class Fracture : MonoBehaviour
         GameObject go = Instantiate(fractured, transform.position, transform.rotation); //Spawn in the broken version
         Destroy(gameObject); //Destroy the object to stop it getting in the way
         Destroy(go, 7);
+
+        foreach (Rigidbody rb in go.GetComponentsInChildren<Rigidbody>())
+            rb.useGravity = false;
     }
 }
