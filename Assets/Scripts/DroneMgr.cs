@@ -47,6 +47,23 @@ public class DroneMgr : MonoBehaviour
             }
         }
     }
+    
+    public void DroneDestroyed(DroneBase drone) {
+        UserDrone userDrone = drone.GetComponent<UserDrone>();
+        RaiderDrone raiderDrone = drone.GetComponent<RaiderDrone>();
+        
+        if(userDrone != null && raiderDrone != null) {
+            Debug.LogWarning("A drone was destroyed with both a UserDrone and RaiderDrone script.");
+        }
+        
+        if(userDrone != null) {
+            UserDroneDestroyed(userDrone);
+        } else if (raiderDrone != null) {
+            RaiderDroneDestroyed(raiderDrone);
+        } else {
+            Debug.LogWarning("A drone was destroyed without a UserDrone and RaiderDrone script.");
+        }
+    }
 
     public void UserDroneDestroyed(UserDrone destroyed) {
         if (userDrones.Contains(destroyed)) {

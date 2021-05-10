@@ -168,10 +168,15 @@ public class DroneBase : MonoBehaviour {
         commands.Clear();
     }
     
+    /// Do damage to this drone
     public void DoDamage(float power) {
         currentStats.Health -= power;
         
-        // Delegate the actual reaction to negative health to the caller since the caller needs to handle deregistering the user/raider drone.
+        if(currentStats.Health <= 0.0) {
+            DroneMgr.inst.DroneDestroyed(this);
+            Destroy(gameObject);
+            return;
+        }
     }
 
     public void SetOwner(OWNERS newOwner)

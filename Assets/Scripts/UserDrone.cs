@@ -26,12 +26,14 @@ public class UserDrone : MonoBehaviour
     
     public Transform homeBase = null;
     
-    // Start is called before the first frame update
-    void Start() {
+    void Awake() {
         droneBase = GetComponent<DroneBase>();
         minedResources = new ResourceSet();
-
         id = nextId++;
+    }
+    
+    // Start is called before the first frame update
+    void Start() {
         DroneMgr.inst.UserDroneSpawned(this);
         if (droneCard != null)
             droneCard.UpdateStaticText();
@@ -46,12 +48,6 @@ public class UserDrone : MonoBehaviour
     
     // Fixed Timestep
     void FixedUpdate() {
-        if(droneBase.GetDroneCurrentStats().Health <= 0.0) {
-            DroneMgr.inst.UserDroneDestroyed(this);
-            Destroy(gameObject);
-            return;
-        }
-
         if (type != 2 && !droneBase.HasStorageAvailable() && !isReturningHome)
             ReturnToBase();
 
